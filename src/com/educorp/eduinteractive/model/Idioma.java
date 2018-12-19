@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Idioma {
+public class Idioma extends AbstractValueObject{
 
 	private String idIdioma = null;
 	private String idioma = null;

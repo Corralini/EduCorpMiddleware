@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Profesor extends ValueObject {
+public class Profesor extends AbstractValueObject {
 	
 	private Integer id;
 	private String email;

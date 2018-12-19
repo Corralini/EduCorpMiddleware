@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class NivelIngles extends ValueObject {
+public class NivelIngles extends AbstractValueObject {
 
 	private Integer idNivel = null;
 	private String nivel = null;

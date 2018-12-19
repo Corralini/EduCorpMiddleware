@@ -1,12 +1,8 @@
 package com.educorp.eduinteractive.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-public abstract class ValueObject {
+public interface ValueObject {
 
 	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+	public String toString();
 	
 }

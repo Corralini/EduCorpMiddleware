@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Dia extends ValueObject{
+public class Dia extends AbstractValueObject{
 
 	private Integer idDia = null;
 	private String dia = null;

@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Hora extends ValueObject{
+public class Hora extends AbstractValueObject{
 
 	private Integer idHora = null;
 	private String Hora = null;

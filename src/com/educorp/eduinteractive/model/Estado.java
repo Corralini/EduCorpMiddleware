@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Estado {
+public class Estado extends AbstractValueObject{
 
 	private String idEstado = null;
 	private String estado = null;

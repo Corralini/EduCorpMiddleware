@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Puntuacion {
+public class Puntuacion extends AbstractValueObject{
 
 	private Integer idProfesor = null;
 	private Integer idEstudiante = null;

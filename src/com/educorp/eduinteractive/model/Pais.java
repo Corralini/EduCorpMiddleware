@@ -1,6 +1,6 @@
 package com.educorp.eduinteractive.model;
 
-public class Pais extends ValueObject{
+public class Pais extends AbstractValueObject{
 
 	private Integer idPais = null;
 	private String pais = null;

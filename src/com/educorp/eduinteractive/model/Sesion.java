@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Sesion extends ValueObject{
+public class Sesion extends AbstractValueObject{
 
 	private Integer idSesion = null;
 	private Integer idEstudiante = null;

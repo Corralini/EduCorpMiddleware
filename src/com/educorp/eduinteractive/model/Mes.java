@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Mes {
+public class Mes extends AbstractValueObject{
 
 	private Integer idMes = null;
 	private String mes = null;

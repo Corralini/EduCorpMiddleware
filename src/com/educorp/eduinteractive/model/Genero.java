@@ -2,7 +2,7 @@ package com.educorp.eduinteractive.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Genero extends ValueObject {
+public class Genero extends AbstractValueObject {
 	
 	private String idGenero = null;
 	private String genero = null;

@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Estudiante extends ValueObject{
+public class Estudiante extends AbstractValueObject{
 
 	private Integer id;
 	private String email;
