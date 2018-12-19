@@ -46,8 +46,6 @@ public class ObjectCreateTest {
 		sesion2.setIdEstudiante(2);
 		sesion2.setIdProfesor(3);
 		sesion2.setPrecio(17);
-		sesion2.setFechaEstimadaInicio(new Date());
-		sesion2.setRecordable(true);
 		
 //		System.out.println(sesion2);
 //		System.out.println(estudiante1);
