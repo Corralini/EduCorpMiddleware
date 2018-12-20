@@ -7,6 +7,8 @@ import com.educorp.eduinteractive.model.Puntuacion;
 public interface PuntuacionDAO {
 
 	public List<Puntuacion> findByIdProfesor (Integer id)
-	throws Exception;
+			throws Exception;
 	
+	public Puntuacion create (Puntuacion punt)
+			throws Exception;
 }

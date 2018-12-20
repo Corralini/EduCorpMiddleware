@@ -16,5 +16,9 @@ public interface SesionDAO {
 	public List<Sesion> findByEstado (Integer id)
 		throws Exception;
 	
-	public 
+	public Sesion create (Sesion s)
+		throws Exception;
+	
+	public Sesion update (Sesion s)
+		throws Exception;
 }

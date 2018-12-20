@@ -18,7 +18,7 @@ public class Profesor extends AbstractValueObject implements Comparable<Profesor
 	private Date fechaSubscripcion;
 	private Double precioSesión;
 	private Integer idIdioma;
-	private Integer idGenero;
+	private String idGenero;
 	private Boolean Aceptado;
 	private Double puntuacion;
 	
@@ -123,11 +123,11 @@ public class Profesor extends AbstractValueObject implements Comparable<Profesor
 		this.idIdioma = idIdioma;
 	}
 
-	public Integer getIdGenero() {
+	public String getIdGenero() {
 		return idGenero;
 	}
 
-	public void setIdGenero(Integer idGenero) {
+	public void setIdGenero(String idGenero) {
 		this.idGenero = idGenero;
 	}
 

@@ -2,6 +2,7 @@ package com.educorp.eduinteractive.dao;
 
 import java.util.List;
 
+import com.educorp.eduinteractive.model.CriteriaProfesor;
 import com.educorp.eduinteractive.model.Estudiante;
 import com.educorp.eduinteractive.model.Profesor;
 
@@ -16,7 +17,7 @@ public interface ProfesorDAO {
 		public List<Profesor> findByGenero (Integer pais)
 			throws Exception;
 		
-		public List<Profesor> findByCriteria (Criteria profesor)
+		public List<Profesor> findByCriteria (CriteriaProfesor criteria)
 		throws Exception;
 		
 		public Estudiante create (Profesor p)

@@ -8,9 +8,6 @@ public interface EstudianteDAO {
 
 	public Estudiante findById (Integer id)
 		throws Exception;
-	
-	public List<Estudiante> findBy (String nombre, Integer genero)
-		throws Exception;
 
 	public Estudiante create (Estudiante e)
 		throws Exception;
