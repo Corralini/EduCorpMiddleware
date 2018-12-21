@@ -12,7 +12,7 @@ public class PaisDAOImpl implements PaisDAO{
 
 	@Override
 	public List<Pais> findAll() throws Exception {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
