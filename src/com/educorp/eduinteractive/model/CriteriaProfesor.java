@@ -1,6 +1,6 @@
 package com.educorp.eduinteractive.model;
 
-public class CriteriaProfesor {
+public class CriteriaProfesor implements ValueObject {
 
 	private String nombre;
 	private String apellido1;
@@ -8,7 +8,8 @@ public class CriteriaProfesor {
 	private Integer idNivel;
 	private String idGenero;
 	private Double puntuacion;
-	private Double precioSesion;
+	private Double precioSesionMinimo;
+	private Double precioSesionMaximo;
 	private Integer idDia;
 	
 	public CriteriaProfesor() {
@@ -63,12 +64,20 @@ public class CriteriaProfesor {
 		this.puntuacion = puntuacion;
 	}
 
-	public Double getPrecioSesion() {
-		return precioSesion;
+	public Double getPrecioSesionMinimo() {
+		return precioSesionMinimo;
 	}
 
-	public void setPrecioSesion(Double precioSesion) {
-		this.precioSesion = precioSesion;
+	public void setPrecioSesionMinimo(Double precioSesionMinimo) {
+		this.precioSesionMinimo = precioSesionMinimo;
+	}
+
+	public Double getPrecioSesionMaximo() {
+		return precioSesionMaximo;
+	}
+
+	public void setPrecioSesionMaximo(Double precioSesionMaximo) {
+		this.precioSesionMaximo = precioSesionMaximo;
 	}
 
 	public Integer getIdDia() {
