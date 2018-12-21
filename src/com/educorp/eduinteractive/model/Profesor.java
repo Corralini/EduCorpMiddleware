@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Profesor extends AbstractValueObject implements Comparable<Profesor> {
+public class Profesor extends AbstractValueObject  implements Comparable<Profesor>  {
 	
 	private Integer id;
 	private String email;
@@ -154,7 +154,7 @@ public class Profesor extends AbstractValueObject implements Comparable<Profesor
 
 	@Override
 	public int compareTo(Profesor p) {
-		
-		return this.getFechaSubscripcion().compareTo(p.getFechaSubscripcion());
+		System.out.println("Comparando " + this.nombre + " con " + p.getNombre() + "...");
+		return this.getPuntuacion().compareTo(p.getPuntuacion());
 	}
 }
