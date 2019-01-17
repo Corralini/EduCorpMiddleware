@@ -161,7 +161,7 @@ public class EmpleadoDAO {
 			
 			String queryString = "INSERT INTO EMPLOYEES(EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, MANAGER_ID, HIRE_DATE, DEPARTMENT_ID, JOB_ID) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+			
 			preparedStatement = connection.prepareStatement(queryString);
 			
 			int i = 1;     

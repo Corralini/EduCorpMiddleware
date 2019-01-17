@@ -8,18 +8,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.educorp.eduinteractive.dao.EstudianteDAO;
 import com.educorp.eduinteractive.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.exceptions.DataException;
 import com.educorp.eduinteractive.model.Estudiante;
 
-public class EstudianteDAOImpl {
+public class EstudianteDAOImpl implements EstudianteDAO{
 
-	public Estudiante findById (Integer id) 
-			throws Exception{
-
+	public Estudiante findById(Integer id)
+			throws Exception {
+		
 		Estudiante e = null;
-
+				
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -27,153 +28,161 @@ public class EstudianteDAOImpl {
 			connection = ConnectionManager.getConnection();
 
 			String sql;
-			sql = "SELECT ID_ESTUDIANTE,NOMBRE, APELLIDO1 "
-					+ "FROM ESTUDIANTE "
-					+ "WHERE ID_ESTUDIANTE = ? ";
-
+			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
+				  +"FROM ESTUDIANTE "
+				  +"WHERE ID_ESTUDIANTE = ? ";
+			
+			// Preparar a query
 			System.out.println("Creating statement...");
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
+			
+			// Establece os parámetros
 			int i = 1;
 			preparedStatement.setLong(i++, id);
-
-			resultSet = preparedStatement.executeQuery();
-
-			if (resultSet.next()) {
-				e = loadNext(resultSet);
-			}else {
-				throw new Exception("Non se atopou o estudiante " + id);
+			
+			
+			resultSet = preparedStatement.executeQuery();			
+			//STEP 5: Extract data from result set						
+			if (resultSet.next()) {				
+				e = loadNext(resultSet);				
+			} else {
+				throw new Exception("Non se encontrou o estudiante "+id);
 			}
 			if (resultSet.next()) {
-				throw new Exception ("Empleado " + id + "duplicado");
+				throw new Exception("Estudainte"+id+" duplicado");
 			}
+						
+		} catch (SQLException ex) {
+			throw new DataException(ex);
+		} finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+			JDBCUtils.closeConnection(connection);
+		}  	
+			
+		return e;
+	}
+	
+	public List<Estudiante> findByNombre(String criterioNombre, String ap1)
+			throws Exception {	
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try{
+			
+			connection = ConnectionManager.getConnection();
 
-		}catch (SQLException ex) {
+			String sql;
+			sql =    " SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, MANAGER_ID " 
+					+" FROM EMPLOYEES "
+					+" WHERE "
+					+"	UPPER(FIRST_NAME) LIKE ? " 
+					+"  AND"
+					+"  UPPER(LAST_NAME) LIKE  ? ";
+			
+			// Preparar a query
+			System.out.println("Creating statement...");
+			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			// Establece os parámetros
+			int i = 1;
+			preparedStatement.setString(i++, "%" + criterioNombre.toUpperCase() + "%");
+			preparedStatement.setString(i++, "%" + ap1.toUpperCase() + "%");			
+			
+			resultSet = preparedStatement.executeQuery();			
+
+			//STEP 5: Extract data from result set			
+			List<Estudiante> empleados = new ArrayList<Estudiante>();
+			Estudiante e = null;
+			while (resultSet.next()) {
+				e = loadNext(resultSet);						
+				empleados.add(e);
+			} 
+			return empleados;
+		} catch (SQLException ex) {
+			throw new DataException(ex);
+		} finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+			JDBCUtils.closeConnection(connection);
+		}  	
+	}
+	
+	public Estudiante create(Estudiante e)
+			throws Exception {
+		Connection connection = null; 
+		PreparedStatement preparedStatement = null;
+		try {          
+
+			connection = ConnectionManager.getConnection();
+			//Check if the primary key already exists
+//			if (exists(connection, e.getId())) {
+//				throw new Exception("Duplicate employee "+e.getId());
+//			}
+			
+			
+			String queryString = "INSERT INTO EMPLOYEES(FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, MANAGER_ID) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+			
+			preparedStatement = connection.prepareStatement(queryString);
+			
+			int i = 1;
+			preparedStatement.setString(i++, e.getEmail());
+			preparedStatement.setString(i++, e.getNombre());
+			preparedStatement.setString(i++, e.getApellido1());
+			preparedStatement.setString(i++, e.getApellido2());
+			preparedStatement.setDate(i++, (java.sql.Date) e.getAnoNacimiento());
+			preparedStatement.setDate(i++, (java.sql.Date) e.getFechaSubscripcion());
+			preparedStatement.setInt(i++, e.getIdNivel());
+			preparedStatement.setString(i++, e.getIdPais());
+			
+			
+			int insertedRows = preparedStatement.executeUpdate();
+			
+			if (insertedRows == 0) {
+				throw new SQLException("Can not add row to table 'Employees'");
+			}
+			
+			//...
+			return e;					
+
+		} catch (SQLException ex) {
 			throw new DataException(ex);
 		} finally {
-			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
 			JDBCUtils.closeConnection(connection);
 		}
-
-		return e;
-
-	}
-
-
-	public Estudiante[] findByNombre (String Nombre) 
-			throws Exception{
-			
-		return null;
-	}
-
-
-	public List<Estudiante> findByPais (int pais) 
-			throws Exception{
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		try {
-			connection = ConnectionManager.getConnection();
-			
-			String sql;
-			sql = "SELECT ID_ESTUDIANTE, NOMBRE, APELLIDO1, ID_PAIS "
-					+ "FROM ESTUDIANTE "
-					+ "WHERE ID_PAIS = ? ";
-			System.out.println("Creating statment...");
-			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-			int i = 1;
-			preparedStatement.setInt(i++, pais);
-			
-			resultSet  =preparedStatement.executeQuery();
-			
 		
-			
-			List<Estudiante> estudiantes = new ArrayList<Estudiante>();
-			Estudiante e = null;
-			while(resultSet.next()) {
-				e = loadNext(resultSet);
-				estudiantes.add(e);
-			}
-			return estudiantes;
-		}catch (SQLException ex) {
-			throw new DataException(ex);
-		}finally {            
-			JDBCUtils.closeResultSet(resultSet);
-			JDBCUtils.closeStatement(preparedStatement);
-			JDBCUtils.closeConnection(connection);
-		} 
 	}
-
-	public Estudiante create (Estudiante e) 
-			throws Exception{
-		return null;
-	}
-
-	public boolean update (Estudiante e) 
-			throws Exception{
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		
-		try {
-			connection = ConnectionManager.getConnection();
-			
-			String sql;
-			sql = "SELECT ID_ESTUDIANTE, NOMBRE, APELLIDO1, ID_PAIS "
-					+ "FROM ESTUDIANTE "
-					+ "WHERE ID_PAIS = ? ";
-			System.out.println("Creating statment...");
-			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-		}finally {}
-		
-		return false;
-	}
-	
-	//load next
 	
 	private Estudiante loadNext(ResultSet resultSet) throws Exception {
+		
 		Estudiante e = new Estudiante();
 		int i = 1;
-		Integer idEstudiante = resultSet.getInt(i++);
+		Integer id = resultSet.getInt(i++);
+		String email = resultSet.getString(i++);
 		String nombre = resultSet.getString(i++);
 		String apellido1 = resultSet.getString(i++);	
-		String email = resultSet.getString(i++);
+		String apellido2 = resultSet.getString(i++);
+		Date anoNacimiento = resultSet.getDate(i++);
 		Date fechaSubscripcion = resultSet.getDate(i++);
-
+		Integer idNivel = resultSet.getInt(i++);
+		String idPais = resultSet.getString(i++);
+		
 		
 		e = new Estudiante();
-		e.setIdEstudiante(idEstudiante);
+		e.setIdEstudiante(id);
+		e.setEmail(email);
 		e.setNombre(nombre);
 		e.setApellido1(apellido1);
-		e.setEmail(email);
+		e.setApellido2(apellido2);
+		e.setAnoNacimiento(anoNacimiento);
 		e.setFechaSubscripcion(fechaSubscripcion);
-		
+		e.setIdNivel(idNivel);
+		e.setIdPais(idPais);
 		
 		return e;
+		
 	}
-	
-	private Estudiante loadNextWithPais(ResultSet resultSet) throws Exception {
-		Estudiante e = new Estudiante();
-		int i = 1;
-		Integer idEstudiante = resultSet.getInt(i++);
-		String nombre = resultSet.getString(i++);
-		String apellido1 = resultSet.getString(i++);	
-		String email = resultSet.getString(i++);
-		Date fechaSubscripcion = resultSet.getDate(i++);
-
-		
-		e = new Estudiante();
-		e.setIdEstudiante(idEstudiante);
-		e.setNombre(nombre);
-		e.setApellido1(apellido1);
-		e.setEmail(email);
-		e.setFechaSubscripcion(fechaSubscripcion);
-		
-		
-		return e;
-	}
-	
-
 }
