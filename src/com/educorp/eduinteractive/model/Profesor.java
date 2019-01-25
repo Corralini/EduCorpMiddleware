@@ -16,11 +16,13 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 	private String apellido2;
 	private Date anoNacimiento;
 	private Date fechaSubscripcion;
-	private Double precioSesión;
-	private Integer idIdioma;
+	private Double precioSesion;
+	private String idIdioma;
 	private String idGenero;
-	private Boolean Aceptado;
+	private Integer idNivel;
+	private Integer Aceptado;
 	private Double puntuacion;
+	private String Descripcion;
 	
 	public Profesor() {
 
@@ -107,19 +109,19 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 		this.fechaSubscripcion = fechaSubscripcion;
 	}
 
-	public Double getPrecioSesión() {
-		return precioSesión;
+	public Double getPrecioSesion() {
+		return precioSesion;
 	}
 
-	public void setPrecioSesión(Double precioSesión) {
-		this.precioSesión = precioSesión;
+	public void setPrecioSesion(Double precioSesión) {
+		this.precioSesion = precioSesión;
 	}
 
-	public Integer getIdIdioma() {
+	public String getIdIdioma() {
 		return idIdioma;
 	}
 
-	public void setIdIdioma(Integer idIdioma) {
+	public void setIdIdioma(String idIdioma) {
 		this.idIdioma = idIdioma;
 	}
 
@@ -131,11 +133,19 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 		this.idGenero = idGenero;
 	}
 
-	public Boolean getAceptado() {
+	public Integer getIdNivel() {
+		return idNivel;
+	}
+
+	public void setIdNivel(Integer idNivel) {
+		this.idNivel = idNivel;
+	}
+
+	public Integer getAceptado() {
 		return Aceptado;
 	}
 
-	public void setAceptado(Boolean aceptado) {
+	public void setAceptado(Integer aceptado) {
 		Aceptado = aceptado;
 	}
 
@@ -147,6 +157,14 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 		this.puntuacion = puntuacion;
 	}
 	
+	public String getDescripcion() {
+		return Descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		Descripcion = descripcion;
+	}
+
 	@Override
 	public String toString() {
 		   return ToStringBuilder.reflectionToString(this);

@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/jasypt-1.9.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

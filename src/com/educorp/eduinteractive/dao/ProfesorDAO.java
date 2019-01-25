@@ -1,29 +1,26 @@
 package com.educorp.eduinteractive.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
-import com.educorp.eduinteractive.model.CriteriaProfesor;
-import com.educorp.eduinteractive.model.Estudiante;
 import com.educorp.eduinteractive.model.Profesor;
+import com.educorp.eduinteractive.service.ProfesorCriteria;
 
 public interface ProfesorDAO {
 
-	public Estudiante findById (Integer id)
+	public Profesor findById (Connection c, Integer id)
 			throws Exception;
 		
-		public List<Profesor> findByNombre (String Nombre)
+		public List<Profesor> findByNombre (Connection c, String Nombre)
 			throws Exception;
 		
-		public List<Profesor> findByGenero (Integer pais)
+		public List<Profesor> findByCriteria (Connection c, ProfesorCriteria criteria)
 			throws Exception;
 		
-		public List<Profesor> findByCriteria (CriteriaProfesor criteria)
-		throws Exception;
-		
-		public Estudiante create (Profesor p)
+		public Profesor create (Connection c, Profesor p)
 			throws Exception;
 		
-		public Estudiante update (Profesor p)
+		public Profesor update (Connection c, Profesor p)
 			throws Exception;
 	
 }

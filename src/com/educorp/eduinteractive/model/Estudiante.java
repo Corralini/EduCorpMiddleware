@@ -10,14 +10,13 @@ public class Estudiante extends AbstractValueObject{
 	private String email;
 	private String idPais;
 	private String psswd;
-	private String psswdEncriptada;
 	private String nombre;
 	private String apellido1;
 	private String apellido2;
-	private Date anoNacimiento;
+	private Integer anoNacimiento;
 	private Date fechaSubscripcion;
 	private Integer idNivel;
-	private Integer idGenero;
+	private String idGenero;
 	
 	
 	public Estudiante() {
@@ -58,16 +57,6 @@ public class Estudiante extends AbstractValueObject{
 	public String getPsswd() {
 		return psswd;
 	}
-	
-	
-	public String getPsswdEncriptada() {
-		return psswdEncriptada;
-	}
-
-
-	public void setPsswdEncriptada(String psswdEncriptada) {
-		this.psswdEncriptada = psswdEncriptada;
-	}
 
 
 	public void setPsswd(String psswd) {
@@ -105,12 +94,12 @@ public class Estudiante extends AbstractValueObject{
 	}
 
 
-	public Date getAnoNacimiento() {
+	public Integer getAnoNacimiento() {
 		return anoNacimiento;
 	}
 
 
-	public void setAnoNacimiento(Date anoNacimiento) {
+	public void setAnoNacimiento(Integer anoNacimiento) {
 		this.anoNacimiento = anoNacimiento;
 	}
 
@@ -135,12 +124,12 @@ public class Estudiante extends AbstractValueObject{
 	}
 
 
-	public Integer getIdGenero() {
+	public String getIdGenero() {
 		return idGenero;
 	}
 
 
-	public void setIdGenero(Integer idGenero) {
+	public void setIdGenero(String idGenero) {
 		this.idGenero = idGenero;
 	}
 	
