@@ -1,7 +1,11 @@
 package com.educorp.eduinteractive.service;
 
+import java.sql.Connection;
 import java.util.Date;
 
+import com.educorp.eduinteractive.dao.EstudianteDAO;
+import com.educorp.eduinteractive.dao.impl.EstudianteDAOImpl;
+import com.educorp.eduinteractive.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.model.Estudiante;
 import com.educorp.eduinteractive.service.impl.EstudianteServiceImpl;
 
@@ -9,6 +13,8 @@ public class EstudianteSignUpTest {
 
 	public static void main (String args[]) throws Exception {
 		EstudianteService estudianteService = new EstudianteServiceImpl();
+		EstudianteDAO dao = new EstudianteDAOImpl();
+		Connection c = ConnectionManager.getConnection();
 		Estudiante e = new Estudiante();
 		
 		e.setEmail("acorralfdez@gmail.com");
@@ -22,6 +28,8 @@ public class EstudianteSignUpTest {
 		e.setIdNivel(3);
 		e.setIdGenero("H");
 		estudianteService.signUp(e);
+		
+		System.out.println("" + e);
 		
 	}
 }
