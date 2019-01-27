@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.ProfesorDAO;
+import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
@@ -25,8 +27,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 			String sql;
 			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
-					+"FROM ESTUDIANTE "
-					+"WHERE ID_ESTUDIANTE = ? ";
+					+"FROM PROFESOR "
+					+"WHERE ID_PROFESOR = ? ";
 
 			// Preparar a query
 			System.out.println("Creating statement...");
@@ -68,8 +70,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			String sql;
-			sql =  "SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NNIVEL, ID_GENERO "
-					+"FROM ESTUDIANTE "
+			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
+					+"FROM PROFESOR "
 					+"WHERE upper(email) like upper(?) ";
 
 			// Preparar a query
@@ -105,7 +107,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 
 	@Override
-	public List<Profesor> findByCriteria(Connection connection, ProfesorCriteria profesor) throws Exception {
+	public List<Profesor> findByCriteria(Connection connection, ProfesorCriteria profesor) throws DataException {
 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -114,78 +116,78 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			queryString = new StringBuilder(
-					"SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NNIVEL, ID_GENERO "
-							+" FROM ESTUDIANTE ");
+					"SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
+							+" FROM PROFESOR ");
 
 			boolean first = true;
 
 			if (profesor.getIdProfesor() != null) {
-				addClause(queryString, first, " id_usuario =  ? ");
+				DAOUtils.addClause(queryString, first, " ID_PROFESOR =  ? ");
 				first = false;
 			}	
 
 			if (profesor.getEmail() != null) {
-				addClause(queryString, first, " upper(email) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(email) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getPsswd() != null) {
-				addClause(queryString, first, " psswd = ? ");
+				DAOUtils.addClause(queryString, first, " psswd = ? ");
 				first = false;
 			}
 
 			if (profesor.getIdPais() != null) {
-				addClause(queryString, first, "id_pais = ?");
+				DAOUtils.addClause(queryString, first, "id_pais = ?");
 				first = false;
 			}
 
 			if (profesor.getNombre() != null) {
-				addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getApellido1() != null) {
-				addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getApellido2() != null) {
-				addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getAnoNacimiento() != null) {
-				addClause(queryString, first, "ano_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
 				first = false;
 			}
 
 			if (profesor.getFechaSubscripcion() != null) {
-				addClause(queryString, first, "fecha_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, "fecha_subscripcion = ?");
 				first = false;
 			}
 
 			if (profesor.getPrecioSesion() != null) {
-				addClause(queryString, first, "precio sesion > ?");
+				DAOUtils.addClause(queryString, first, "precio_sesion > ?");
 				first = false;
 			}
 
 			if (profesor.getPrecioSesionHasta() != null) {
-				addClause(queryString, first, "precio sesion < ?");
+				DAOUtils.addClause(queryString, first, "precio_sesion < ?");
 				first = false;
 			}
 
 			if (profesor.getIdIdioma() != null) {
-				addClause(queryString, first, "id_idioma = ?");
+				DAOUtils.addClause(queryString, first, "id_idioma = ?");
 				first = false;
 			}
 
 			if (profesor.getIdGenero() != null) {
-				addClause(queryString, first, "id_genero = ?");
+				DAOUtils.addClause(queryString, first, "id_genero = ?");
 				first = false;
 			}
 
 			if (profesor.getIdNivel() != null) {
-				addClause(queryString, first, "id_nivel = ?");
+				DAOUtils.addClause(queryString, first, "id_nivel = ?");
 				first = false;
 			}
 
@@ -209,7 +211,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (profesor.getApellido2()!=null) 
 				preparedStatement.setString(i++,profesor.getApellido1());
 			if (profesor.getAnoNacimiento() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) profesor.getAnoNacimiento());
+				preparedStatement.setInt(i++, profesor.getAnoNacimiento());
 			if (profesor.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) profesor.getFechaSubscripcion());
 			if (profesor.getPrecioSesion() != null) 
@@ -250,15 +252,196 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	}
 
 	@Override
-	public Profesor create(Connection c, Profesor p) throws Exception {
-		return null;					
+	public Profesor create(Connection c, Profesor p) throws DataException {
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {          
 
+			// Creamos el preparedstatement
+			String queryString = "INSERT INTO ESTUDIANTE (EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,ID_NIVEL, ID_GENERO) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+			preparedStatement = c.prepareStatement(queryString,
+									Statement.RETURN_GENERATED_KEYS);
+
+			// Rellenamos el "preparedStatement"
+			int i = 1;    
+
+				preparedStatement.setInt(i++, p.getIdProfesor());
+				preparedStatement.setString(i++,p.getEmail() );
+				preparedStatement.setString(i++, p.getPsswd());
+				preparedStatement.setString(i++, p.getIdPais());
+				preparedStatement.setString(i++,p.getNombre());
+				preparedStatement.setString(i++,p.getApellido1());
+				preparedStatement.setString(i++,p.getApellido1());
+				preparedStatement.setInt(i++, p.getAnoNacimiento());
+				preparedStatement.setDate(i++, (java.sql.Date) p.getFechaSubscripcion());
+				preparedStatement.setDouble(i++, p.getPrecioSesion());
+				preparedStatement.setString(i++, p.getIdIdioma());
+				preparedStatement.setString(i++, p.getIdGenero());
+				preparedStatement.setInt(i++, p.getIdNivel());
+				preparedStatement.setInt(i++, p.getAceptado());
+				preparedStatement.setString(i++, p.getDescripcion());
+			
+			// Execute query
+			int insertedRows = preparedStatement.executeUpdate();
+
+			if (insertedRows == 0) {
+				throw new SQLException("Can not add row to table 'Estudiante'");
+			}
+
+			// Recuperamos la PK generada
+			resultSet = preparedStatement.getGeneratedKeys();
+			if (resultSet.next()) {
+				Integer pk = resultSet.getInt(1); 
+				p.setIdProfesor(pk);;
+			} else {
+				throw new DataException("Unable to fetch autogenerated primary key");
+			}
+
+			// Return the DTO
+			return p;
+
+		} catch (SQLException ex) {
+			throw new DataException(ex);
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}
 	}
 
 	@Override
-	public Profesor update(Connection c, Profesor p) throws Exception {
+	public void update(Connection c, Profesor p) throws DataException {
+		PreparedStatement preparedStatement = null;
+		StringBuilder queryString = null;
+		try {	
+			
+			queryString = new StringBuilder(
+					" UPDATE PROFESOR" 
+					);
+			
+			boolean first = true;
+			
+			if (p.getIdProfesor() != null) {
+				DAOUtils.addClause(queryString, first, " ID_PROFESOR =  ? ");
+				first = false;
+			}	
 
-		return null;
+			if (p.getEmail() != null) {
+				DAOUtils.addClause(queryString, first, " upper(email) LIKE upper(?) ");
+				first = false;
+			}
+
+			if (p.getPsswd() != null) {
+				DAOUtils.addClause(queryString, first, " psswd = ? ");
+				first = false;
+			}
+
+			if (p.getIdPais() != null) {
+				DAOUtils.addClause(queryString, first, "id_pais = ?");
+				first = false;
+			}
+
+			if (p.getNombre() != null) {
+				DAOUtils.addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
+				first = false;
+			}
+
+			if (p.getApellido1() != null) {
+				DAOUtils.addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
+				first = false;
+			}
+
+			if (p.getApellido2() != null) {
+				DAOUtils.addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
+				first = false;
+			}
+
+			if (p.getAnoNacimiento() != null) {
+				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
+				first = false;
+			}
+
+			if (p.getFechaSubscripcion() != null) {
+				DAOUtils.addClause(queryString, first, "fecha_subscripcion = ?");
+				first = false;
+			}
+
+			if (p.getPrecioSesion() != null) {
+				DAOUtils.addClause(queryString, first, "precio_sesion > ?");
+				first = false;
+			}
+
+			if (p.getIdIdioma() != null) {
+				DAOUtils.addClause(queryString, first, "id_idioma = ?");
+				first = false;
+			}
+
+			if (p.getIdGenero() != null) {
+				DAOUtils.addClause(queryString, first, "id_genero = ?");
+				first = false;
+			}
+
+			if (p.getIdNivel() != null) {
+				DAOUtils.addClause(queryString, first, "id_nivel = ?");
+				first = false;
+			}
+			
+			
+						
+			queryString.append("WHERE id_profesor = ?");
+			
+			preparedStatement = c.prepareStatement(queryString.toString());
+			
+
+			int i = 1;
+			if (p.getIdProfesor() != null)
+				preparedStatement.setInt(i++, p.getIdProfesor());
+			if (p.getEmail()!=null) 
+				preparedStatement.setString(i++,p.getEmail() );
+			if (p.getPsswd()!=null) 
+				preparedStatement.setString(i++, p.getPsswd());
+			if (p.getIdPais() != null)
+				preparedStatement.setString(i++, p.getIdPais());
+			if (p.getNombre()!=null)
+				preparedStatement.setString(i++,p.getNombre());
+			if (p.getApellido1()!=null) 
+				preparedStatement.setString(i++,p.getApellido1());
+			if (p.getApellido2()!=null) 
+				preparedStatement.setString(i++,p.getApellido1());
+			if (p.getAnoNacimiento() != null)
+				preparedStatement.setInt(i++, p.getAnoNacimiento());
+			if (p.getFechaSubscripcion() != null)
+				preparedStatement.setDate(i++, (java.sql.Date) p.getFechaSubscripcion());
+			if (p.getPrecioSesion() != null) 
+				preparedStatement.setDouble(i++, p.getPrecioSesion());
+			if (p.getIdIdioma() != null)
+				preparedStatement.setString(i++, p.getIdIdioma());
+			if (p.getIdGenero() != null)
+				preparedStatement.setString(i++, p.getIdGenero());
+			if (p.getIdNivel() != null)
+				preparedStatement.setInt(i++, p.getIdNivel());
+			if (p.getAceptado() != null)
+				preparedStatement.setInt(i++, p.getAceptado());
+			if (p.getDescripcion() != null)
+				preparedStatement.setString(i++, p.getDescripcion());
+
+			int updatedRows = preparedStatement.executeUpdate();
+
+			if (updatedRows == 0) {
+				throw new DataException("Non se actualizou o estudiante");
+			}
+
+			if (updatedRows > 1) {
+				throw new SQLException("Duplicate row for id = '" + 
+						p.getIdProfesor() + "' in table 'Profesor'");
+			}     
+			
+		} catch (SQLException ex) {
+			throw new DataException(ex);    
+		} finally {
+			JDBCUtils.closeStatement(preparedStatement);
+		}
 	}
 
 	private Profesor loadNext(ResultSet resultSet) throws SQLException, DataException {
@@ -272,7 +455,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		String nombre = resultSet.getString(i++);
 		String apellido1 = resultSet.getString(i++);	
 		String apellido2 = resultSet.getString(i++);
-		Date anoNacimiento = resultSet.getDate(i++);
+		Integer anoNacimiento = resultSet.getInt(i++);
 		Date fechaSubscripcion = resultSet.getDate(i++);
 		Double precioSesion = resultSet.getDouble(i++);
 		String idIdioma = resultSet.getString(i++);

@@ -377,12 +377,12 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			}	
 
 			if (e.getEmail() != null) {
-				DAOUtils.addUpdate(queryString, first, " upper(email) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " email = ? ");
 				first = false;
 			}
 			
 			if (e.getIdPais() != null) {
-				DAOUtils.addUpdate(queryString, first, "id_pais = ?");
+				DAOUtils.addUpdate(queryString, first, "id_pais = ? ");
 				first = false;
 			}
 			
@@ -392,37 +392,37 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			}
 			
 			if (e.getNombre() != null) {
-				DAOUtils.addUpdate(queryString, first, " upper(nombre) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " nombre = ? ");
 				first = false;
 			}
 			
 			if (e.getApellido1() != null) {
-				DAOUtils.addUpdate(queryString, first, " upper(apellido1) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " apelllido1 = ? ");
 				first = false;
 			}
 			
 			if (e.getApellido2() != null) {
-				DAOUtils.addUpdate(queryString, first, " upper(apellido2) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " apelllido2 = ? ");
 				first = false;
 			}
 			
 			if (e.getAnoNacimiento() != null) {
-				DAOUtils.addUpdate(queryString, first, "ano_nacimiento = ?");
+				DAOUtils.addUpdate(queryString, first, "ano_nacimiento = ? ");
 				first = false;
 			}
 			
 			if (e.getFechaSubscripcion() != null) {
-				DAOUtils.addUpdate(queryString, first, "fecha_nacimiento = ?");
+				DAOUtils.addUpdate(queryString, first, "fecha_nacimiento = ? ");
 				first = false;
 			}
 			
 			if (e.getIdNivel() != null) {
-				DAOUtils.addUpdate(queryString, first, "id_nivel = ?");
+				DAOUtils.addUpdate(queryString, first, "id_nivel = ? ");
 				first = false;
 			}
 			
 			if (e.getIdGenero() != null) {
-				DAOUtils.addUpdate(queryString, first, "id_genero = ?");
+				DAOUtils.addUpdate(queryString, first, "id_genero = ? ");
 				first = false;
 			}
 			

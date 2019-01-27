@@ -16,12 +16,12 @@ public interface ProfesorDAO {
 			throws DataException;
 	
 	public List<Profesor> findByCriteria (Connection c, ProfesorCriteria criteria)
-			throws Exception;
+			throws DataException;
 
 	public Profesor create (Connection c, Profesor p)
-			throws Exception;
+			throws DataException;
 
-	public Profesor update (Connection c, Profesor p)
-			throws Exception;
+	public void update (Connection c, Profesor p)
+			throws DataException;
 
 }

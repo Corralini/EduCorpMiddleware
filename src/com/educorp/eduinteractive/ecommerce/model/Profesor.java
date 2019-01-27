@@ -14,7 +14,7 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 	private String nombre;
 	private String apellido1;
 	private String apellido2;
-	private Date anoNacimiento;
+	private Integer anoNacimiento;
 	private Date fechaSubscripcion;
 	private Double precioSesion;
 	private String idIdioma;
@@ -94,11 +94,11 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 		this.apellido2 = apellido2;
 	}
 
-	public Date getAnoNacimiento() {
+	public Integer getAnoNacimiento() {
 		return anoNacimiento;
 	}
 
-	public void setAnoNacimiento(Date anoNacimiento) {
+	public void setAnoNacimiento(Integer anoNacimiento) {
 		this.anoNacimiento = anoNacimiento;
 	}
 
