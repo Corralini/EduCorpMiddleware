@@ -10,10 +10,9 @@ public class Sesion extends AbstractValueObject{
 	private Integer idEstudiante = null;
 	private Integer idProfesor = null;
 	private Integer idMes = null;
-	private Integer idDia = null;
 	private Integer idHorario = null;
 	private Date fechaInicio = null;
-	private Date fechaFIn = null;
+	private Date fechaFin = null;
 	private Double precio = null;
 	private Integer ano = null;
 	private String idEstado = null;
@@ -65,16 +64,6 @@ public class Sesion extends AbstractValueObject{
 	}
 
 
-	public Integer getIdDia() {
-		return idDia;
-	}
-
-
-	public void setIdDia(Integer idDia) {
-		this.idDia = idDia;
-	}
-
-
 	public Integer getIdHorario() {
 		return idHorario;
 	}
@@ -95,13 +84,13 @@ public class Sesion extends AbstractValueObject{
 	}
 
 
-	public Date getFechaFIn() {
-		return fechaFIn;
+	public Date getFechaFin() {
+		return fechaFin;
 	}
 
 
-	public void setFechaFIn(Date fechaFIn) {
-		this.fechaFIn = fechaFIn;
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
 	}
 
 

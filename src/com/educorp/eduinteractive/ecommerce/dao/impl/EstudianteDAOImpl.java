@@ -428,7 +428,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			
 			
 						
-			queryString.append("WHERE id_usuario = ?");
+			queryString.append("WHERE id_estudiante = ?");
 			
 			preparedStatement = c.prepareStatement(queryString.toString());
 			

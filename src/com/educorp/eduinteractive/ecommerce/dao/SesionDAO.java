@@ -12,15 +12,15 @@ public interface SesionDAO {
 		throws DataException;
 	
 	// a hora de ordenalos ordenar por dia e hora
-	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario, Integer mes, Integer ano)
+	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario)
 		throws DataException;
 	
-	public List<Sesion> findByEstado (Connection connection, Integer idEstado)
+	public List<Sesion> findByEstado (Connection connection, String idEstado)
 		throws DataException;
 	
 	public Sesion create (Connection connection, Sesion s)
 		throws DataException;
 	
-	public Sesion update (Connection connection, Sesion s)
+	public void update (Connection connection, Sesion s)
 		throws DataException;
 }
