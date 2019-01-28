@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.spi.MesDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Mes;
 
-public class MesDAOImpl {
+public class MesDAOImpl implements MesDAO{
 
 	public List<Mes> findAll(Connection connection) throws DataException {
 		PreparedStatement preparedStatement = null;

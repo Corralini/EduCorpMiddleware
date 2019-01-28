@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.dao;
+package com.educorp.eduinteractive.ecommerce.dao.spi;
 
 import java.util.List;
 

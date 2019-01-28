@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.spi.HoraDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Hora;
 
-public class HoraDAOImpl {
+public class HoraDAOImpl implements HoraDAO{
 
 	public List<Hora> findAll(Connection connection) throws DataException {
 		PreparedStatement preparedStatement = null;

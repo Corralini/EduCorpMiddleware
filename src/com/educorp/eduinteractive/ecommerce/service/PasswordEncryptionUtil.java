@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.service;
+ackage com.educorp.eduinteractive.ecommerce.service;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
