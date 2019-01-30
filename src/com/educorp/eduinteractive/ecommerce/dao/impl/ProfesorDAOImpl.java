@@ -17,6 +17,7 @@ import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceExceptio
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
 import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
+import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class ProfesorDAOImpl implements ProfesorDAO {
 
@@ -273,7 +274,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 				preparedStatement.setInt(i++, p.getIdProfesor());
 				preparedStatement.setString(i++,p.getEmail() );
-				preparedStatement.setString(i++, p.getPsswd());
+				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
 				preparedStatement.setString(i++, p.getIdPais());
 				preparedStatement.setString(i++,p.getNombre());
 				preparedStatement.setString(i++,p.getApellido1());
@@ -405,7 +406,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (p.getEmail()!=null) 
 				preparedStatement.setString(i++,p.getEmail() );
 			if (p.getPsswd()!=null) 
-				preparedStatement.setString(i++, p.getPsswd());
+				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
 			if (p.getIdPais() != null)
 				preparedStatement.setString(i++, p.getIdPais());
 			if (p.getNombre()!=null)

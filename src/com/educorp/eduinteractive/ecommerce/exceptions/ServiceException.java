@@ -1,4 +1,4 @@
-package com.gzone.ecommerce.exceptions;
+package com.educorp.eduinteractive.ecommerce.exceptions;
 
 public class ServiceException extends BusinessException {
        

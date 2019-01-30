@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import com.educorp.eduinteractive.ecommerce.dao.impl.EstudianteDAOImpl;
+import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
-import com.educorp.eduinteractive.ecommerce.dao.spi.EstudianteDAO;
+import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.dao.spi.PuntuacionDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
@@ -18,31 +18,31 @@ import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
 import com.educorp.eduinteractive.ecommerce.model.Puntuacion;
-import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
-import com.educorp.eduinteractive.ecommerce.service.spi.EstudianteService;
+import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
+import com.educorp.eduinteractive.ecommerce.service.spi.ProfesorService;
 import com.educorp.eduinteractive.ecommerce.service.spi.UsuariosUtils;
 import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
-public class EstudianteServiceImpl implements EstudianteService{
+public class ProfesorServicesImpl implements ProfesorService{
 
-	private EstudianteDAO estudianteDAO = null;
+	private ProfesorDAO profesorDAO = null;
 	private PuntuacionDAO puntuacionDAO = null;
 	private MailService mailService = new MailServiceImpl();
 
-	public EstudianteServiceImpl () {
-		estudianteDAO = new EstudianteDAOImpl();
+	public ProfesorServicesImpl () {
+		profesorDAO = new ProfesorDAOImpl();
 		puntuacionDAO = new PuntuacionDAOImpl();
 	}
 
 	@Override
-	public Estudiante findById(Integer id) 
+	public Profesor findById(Integer id) 
 			throws DataException {
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(true);
-			return estudianteDAO.findById(c, id);
+			return profesorDAO.findById(c, id);
 
 		}catch (SQLException ex) {
 			throw new DataException(ex);
@@ -53,7 +53,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public Estudiante login(String email, String psswd)
+	public Profesor login(String email, String psswd)
 			throws DataException{
 		Connection c = null;
 		try {
@@ -62,15 +62,15 @@ public class EstudianteServiceImpl implements EstudianteService{
 				return null;
 			}
 
-			Estudiante e = estudianteDAO.findByEmail(c, email);
+			Profesor p = profesorDAO.findByEmail(c, email);
 
-			if(e==null) {
-				return e;
+			if(p==null) {
+				return p;
 			}
 
-			if(PasswordEncryptionUtil.checkPassword(psswd, e.getPsswd())) {
-				System.out.println("Usuario " + e.getEmail() + " autenticado a las " + new Date());
-				return e;
+			if(PasswordEncryptionUtil.checkPassword(psswd, p.getPsswd())) {
+				System.out.println("Usuario " + p.getEmail() + " autenticado a las " + new Date());
+				return p;
 			}else {
 				throw new DataException("Hemos detetado un problema, comprueba los datos introducidos");
 			}
@@ -84,7 +84,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public Estudiante signUp(Estudiante e)
+	public Profesor signUp(Profesor e)
 			throws DuplicateInstanceException, MailException, DataException {
 		boolean commit = false;
 		Connection c = null;
@@ -101,7 +101,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 
-			Estudiante result = estudianteDAO.create(c, e);
+			Profesor result = profesorDAO.create(c, e);
 
 
 			mailService.sendEmail(e.getEmail(), "Bienvenido a Educorp", mssg);
@@ -122,7 +122,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public void update(Estudiante e)
+	public Profesor update(Profesor e)
 			throws InstanceNotFoundException, DataException {
 		Connection connection = null;
 		boolean commit = false;
@@ -136,7 +136,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 			connection.setAutoCommit(false);
 
-			estudianteDAO.update(connection, e);
+			profesorDAO.update(connection, e);
 			commit = true;
 
 		} catch (SQLException ex) {
@@ -145,10 +145,11 @@ public class EstudianteServiceImpl implements EstudianteService{
 		} finally {
 			JDBCUtils.closeConnection(connection, commit);
 		}
+		return null;
 	}
 
 	@Override
-	public List<Estudiante> findByCriteria(EstudianteCriteria criteria)
+	public List<Profesor> findByCriteria(ProfesorCriteria criteria)
 			throws DataException {
 		Connection connection = null;
 
@@ -157,7 +158,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			connection = ConnectionManager.getConnection();
 			connection.setAutoCommit(true);
 
-			return estudianteDAO.findByCriteria(connection, criteria);
+			return profesorDAO.findByCriteria(connection, criteria);
 
 		} catch (SQLException e){
 			throw new DataException(e);
@@ -167,14 +168,14 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public Estudiante findByEmailToRecovery(String email) 
+	public Profesor findByEmailToRecovery(String email) 
 			throws MailException, DataException {
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(true);
-			Estudiante e = new Estudiante();
-			e = estudianteDAO.findByEmail(c, email);
+			Profesor e = new Profesor();
+			e = profesorDAO.findByEmail(c, email);
 			setCodigo(e);
 			return e;
 
@@ -185,7 +186,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 		} 
 	}
 
-	public void setCodigo (Estudiante e) 
+	public void setCodigo (Profesor e) 
 			throws MailException, DataException{
 		Connection c = null;
 		boolean commit = false;
@@ -198,7 +199,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			+ " Introduce este código para poder cambiar tu contraseña: " + e.getCodigoDeRecuperacion();
 
 			c.setAutoCommit(false);
-			estudianteDAO.update(c, e);
+			profesorDAO.update(c, e);
 			mailService.sendEmail(e.getEmail(), "Restablecer contraseña", mssg);
 			commit = true;
 		}catch (SQLException ex) {
@@ -209,32 +210,36 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public void comprobarCodigo(int codigo, Estudiante e) throws DataException {
+	public void comprobarCodigo(int codigo, Profesor e) throws DataException {
+
 			if(codigo != e.getCodigoDeRecuperacion()) {
+				
 				throw new DataException("El código introducido no coincide, compruebe el código");
 			}
+		
 	}
 	
 	@Override
-	public void cambiarContra(Estudiante e, String psswd) throws DataException {
+	public void cambiarContra(Profesor p, String psswd) throws DataException {
 		Connection c = null;
 		boolean commit = false;
 		try {
 			c = ConnectionManager.getConnection();
-			e.setPsswd(psswd);
+			p.setPsswd(psswd);
 			c.setAutoCommit(false);
-			estudianteDAO.update(c, e);
-			commit = false;
+			profesorDAO.update(c, p);
+			commit = true;
+			
 		}catch(SQLException ex) {
 			throw new DataException(ex);
-		}finally {
+		}finally{
 			JDBCUtils.closeConnection(c, commit);
 		}
 		
 	}
 
 	@Override
-	public void puntuarProfesor(Profesor p, Estudiante e, double puntuacion) throws DataException {
+	public void puntuarEstudiante(Profesor p, Estudiante e, double puntuacion) throws DataException {
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -245,7 +250,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			punt.setFechaPuntuacion(new Date());
 			punt.setPuntuacion(puntuacion);
 			c.setAutoCommit(false);
-			puntuacionDAO.createPuntuacionProfesor(c, punt);
+			puntuacionDAO.createPuntuacionEstudiante(c, punt);
 			commit = true;
 		}catch (SQLException ex) {
 			throw new DataException (ex);
@@ -253,5 +258,5 @@ public class EstudianteServiceImpl implements EstudianteService{
 			JDBCUtils.closeConnection(c, commit);
 		}
 	}
-
+	
 }

@@ -1,6 +1,6 @@
-package com.gzone.ecommerce.exceptions;
+package com.educorp.eduinteractive.ecommerce.exceptions;
 
-import com.gzone.exceptions.MyCompanyException;
+import com.educorp.eduinteractive.exceptions.EducorpExceptions;
 
 /**
  * Excepcion raiz para todas las excepciones de la capa de negocio del sistema.

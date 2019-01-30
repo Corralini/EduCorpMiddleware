@@ -7,15 +7,11 @@ import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Horario;
-import com.educorp.eduinteractive.ecommerce.service.criteria.HorarioCriteria;
 
 public interface HorarioDAO {
 
 	public Horario findById (Connection connection, Integer id)
 		throws DuplicateInstanceException, DataException;
-	
-	public List<Horario> findByCriteria (Connection connection , HorarioCriteria horario)
-		throws DataException;
 	
 	public List <Horario> findBy (Connection connection,Integer idProfesor, Integer idDia)
 		throws DataException;

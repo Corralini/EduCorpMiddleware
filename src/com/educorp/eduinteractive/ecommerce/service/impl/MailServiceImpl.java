@@ -2,8 +2,10 @@ package com.educorp.eduinteractive.ecommerce.service.impl;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
+import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class MailServiceImpl implements MailService{
@@ -13,7 +15,7 @@ public class MailServiceImpl implements MailService{
 	
 
 	@Override
-	public void sendEmail(String to, String subject, String plainText) throws Exception {
+	public void sendEmail(String to, String subject, String plainText) throws MailException {
 		try {
 			Email email = new SimpleEmail();
 			email.setHostName("smtp.googlemail.com");
@@ -27,7 +29,7 @@ public class MailServiceImpl implements MailService{
 			email.addTo(to);
 			email.send();
 			System.out.println("Mensaje enviado");
-			}catch (Exception e) {
+			}catch (EmailException e) {
 				e.printStackTrace();
 			}
 		

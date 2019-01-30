@@ -1,4 +1,6 @@
-ackage com.educorp.eduinteractive.ecommerce.service;
+package com.educorp.eduinteractive.exceptions;
+
+
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 

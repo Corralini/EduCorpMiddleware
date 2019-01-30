@@ -15,7 +15,6 @@ import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Horario;
-import com.educorp.eduinteractive.ecommerce.service.criteria.HorarioCriteria;
 
 public class HorarioDAOImpl implements HorarioDAO{
 
@@ -62,65 +61,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 		return h;
 	}
 	
-	@Override
-	public List<Horario> findByCriteria (Connection connection, HorarioCriteria horario) 
-			throws DataException{
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		StringBuilder queryString = null;
-
-		try {
-    
-			queryString = new StringBuilder(
-					"SELECT id_hora "
-					+" FROM horario ");
-			
-			boolean first = true;
-			
-			if (horario.getIdProfesor() != null) {
-				DAOUtils.addClause(queryString, first, " id_profesor =  ? ");
-				first = false;
-			}
-			
-			if(horario.getIdDia() != null) {
-				DAOUtils.addClause(queryString, first, " id_dia = ? ");
-			}
-			
-
-
-			
-			
-			preparedStatement = connection.prepareStatement(queryString.toString(),
-					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-			int i = 1;  
-			
-			if (horario.getIdProfesor() != null)
-				preparedStatement.setInt(i++, horario.getIdProfesor());
-			if (horario.getIdDia()!=null) 
-				preparedStatement.setInt(i++,horario.getIdDia() );
-			
-
-			resultSet = preparedStatement.executeQuery();
-			
-			List<Horario> estudiantes = new ArrayList<Horario>();                        
-			Horario e = null;
-
-			while (resultSet.next()) {
-				e = loadNext(resultSet);						
-				estudiantes.add(e);
-			}
-
-			return estudiantes;
 	
-			} catch (SQLException e) {
-				throw new DataException("Hemos encontrado un problema");
-			} finally {
-				JDBCUtils.closeResultSet(resultSet);
-				JDBCUtils.closeStatement(preparedStatement);
-		}
-	}
- 
 	@Override
 	public List<Horario> findBy(Connection connection, Integer idProfesor, Integer idDia) throws DataException {
 		PreparedStatement preparedStatement = null;

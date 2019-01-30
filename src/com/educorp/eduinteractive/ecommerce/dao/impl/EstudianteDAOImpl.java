@@ -16,8 +16,8 @@ import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
-import com.educorp.eduinteractive.ecommerce.service.PasswordEncryptionUtil;
 import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
+import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
@@ -115,7 +115,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
     
 			queryString = new StringBuilder(
-					"SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
+					"SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
 					+" FROM ESTUDIANTE ");
 			
 			boolean first = true;
@@ -197,9 +197,9 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (estudiante.getApellido2()!=null) 
 				preparedStatement.setString(i++, "%" + estudiante.getApellido2() + "%");
 			if(estudiante.getIdNivel() != null)
-				preparedStatement.setInt(i++, estudiante.getIdNivel());
+				preparedStatement.setString(i++, estudiante.getIdNivel());
 			if (estudiante.getAnoNacimiento() != null)
-				preparedStatement.setInt(i++, estudiante.getAnoNacimiento());
+				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getAnoNacimiento());
 			if (estudiante.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getFechaSubscripcion());
 
@@ -232,7 +232,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NNIVEL, ID_GENERO "
+			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
 					+"FROM ESTUDIANTE "
 					+"WHERE upper(email) like upper(?) ";
 
@@ -326,9 +326,9 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			preparedStatement.setString(i++, e.getNombre());
 			preparedStatement.setString(i++, e.getApellido1());
 			preparedStatement.setString(i++, e.getApellido2());
-			preparedStatement.setInt(i++, e.getAnoNacimiento());
+			preparedStatement.setDate(i++, new java.sql.Date( e.getAnoNacimiento().getTime()));
 			preparedStatement.setDate(i++, new java.sql.Date(e.getFechaSubscripcion().getTime()));
-			preparedStatement.setInt(i++, e.getIdNivel());
+			preparedStatement.setString(i++, e.getIdNivel());
 			preparedStatement.setString(i++, e.getIdGenero());
 			
 			// Execute query
@@ -450,7 +450,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (e.getApellido2()!=null) 
 				preparedStatement.setString(i++,e.getApellido1());
 			if (e.getAnoNacimiento() != null)
-				preparedStatement.setInt(i++, e.getAnoNacimiento());
+				preparedStatement.setDate(i++, (java.sql.Date) e.getAnoNacimiento());
 			if (e.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) e.getFechaSubscripcion());
 
@@ -484,9 +484,9 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		String nombre = resultSet.getString(i++);
 		String apellido1 = resultSet.getString(i++);	
 		String apellido2 = resultSet.getString(i++);
-		Integer anoNacimiento = resultSet.getInt(i++);
+		Date anoNacimiento = resultSet.getDate(i++);
 		Date fechaSubscripcion = resultSet.getDate(i++);
-		Integer idNivel = resultSet.getInt(i++);
+		String idNivel = resultSet.getString(i++);
 		String idGenero = resultSet.getString(i++);
 		
 

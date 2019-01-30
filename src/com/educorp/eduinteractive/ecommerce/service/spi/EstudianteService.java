@@ -3,7 +3,10 @@ package com.educorp.eduinteractive.ecommerce.service.spi;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
+import com.educorp.eduinteractive.ecommerce.model.Profesor;
 import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
 
 public interface EstudianteService {
@@ -18,8 +21,23 @@ public interface EstudianteService {
 		throws DataException;
 	
 	public Estudiante signUp(Estudiante e)
+		throws DuplicateInstanceException, MailException, DataException;
+	
+	public void update(Estudiante e)
 		throws DataException;
 	
-	public Estudiante update(Estudiante e)
-		throws DataException;
+	public Estudiante findByEmailToRecovery (String email) 
+		throws MailException, DataException;
+	
+	public void setCodigo (Estudiante e) 
+		throws MailException, DataException;
+	
+	public void comprobarCodigo (int codigo, Estudiante e) 
+			throws DataException;
+	
+	public void cambiarContra (Estudiante e, String psswd)
+			throws DataException;
+	
+	public void puntuarProfesor (Profesor p, Estudiante e, double puntuacion) 
+			throws DataException;
 }
