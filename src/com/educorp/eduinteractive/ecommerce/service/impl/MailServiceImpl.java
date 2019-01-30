@@ -1,10 +1,10 @@
-package com.educorp.eduinteractive.service.impl;
+package com.educorp.eduinteractive.ecommerce.service.impl;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
 
-import com.educorp.eduinteractive.service.MailService;
+import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class MailServiceImpl implements MailService{
 	

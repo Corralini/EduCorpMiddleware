@@ -13,12 +13,14 @@ import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.SesionDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Sesion;
 
 public class SesionDAOImpl implements SesionDAO{
 
 	@Override
-	public Sesion findById(Connection connection, Integer id) throws DataException {
+	public Sesion findById(Connection connection, Integer id) throws InstanceNotFoundException, DataException {
 		Sesion s = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -139,13 +141,14 @@ public class SesionDAOImpl implements SesionDAO{
 	}
 
 	@Override
-	public Sesion create(Connection connection, Sesion s) throws DataException {
+	public Sesion create(Connection connection, Sesion s) 
+			throws DuplicateInstanceException, DataException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
 
 			// Creamos el preparedstatement
-			String queryString = "INSERT INTO SESION (ID_PROFESOR, ID_ESTUDIANTE,ID_MES, ID_HORARIO, FECHA_INICIO, FECHA_FIN, ANO, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO) "
+			String queryString = "INSERT INTO SESION (ID_PROFESOR, ID_ESTUDIANTE,FECHA_SESION, ID_HORARIO, FECHA_INICIO, FECHA_FIN, ANO, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			preparedStatement = connection.prepareStatement(queryString,
@@ -155,11 +158,10 @@ public class SesionDAOImpl implements SesionDAO{
 			int i = 1;    
 			preparedStatement.setInt(i++, s.getIdProfesor());
 			preparedStatement.setInt(i++, s.getIdEstudiante());
-			preparedStatement.setInt(i++, s.getIdMes());
+			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaSesion().getTime()));
 			preparedStatement.setInt(i++, s.getIdHorario());
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaInicio().getTime()));
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaFin().getTime()));
-			preparedStatement.setInt(i++, s.getAno());
 			preparedStatement.setDouble(i++, s.getPrecio());
 			preparedStatement.setString(i++, s.getIdEstado());
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaCambioEstado().getTime()));
@@ -192,7 +194,8 @@ public class SesionDAOImpl implements SesionDAO{
 	}
 
 	@Override
-	public void update(Connection connection, Sesion s) throws DataException {
+	public void update(Connection connection, Sesion s) 
+			throws InstanceNotFoundException, DataException {
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
@@ -213,8 +216,8 @@ public class SesionDAOImpl implements SesionDAO{
 				first = false;
 			}	
 
-			if (s.getIdMes() != null) {
-				DAOUtils.addUpdate(queryString, first, " id_mes = ? ");
+			if (s.getFechaSesion() != null) {
+				DAOUtils.addUpdate(queryString, first, " fecha_sesion = ? ");
 				first = false;
 			}
 			
@@ -238,11 +241,6 @@ public class SesionDAOImpl implements SesionDAO{
 				first = false;
 			}
 			
-			if (s.getAno() != null) {
-				DAOUtils.addUpdate(queryString, first, " ano = ? ");
-				first = false;
-			}
-			
 			if (s.getIdEstado() != null) {
 				DAOUtils.addUpdate(queryString, first, "id_estado = ?");
 				first = false;
@@ -263,8 +261,8 @@ public class SesionDAOImpl implements SesionDAO{
 				preparedStatement.setInt(i++, s.getIdProfesor());
 			if (s.getIdEstudiante() != null)
 				preparedStatement.setInt(i++, s.getIdEstudiante());
-			if (s.getIdMes()!=null) 
-				preparedStatement.setInt(i++,s.getIdMes());
+			if (s.getFechaSesion()!=null) 
+				preparedStatement.setDate(i++,(java.sql.Date) s.getFechaSesion());
 			if (s.getIdHorario() != null)
 				preparedStatement.setInt(i++, s.getIdHorario());
 			if (s.getFechaInicio()!=null) 
@@ -273,8 +271,6 @@ public class SesionDAOImpl implements SesionDAO{
 				preparedStatement.setDate(i++, (java.sql.Date) s.getFechaFin());
 			if (s.getPrecio()!=null) 
 				preparedStatement.setDouble(i++,s.getPrecio());
-			if (s.getAno()!=null) 
-				preparedStatement.setInt(i++,s.getAno());
 			if (s.getIdEstado() != null)
 				preparedStatement.setString(i++, s.getIdEstado());
 			if (s.getFechaCambioEstado() != null)
@@ -305,12 +301,11 @@ public class SesionDAOImpl implements SesionDAO{
 		Integer idSesion = resultSet.getInt(i++);
 		Integer idProfesor = resultSet.getInt(i++);
 		Integer idEstudiante = resultSet.getInt(i++);
-		Integer idMes = resultSet.getInt(i++);
+		Date fechaSesion = resultSet.getDate(i++);
 		Integer idHorario = resultSet.getInt(i++);
 		Date fechaInicio = resultSet.getDate(i++);
 		Date fechaFIn = resultSet.getDate(i++);
 		Double precio = resultSet.getDouble(i++);
-		Integer ano = resultSet.getInt(i++);
 		String idEstado = resultSet.getString(i++);
 		Date fechaCambioEstado = resultSet.getDate(i++);
 		
@@ -318,12 +313,11 @@ public class SesionDAOImpl implements SesionDAO{
 		s.setIdSesion(idSesion);
 		s.setIdProfesor(idProfesor);
 		s.setIdEstudiante(idEstudiante);
-		s.setIdMes(idMes);
+		s.setFechaSesion(fechaSesion);
 		s.setIdHorario(idHorario);
 		s.setFechaInicio(fechaInicio);
 		s.setFechaFin(fechaFIn);
 		s.setPrecio(precio);
-		s.setAno(ano);
 		s.setIdEstado(idEstado);
 		s.setFechaCambioEstado(fechaCambioEstado);
 

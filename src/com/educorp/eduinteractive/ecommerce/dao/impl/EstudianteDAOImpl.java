@@ -13,14 +13,16 @@ import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.EstudianteDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
-import com.educorp.eduinteractive.ecommerce.service.EstudianteCriteria;
 import com.educorp.eduinteractive.ecommerce.service.PasswordEncryptionUtil;
+import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
 
 public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public Estudiante findById(Connection connection, Integer id)
-			throws  DataException {
+			throws  InstanceNotFoundException,DataException {
 
 		Estudiante e = null;
 		PreparedStatement preparedStatement = null;
@@ -64,7 +66,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	
 	
 	@Override
-	public List<Estudiante> findByNombre(Connection connection, String criterioNombre)
+	public List<Estudiante> findByNombre(Connection connection, String nombre)
 			throws DataException {	
 
 		PreparedStatement preparedStatement = null;
@@ -74,9 +76,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			String sql;
 			sql =  	 "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
 					+"  FROM ESTUDIANTE "
-					+"	UPPER(FIRST_NAME) LIKE ? " 
-					+"  AND"
-					+"  UPPER(LAST_NAME) LIKE  ? ";
+					+"	WHERE UPPER(NOMBRE) LIKE UPPER(?) ";
 
 			// Preparar a query
 			System.out.println("Creating statement...");
@@ -84,7 +84,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 			// Establece os parámetros
 			int i = 1;
-			preparedStatement.setString(i++, "%" + criterioNombre.toUpperCase() + "%");			
+			preparedStatement.setString(i++, "%" + nombre.toUpperCase() + "%");			
 
 			resultSet = preparedStatement.executeQuery();			
 
@@ -97,7 +97,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			} 
 			return empleados;
 		} catch (SQLException ex) {
-			throw new DataException(ex);
+			throw new DataException("Non se encontrou o estudiante " + nombre);
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
@@ -115,7 +115,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
     
 			queryString = new StringBuilder(
-					"SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NNIVEL, ID_GENERO "
+					"SELECT ID_ESTUDIANTE, EMAIL,ID_NIVEL, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
 					+" FROM ESTUDIANTE ");
 			
 			boolean first = true;
@@ -191,17 +191,17 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (estudiante.getPsswd()!=null) 
 				preparedStatement.setString(i++, estudiante.getPsswd());
 			if (estudiante.getNombre()!=null)
-				preparedStatement.setString(i++,estudiante.getNombre());
+				preparedStatement.setString(i++, "%" + estudiante.getNombre() + "%");
 			if (estudiante.getApellido1()!=null) 
-				preparedStatement.setString(i++,estudiante.getApellido1());
+				preparedStatement.setString(i++, "%" + estudiante.getApellido1() + "%");
 			if (estudiante.getApellido2()!=null) 
-				preparedStatement.setString(i++,estudiante.getApellido1());
+				preparedStatement.setString(i++, "%" + estudiante.getApellido2() + "%");
+			if(estudiante.getIdNivel() != null)
+				preparedStatement.setInt(i++, estudiante.getIdNivel());
 			if (estudiante.getAnoNacimiento() != null)
 				preparedStatement.setInt(i++, estudiante.getAnoNacimiento());
 			if (estudiante.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getFechaSubscripcion());
-
-
 
 			resultSet = preparedStatement.executeQuery();
 			
@@ -216,7 +216,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			return estudiantes;
 	
 			} catch (SQLException e) {
-				throw new DataException(e);
+				throw new DataException("Hemos encontrado un problema");
 			} finally {
 				JDBCUtils.closeResultSet(resultSet);
 				JDBCUtils.closeStatement(preparedStatement);
@@ -305,7 +305,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 	@Override
 	public Estudiante create(Connection connection, Estudiante e) 
-			throws DataException {
+			throws DuplicateInstanceException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -359,7 +359,8 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	}
 
 	@Override
-	public void update(Connection c, Estudiante e) throws  DataException {
+	public void update(Connection c, Estudiante e) 
+			throws  InstanceNotFoundException, DataException {
 		
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;

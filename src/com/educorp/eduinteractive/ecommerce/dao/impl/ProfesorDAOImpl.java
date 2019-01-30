@@ -13,13 +13,16 @@ import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
-import com.educorp.eduinteractive.ecommerce.service.ProfesorCriteria;
+import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 
 public class ProfesorDAOImpl implements ProfesorDAO {
 
 	@Override
-	public Profesor findById(Connection connection, Integer id) throws DataException {
+	public Profesor findById(Connection connection, Integer id) 
+			throws InstanceNotFoundException, DataException {
 		Profesor p = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -252,7 +255,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	}
 
 	@Override
-	public Profesor create(Connection c, Profesor p) throws DataException {
+	public Profesor create(Connection c, Profesor p) 
+			throws DuplicateInstanceException, DataException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -311,7 +315,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	}
 
 	@Override
-	public void update(Connection c, Profesor p) throws DataException {
+	public void update(Connection c, Profesor p) 
+			throws InstanceNotFoundException, DataException {
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	

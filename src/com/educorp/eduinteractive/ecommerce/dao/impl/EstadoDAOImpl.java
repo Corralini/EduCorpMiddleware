@@ -13,7 +13,7 @@ import com.educorp.eduinteractive.ecommerce.model.Estado;
 public class EstadoDAOImpl implements EstadoDAO{
 
 	@Override
-	public Estado findId(Connection connection, String idEstado) throws DataException {
+	public Estado findById(Connection connection, String idEstado) throws DataException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -37,7 +37,7 @@ public class EstadoDAOImpl implements EstadoDAO{
 				e = loadNext(resultSet);				
 			} else {
 				throw new DataException("Estado with id " + idEstado + 
-						"not found");
+						" not found");
 			}
 
 			return e;

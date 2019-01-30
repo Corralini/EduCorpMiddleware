@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.service;
+package com.educorp.eduinteractive.ecommerce.service.spi;
 
 public interface MailService {
 

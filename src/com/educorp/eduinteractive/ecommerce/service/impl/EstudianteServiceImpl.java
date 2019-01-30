@@ -1,18 +1,20 @@
-package com.educorp.eduinteractive.service.impl;
+package com.educorp.eduinteractive.ecommerce.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
-import com.educorp.eduinteractive.dao.EstudianteDAO;
-import com.educorp.eduinteractive.dao.impl.EstudianteDAOImpl;
-import com.educorp.eduinteractive.dao.service.ConnectionManager;
-import com.educorp.eduinteractive.dao.service.JDBCUtils;
-import com.educorp.eduinteractive.exceptions.DataException;
-import com.educorp.eduinteractive.model.Estudiante;
-import com.educorp.eduinteractive.service.EstudianteService;
-import com.educorp.eduinteractive.service.MailService;
-import com.educorp.eduinteractive.services.PasswordEncryptionUtil;
+import com.educorp.eduinteractive.ecommerce.dao.impl.EstudianteDAOImpl;
+import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
+import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.spi.EstudianteDAO;
+import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.model.Estudiante;
+import com.educorp.eduinteractive.ecommerce.service.PasswordEncryptionUtil;
+import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
+import com.educorp.eduinteractive.ecommerce.service.spi.EstudianteService;
+import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class EstudianteServiceImpl implements EstudianteService{
 	
@@ -25,14 +27,14 @@ public class EstudianteServiceImpl implements EstudianteService{
 	
 	@Override
 	public Estudiante findById(Integer id) 
-		throws Exception {
+		throws DataException {
 		boolean commit = false;
 		Connection c = ConnectionManager.getConnection();
 		try {
 			c.setAutoCommit(true);
 			return dao.findById(c, id);
 		
-		}catch (SQLException ex) {
+		}catch (DataException ex) {
 			ex.printStackTrace();
 			throw ex;
 		} finally {   
@@ -43,7 +45,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	
 	@Override
 	public Estudiante login(String email, String psswd)
-		throws Exception{
+		throws DataException{
 		Connection c = ConnectionManager.getConnection();
 		try {
 			
@@ -63,14 +65,18 @@ public class EstudianteServiceImpl implements EstudianteService{
 			}
 			
 			return null;
-		}finally {
+		}catch(DataException de) {
+			de.printStackTrace();
+			throw de;
+		}
+		finally {
 			
 		}
 	}
 
 	@Override
 	public Estudiante signUp(Estudiante e)
-		throws Exception {
+		throws DataException {
 		boolean commit = false;
 		Connection c = ConnectionManager.getConnection();
 
@@ -107,8 +113,15 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 	@Override
 	public Estudiante update(Estudiante e)
-		throws Exception {
+		throws DataException {
 
+		return null;
+	}
+
+	@Override
+	public List<Estudiante> findByCriteria(EstudianteCriteria criteria)
+			throws com.educorp.eduinteractive.ecommerce.service.spi.DataException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

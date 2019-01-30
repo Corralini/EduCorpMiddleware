@@ -10,9 +10,51 @@ import java.util.List;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.HoraDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Hora;
 
 public class HoraDAOImpl implements HoraDAO{
+	
+	@Override
+	public Hora findById(Connection connection, Integer id) throws InstanceNotFoundException, DataException {
+		
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			String queryString = 
+									"SELECT ID_DIA, DIA " 
+									+"FROM DIA "
+									+"where id_dia = ?";
+
+			preparedStatement = connection.prepareStatement(queryString,
+					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			int i = 1;
+			preparedStatement.setInt(i++, id);
+			
+			resultSet = preparedStatement.executeQuery();
+                       
+			Hora t = null;
+
+			if (resultSet.next()) {				
+				t = loadNext(resultSet);				
+			} else {
+				throw new DataException("Non se encontrou a hora "+id);
+			}
+			if (resultSet.next()) {
+				throw new DataException("Hora "+id+" duplicado");
+			}                	              	
+
+			return t;
+		}catch (SQLException e) {
+			throw new DataException(e);
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}
+	}
 
 	public List<Hora> findAll(Connection connection) throws DataException {
 		PreparedStatement preparedStatement = null;

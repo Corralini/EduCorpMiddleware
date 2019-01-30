@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
-import com.educorp.eduinteractive.ecommerce.service.ProfesorCriteria;
+import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 
 public interface ProfesorDAO {
 
 	public Profesor findById (Connection c, Integer id)
-			throws  DataException;
+			throws  InstanceNotFoundException, DataException;
 
 	public Profesor findByEmail (Connection c, String email)
 			throws DataException;
@@ -19,9 +21,9 @@ public interface ProfesorDAO {
 			throws DataException;
 
 	public Profesor create (Connection c, Profesor p)
-			throws DataException;
+			throws DuplicateInstanceException, DataException;
 
 	public void update (Connection c, Profesor p)
-			throws DataException;
+			throws InstanceNotFoundException, DataException;
 
 }

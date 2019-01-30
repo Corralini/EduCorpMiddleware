@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.dao.service;
+package com.educorp.eduinteractive.ecommerce.service.criteria;
 
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
 

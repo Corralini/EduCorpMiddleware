@@ -8,7 +8,7 @@ import com.educorp.eduinteractive.ecommerce.model.Estado;
 public interface EstadoDAO {
 
 	
-	public Estado findId(Connection connection, String estado)
+	public Estado findById(Connection connection, String estado)
 			throws DataException;
 	
 }

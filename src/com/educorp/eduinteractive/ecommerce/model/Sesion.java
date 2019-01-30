@@ -9,12 +9,11 @@ public class Sesion extends AbstractValueObject{
 	private Integer idSesion = null;
 	private Integer idEstudiante = null;
 	private Integer idProfesor = null;
-	private Integer idMes = null;
+	private Date fechaSesion = null;
 	private Integer idHorario = null;
 	private Date fechaInicio = null;
 	private Date fechaFin = null;
 	private Double precio = null;
-	private Integer ano = null;
 	private String idEstado = null;
 	private Date fechaCambioEstado = null;
 	
@@ -54,13 +53,14 @@ public class Sesion extends AbstractValueObject{
 	}
 
 
-	public Integer getIdMes() {
-		return idMes;
+
+	public Date getFechaSesion() {
+		return fechaSesion;
 	}
 
 
-	public void setIdMes(Integer idMes) {
-		this.idMes = idMes;
+	public void setFechaSesion(Date fechaSesion) {
+		this.fechaSesion = fechaSesion;
 	}
 
 
@@ -103,15 +103,6 @@ public class Sesion extends AbstractValueObject{
 		this.precio = precio;
 	}
 
-
-	public Integer getAno() {
-		return ano;
-	}
-
-
-	public void setAno(Integer ano) {
-		this.ano = ano;
-	}
 
 
 	public String getIdEstado() {

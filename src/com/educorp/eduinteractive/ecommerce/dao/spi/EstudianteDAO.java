@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
+import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
+import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
-import com.educorp.eduinteractive.ecommerce.service.EstudianteCriteria;
+import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
 
 public interface EstudianteDAO {
 
 	public Estudiante findById (Connection c, Integer id)
-		throws  DataException;
+		throws  InstanceNotFoundException, DataException;
 
 	public List<Estudiante> findByNombre (Connection c, String nombre)
 			throws DataException;
@@ -25,9 +27,9 @@ public interface EstudianteDAO {
     		throws DataException;
 	
 	public Estudiante create (Connection c, Estudiante e)
-		throws  DataException;
+		throws  DuplicateInstanceException, DataException;
 	
 	public void update (Connection c, Estudiante e)
-		throws  DataException;
+		throws  InstanceNotFoundException, DataException;
 	
 }

@@ -2,18 +2,18 @@ package com.educorp.eduinteractive.ecommerce.model;
 
 public class Pais extends AbstractValueObject{
 
-	private Integer idPais = null;
+	private String idPais = null;
 	private String pais = null;
 	
 	public Pais() {
 		
 	}
 
-	public Integer getIdPais() {
+	public String getIdPais() {
 		return idPais;
 	}
 
-	public void setIdPais(Integer idPais) {
+	public void setIdPais(String idPais) {
 		this.idPais = idPais;
 	}
 

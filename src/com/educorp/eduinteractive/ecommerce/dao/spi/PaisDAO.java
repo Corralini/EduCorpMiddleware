@@ -7,6 +7,6 @@ import com.educorp.eduinteractive.ecommerce.model.Pais;
 
 public interface PaisDAO {
 	
-	public List<Pais> findAll (Connection connection) 
+	public List<Pais> findAll (Connection connection, String idIdioma) 
 			throws Exception;
 }

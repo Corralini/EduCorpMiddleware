@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.service;
+package com.educorp.eduinteractive.ecommerce.service.criteria;
 
 import com.educorp.eduinteractive.ecommerce.model.Estudiante;
 

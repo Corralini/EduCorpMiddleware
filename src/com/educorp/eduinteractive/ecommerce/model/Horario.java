@@ -4,12 +4,21 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Horario extends AbstractValueObject{
 
+	private Integer idHorario = null;
 	private Integer idProfesor = null;
 	private Integer idDia = null;
 	private Integer idHora = null;
 
 	public Horario() {
 
+	}
+
+	public Integer getIdHorario() {
+		return idHorario;
+	}
+
+	public void setIdHorario(Integer idHorario) {
+		this.idHorario = idHorario;
 	}
 
 	public Integer getIdProfesor() {
