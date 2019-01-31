@@ -119,16 +119,17 @@ public class EstudianteServiceTest {
 
 			EstudianteCriteria c = new EstudianteCriteria();
 
-			c.setIdGenero("o");
-			c.setIdPais("ES");
+			c.setIdGenero("M");
+			c.setApellido1("settg");
 
 
 			EstudianteService estudiante = new EstudianteServiceImpl();
 			List<Estudiante> est;
 			try {
 				est = estudiante.findByCriteria(c);
-				for (Estudiante e: est)
+				for (Estudiante e: est) {
 				System.out.println(e);
+				}
 			} catch (DataException e1) {
 				e1.printStackTrace();
 			}

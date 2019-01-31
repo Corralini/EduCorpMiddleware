@@ -123,15 +123,17 @@ public class SesionServicesImpl implements SesionServices{
 				sesionDAO.update(c, s);
 				
 				commit = true;
-				TimeUnit.SECONDS.sleep(10);
+				// Simulacion de vidiollamada
+				// TimeUnit.SECONDS.sleep(10);
 			}else {
 				cambiarEstado(s, "R");
 			}
 		}catch(SQLException ex) {
 			throw new DataException(ex);
-		}catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
-		}finally {
+		}// catch (InterruptedException ie) {
+			//     Thread.currentThread().interrupt();
+		//}
+			finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
 

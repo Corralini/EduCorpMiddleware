@@ -211,16 +211,17 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 			List<Estudiante> estudiantes = new ArrayList<Estudiante>();                        
 			Estudiante e = null;
-			if (resultSet.next()) {
+
 				while (resultSet.next()) {
 					e = loadNext(resultSet);						
 					estudiantes.add(e);
 				}
+				
+				if (estudiantes.isEmpty()) {
+					throw new DataException("No se han encontrado resultados");
+				}
 
 				return estudiantes;
-			} else {
-				throw new DataException("No hay ningún resultado para la búsqueda");
-			}
 		} catch (SQLException e) {
 			throw new DataException("Hemos encontrado un problema" + e);
 		} finally {
