@@ -201,8 +201,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			c = ConnectionManager.getConnection();
 			e.setCodigoDeRecuperacion(UsuariosUtils.codRecuperacion());
 
-			String mssg = "Hola " + e.getNombre()
-			+ " " + e.getApellido1()
+			String mssg = "Hola "
 			+ " Introduce este código para poder cambiar tu contraseña: " + e.getCodigoDeRecuperacion();
 
 			c.setAutoCommit(false);
