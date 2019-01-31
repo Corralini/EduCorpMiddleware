@@ -33,21 +33,21 @@ public class HorarioServiceTest {
 	public static void main(String[] args) throws DuplicateInstanceException, DataException {
 		Horario h = new Horario();
 
-		//		h.setIdProfesor(4);
-		//		h.setIdDia(5);
-		//		h.setIdHora(25);
-		//		
-		//		create(h);
+				h.setIdProfesor(11);
+				h.setIdDia(5);
+				h.setIdHora(30);
+				
+				create(h);
 		
 //		findById(17);
 		
-		List<Horario> horarios = new ArrayList<Horario>();
-		
-		horarios = findByFecha(4, new Date());
-		
-		for(Horario horar : horarios) {
-			System.out.println("" + horar);
-		}
+//		List<Horario> horarios = new ArrayList<Horario>();
+//		
+//		horarios = findByFecha(4, new Date());
+//		
+//		for(Horario horar : horarios) {
+//			System.out.println("" + horar);
+//		}
 	}
 
 }

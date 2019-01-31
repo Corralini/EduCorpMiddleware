@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import com.educorp.eduinteractive.ecommerce.dao.impl.HorarioDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.SesionDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.spi.HorarioDAO;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.dao.spi.SesionDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;

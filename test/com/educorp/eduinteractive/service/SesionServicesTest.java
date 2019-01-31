@@ -44,20 +44,18 @@ public class SesionServicesTest {
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
 		
 		
-//		Horario h = new Horario();
-//		h.setIdHorario(9);
-//		h.setIdProfesor(3);
-//		h.setIdDia(1);
-//		h.setIdHora(12);
+		Horario h = new Horario();
+		h.setIdHorario(19);
+		h.setIdProfesor(11);
+		
+		createTest(h, new Date(), 4);
+		
+//		Sesion s = new Sesion();
+//		s.setIdSesion(7);
+//		s.setIdEstado("A");
 //		
-//		createTest(h, new Date(), 4);
-		
-		Sesion s = new Sesion();
-		s.setIdSesion(7);
-		s.setIdEstado("A");
-		
-		empezarSesionTest(s);
-		terminarSesionTest(s);
+//		empezarSesionTest(s);
+//		terminarSesionTest(s);
 //		cambiarEstadoTest(s, "a");
 		
 	}

@@ -15,7 +15,7 @@ import com.educorp.eduinteractive.ecommerce.model.Pais;
 public class PaisDAOImpl implements PaisDAO{
 
 	@Override
-	public List<Pais> findAll(Connection connection, String idIdioma) throws Exception {
+	public List<Pais> findAll(Connection connection, String idIdioma) throws DataException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
