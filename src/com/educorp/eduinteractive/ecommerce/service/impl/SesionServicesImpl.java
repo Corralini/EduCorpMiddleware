@@ -19,7 +19,6 @@ import com.educorp.eduinteractive.ecommerce.dao.spi.SesionDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
-import com.educorp.eduinteractive.ecommerce.model.Hora;
 import com.educorp.eduinteractive.ecommerce.model.Horario;
 import com.educorp.eduinteractive.ecommerce.model.Sesion;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
