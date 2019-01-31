@@ -46,7 +46,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			resultSet = preparedStatement.executeQuery();			
 			//STEP 5: Extract data from result set						
 			if (resultSet.next()) {				
-				p = loadNext(resultSet);				
+				p = loadNext(connection, resultSet);				
 			} else {
 				throw new DataException("Non se encontrou o profesor "+id);
 			}
@@ -89,7 +89,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			resultSet = preparedStatement.executeQuery();			
 			//STEP 5: Extract data from result set						
 			if (resultSet.next()) {				
-				e = loadNext(resultSet);				
+				e = loadNext(connection, resultSet);				
 			} else {
 				throw new DataException("Non se encontrou o estudiante "+email);
 			}
@@ -118,8 +118,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			queryString = new StringBuilder(
-					"SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
-							+" from profesor p ");
+					"select P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION, punt.puntuacion "
+							+" from profesor p left join estudiante_puntua_profesor punt on (p.id_profesor = punt.id_profesor) ");
 
 			boolean first = true;
 
@@ -201,7 +201,13 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				DAOUtils.addClause(queryString, first, " p.descripcion = ? ");
 			}
 			
-
+			if (profesor.getPuntuacion() != null) {
+				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM estudiante_puntua_profesor puntu where puntu.id_profesor = p.id_profesor) > ? ");
+			}
+			
+			queryString.append(" group By p.id_profesor"
+								+ " order by punt.puntuacion desc ");
+			
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -239,6 +245,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				preparedStatement.setInt(i++, profesor.getAceptado());
 			if (profesor.getDescripcion() != null)
 				preparedStatement.setString(i++, profesor.getDescripcion());
+			if (profesor.getPuntuacion() != null)
+				preparedStatement.setDouble(i++, profesor.getPuntuacion());
 
 
 			resultSet = preparedStatement.executeQuery();
@@ -247,7 +255,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			Profesor p = null;
 
 			while (resultSet.next()) {
-				p = loadNext(resultSet);						
+				p = loadNext(connection, resultSet);						
 				profesores.add(p);
 			}
 
@@ -475,10 +483,12 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		}
 	}
 
-	private Profesor loadNext(ResultSet resultSet) throws SQLException, DataException {
+	private Profesor loadNext(Connection connection, ResultSet resultSet) throws SQLException, DataException {
 
 		Profesor p = new Profesor();
 		int i = 1;
+		Double puntuacion = 0.0d;
+		
 		Integer id = resultSet.getInt(i++);
 		String email = resultSet.getString(i++);
 		String contra = resultSet.getString(i++);
@@ -515,7 +525,19 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		p.setDescripcion(descripcion);
 		p.setCodigoDeRecuperacion(codigoDeRecuperacion);
 
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+
+		String queryString = "SELECT AVG(PUNTUACION) "
+							+ " FROM ESTUDIANTE_PUNTUA_PROFESOR"
+							+ " WHERE ID_PROFESOR = " +p.getIdProfesor();
+		preparedStatement = connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		rs = preparedStatement.executeQuery();
+		if (rs.next()) {
+			puntuacion = rs.getDouble(1);
+		}
 		
+		p.setPuntuacion(puntuacion);
 		
 
 		return p;

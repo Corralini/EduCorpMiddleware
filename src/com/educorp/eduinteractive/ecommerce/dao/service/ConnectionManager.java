@@ -8,7 +8,7 @@ public class ConnectionManager	 {
 
 
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-	static final String DB_URL = "jdbc:mysql://192.168.0.17:3306/educorp?"
+	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/educorp?"
 			+ "useUnicode=true&useJDBCCompliantTimezoneShift=true"
 			+ "&useLegacyDatetimeCode=false&serverTimezone=UTC";
 

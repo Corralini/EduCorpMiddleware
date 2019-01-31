@@ -46,7 +46,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			resultSet = preparedStatement.executeQuery();			
 			//STEP 5: Extract data from result set						
 			if (resultSet.next()) {				
-				e = loadNext(resultSet);				
+				e = loadNext(connection, resultSet);				
 			} else {
 				throw new DataException("Non se encontrou o estudiante "+id);
 			}
@@ -92,7 +92,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			List<Estudiante> empleados = new ArrayList<Estudiante>();
 			Estudiante e = null;
 			while (resultSet.next()) {
-				e = loadNext(resultSet);						
+				e = loadNext(connection, resultSet);						
 				empleados.add(e);
 			} 
 			return empleados;
@@ -115,13 +115,13 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
 
 			queryString = new StringBuilder(
-					"SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
-							+" FROM ESTUDIANTE ");
+					"SELECT e.ID_ESTUDIANTE, e.EMAIL, e.ID_PAIS, e.PSSWD, e.NOMBRE, e.APELLIDO1, e.APELLIDO2, e.ANO_NACIMIENTO, e.FECHA_SUBSCRIPCION, e.ID_NIVEL, e.ID_GENERO, e.CODIGO_DE_RECUPERACION, punt.puntuacion "
+							+" from estudiante e  left join profesor_puntua_estudiante punt on (e.ID_ESTUDIANTE = punt.ID_ESTUDIANTE) ");
 
 			boolean first = true;
 
 			if (estudiante.getIdEstudiante() != null) {
-				DAOUtils.addClause(queryString, first, " id_estudiante =  ? ");
+				DAOUtils.addClause(queryString, first, " e.id_estudiante =  ? ");
 				first = false;
 			}	
 
@@ -175,6 +175,13 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 						+ "");
 				first = false;
 			}
+			
+			if (estudiante.getPuntuacion() != null) {
+				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM profesor_puntua_estudiante puntu where puntu.ID_ESTUDIANTE = e.ID_ESTUDIANTE) > ? ");
+			}
+			
+			queryString.append(" group By e.id_estudiante " 
+								+ " order by punt.puntuacion desc ");
 
 
 
@@ -205,6 +212,8 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				preparedStatement.setInt(i++, estudiante.getIdNivel());
 			if (estudiante.getIdGenero() != null)
 				preparedStatement.setString(i++, estudiante.getIdGenero());
+			if (estudiante.getPuntuacion() != null)
+				preparedStatement.setDouble(i++, estudiante.getPuntuacion());
 			
 
 			resultSet = preparedStatement.executeQuery();
@@ -213,7 +222,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			Estudiante e = null;
 
 				while (resultSet.next()) {
-					e = loadNext(resultSet);						
+					e = loadNext(connection, resultSet);						
 					estudiantes.add(e);
 				}
 				
@@ -255,7 +264,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			resultSet = preparedStatement.executeQuery();			
 			//STEP 5: Extract data from result set						
 			if (resultSet.next()) {				
-				e = loadNext(resultSet);				
+				e = loadNext(connection, resultSet);				
 			} else {
 				throw new DataException("Non se encontrou o estudiante "+email);
 			}
@@ -491,10 +500,11 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 	}
 
-	private Estudiante loadNext(ResultSet resultSet) throws SQLException, DataException {
+	private Estudiante loadNext(Connection connection, ResultSet resultSet) throws SQLException, DataException {
 
 		Estudiante e = new Estudiante();
 		int i = 1;
+		Double puntuacion = 0.0d;
 		Integer id = resultSet.getInt(i++);
 		String email = resultSet.getString(i++);
 		String idPais = resultSet.getString(i++);
@@ -523,6 +533,20 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		e.setIdNivel(idNivel);
 		e.setIdGenero(idGenero);
 		e.setCodigoDeRecuperacion(codigoRecuperacion);
+		
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+
+		String queryString = "SELECT AVG(PUNTUACION) "
+							+ " FROM profesor_puntua_estudiante"
+							+ " WHERE ID_ESTUDIANTE = " +e.getIdEstudiante();
+		preparedStatement = connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		rs = preparedStatement.executeQuery();
+		if (rs.next()) {
+			puntuacion = rs.getDouble(1);
+		}
+		
+		e.setPuntuacion(puntuacion);
 
 		return e;
 

@@ -1,5 +1,6 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -71,19 +72,19 @@ public class ProfesorServiceTest {
 	
 	public static void main(String[] args) throws DataException, MailException {
 		
-//		List<Profesor> profesores = new ArrayList<Profesor>();
-//		ProfesorCriteria criteria = new ProfesorCriteria();
-//		
-//		criteria.setPrecioSesion(1.0d);
-//		criteria.setPrecioSesionHasta(7.0d);
-//		
-//		profesores = findByCriteriaTest(criteria);
-//		
-//		for (Profesor p: profesores) {
-//			System.out.println("" + p);
-//		}
+		List<Profesor> profesores = new ArrayList<Profesor>();
+		ProfesorCriteria criteria = new ProfesorCriteria();
 		
-		findByIdTest(4);
+		criteria.setPrecioSesion(1.0d);
+		criteria.setPuntuacion(3.25d);
+		
+		profesores = findByCriteriaTest(criteria);
+		
+		for (Profesor p: profesores) {
+			System.out.println("" + p);
+		}
+		
+//		findByIdTest(6);
 		
 //		Profesor test = new Profesor();
 //		test.setIdProfesor(11);

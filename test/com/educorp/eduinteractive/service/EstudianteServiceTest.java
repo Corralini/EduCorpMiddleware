@@ -1,6 +1,6 @@
 package com.educorp.eduinteractive.service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -89,34 +89,33 @@ public class EstudianteServiceTest {
 //						test.setAnoNacimiento(1969);
 //						test.setIdNivel(2);
 //						test.setIdGenero("O");
-//						test.setFechaSubscripcion(new Date(1998,5,9));
-
-
-			//			
+//
+//
+//			//			
 //						Estudiante testNuevo = new Estudiante();
 //						testNuevo.setEmail("acorralfdez@gmail.com");
-//						testNuevo.setIdGenero("H");
-//						signUpTest(test);
-
-			//			updateTest(testNuevo);
-			//			cambiarContraTest(997414, "acorralfdez@gmail.com", "nueva");
+//						testNuevo.setIdGenero("h");
+////						signUpTest(test);
+//
+//						updateTest(testNuevo);
+//			//			cambiarContraTest(997414, "acorralfdez@gmail.com", "nueva");
 
 			//			Profesor profesor = new Profesor();
 			//			profesor.setIdProfesor(1);
 			//			
 			//			puntuarProfesorTest(profesor, test, 4.0d);
 
-			//			List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
-			//			EstudianteCriteria criteria = new EstudianteCriteria();
-			//			
-			//			criteria.setNombre("zrasdtfj");
-			//
-			//			
-			//			estudiantes = findByCriteriaTest(criteria);
-			//			
-			//			for (Estudiante e : estudiantes) {
-			//				System.out.println("" + e);
-			//			}
+						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
+						EstudianteCriteria criteria = new EstudianteCriteria();
+						
+						criteria.setPuntuacion(2.0d);
+			
+						
+						estudiantes = findByCriteriaTest(criteria);
+						
+						for (Estudiante e : estudiantes) {
+							System.out.println("" + e);
+						}
 
 	}
 

@@ -6,18 +6,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Estudiante extends AbstractValueObject{
 
-	private Integer id;
-	private String email;
-	private String idPais;
-	private String psswd;
-	private String nombre;
-	private String apellido1;
-	private String apellido2;
-	private Integer anoNacimiento;
-	private Date fechaSubscripcion;
-	private Integer idNivel;
-	private String idGenero;
-	private Integer codigoDeRecuperacion;
+	private Integer id = null;
+	private String email = null;
+	private String idPais = null;
+	private String psswd = null;
+	private String nombre = null;
+	private String apellido1 = null;
+	private String apellido2 = null;
+	private Integer anoNacimiento = null;
+	private Date fechaSubscripcion = null;
+	private Integer idNivel = null;
+	private String idGenero = null;
+	private Integer codigoDeRecuperacion = null;
+	private Double puntuacion = null;
 	
 	public Estudiante() {
 		
@@ -140,6 +141,16 @@ public class Estudiante extends AbstractValueObject{
 
 	public void setCodigoDeRecuperacion(Integer codigoDeRecuperacion) {
 		this.codigoDeRecuperacion = codigoDeRecuperacion;
+	}
+
+
+	public Double getPuntuacion() {
+		return puntuacion;
+	}
+
+
+	public void setPuntuacion(Double puntuacion) {
+		this.puntuacion = puntuacion;
 	}
 
 
