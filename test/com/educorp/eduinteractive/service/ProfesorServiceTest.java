@@ -1,5 +1,6 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -75,8 +76,7 @@ public class ProfesorServiceTest {
 //		ProfesorCriteria criteria = new ProfesorCriteria();
 //		
 //		criteria.setPrecioSesion(1.0d);
-//		criteria.setPrecioSesionHasta(6.0d);
-//		criteria.setIdPais("se");
+//		criteria.setPrecioSesionHasta(7.0d);
 //		
 //		profesores = findByCriteriaTest(criteria);
 //		
@@ -84,22 +84,22 @@ public class ProfesorServiceTest {
 //			System.out.println("" + p);
 //		}
 		
-//		findByIdTest(4);
+		findByIdTest(4);
 		
-		Profesor test = new Profesor();
-		test.setIdProfesor(11);
-		test.setEmail("acorralfdez@gmail.com");
-		test.setPsswd("corralito");
-		test.setIdPais("es");
-		test.setNombre("Alejandro Ricardo");
-		test.setApellido1("Corral");
-		test.setApellido2("Fernández");
-		test.setAnoNacimiento(2000);
-		test.setPrecioSesion(5.5d);
-		test.setIdIdioma("en");
-		test.setIdNivel(2);
-		test.setIdGenero("H");
-		test.setDescripcion("You love me and you know it");
+//		Profesor test = new Profesor();
+//		test.setIdProfesor(11);
+//		test.setEmail("acorralfdez@gmail.com");
+//		test.setPsswd("corralito");
+//		test.setIdPais("es");
+//		test.setNombre("Alejandro Ricardo");
+//		test.setApellido1("Corral");
+//		test.setApellido2("Fernández");
+//		test.setAnoNacimiento(2000);
+//		test.setPrecioSesion(5.5d);
+//		test.setIdIdioma("en");
+//		test.setIdNivel(2);
+//		test.setIdGenero("H");
+//		test.setDescripcion("You love me and you know it");
 //		
 //		signUp(test);
 		
@@ -115,10 +115,10 @@ public class ProfesorServiceTest {
 //		findByEmailToRecovery("acorralfdez@gmail.com");
 //		cambiarContraTest(379067, "acorralfdez@gmail.com", "pericodelospalotes123.");
 		
-		Estudiante e = new Estudiante ();
-		e.setIdEstudiante(3);
-		
-		puntuarEstudianteTest(test, e, 8.0d);
+//		Estudiante e = new Estudiante ();
+//		e.setIdEstudiante(3);
+//		
+//		puntuarEstudianteTest(test, e, 8.0d);
 	}
 	
 }

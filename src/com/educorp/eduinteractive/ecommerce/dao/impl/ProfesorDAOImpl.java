@@ -30,9 +30,9 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
-					+"FROM PROFESOR "
-					+"WHERE ID_PROFESOR = ? ";
+			sql =  "SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
+					+" from profesor p  "
+					+"where P.id_profesor = ? ";
 
 			// Preparar a query
 			System.out.println("Creating statement...");
@@ -73,9 +73,9 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
-					+"FROM PROFESOR "
-					+"WHERE upper(email) like upper(?) ";
+			sql =  "SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
+					+" from profesor p  "
+					+" WHERE upper(p.email) like upper(?) ";
 
 			// Preparar a query
 			System.out.println("Creating statement...");
@@ -118,80 +118,81 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			queryString = new StringBuilder(
-					"SELECT SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
-							+" FROM PROFESOR ");
+					"SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
+							+" from profesor p ");
 
 			boolean first = true;
 
 			if (profesor.getIdProfesor() != null) {
-				DAOUtils.addClause(queryString, first, " ID_PROFESOR =  ? ");
+				DAOUtils.addClause(queryString, first, " p.ID_PROFESOR =  ? ");
 				first = false;
 			}	
 
 			if (profesor.getEmail() != null) {
-				DAOUtils.addClause(queryString, first, " upper(email) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(p.email) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getPsswd() != null) {
-				DAOUtils.addClause(queryString, first, " psswd = ? ");
+				DAOUtils.addClause(queryString, first, " p.psswd = ? ");
 				first = false;
 			}
 
 			if (profesor.getIdPais() != null) {
-				DAOUtils.addClause(queryString, first, "id_pais = ?");
+				DAOUtils.addClause(queryString, first, " p.id_pais = ?");
 				first = false;
 			}
 
 			if (profesor.getNombre() != null) {
-				DAOUtils.addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(p.nombre) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getApellido1() != null) {
-				DAOUtils.addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(p.apellido1) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getApellido2() != null) {
-				DAOUtils.addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
+				DAOUtils.addClause(queryString, first, " upper(p.apellido2) LIKE upper(?) ");
 				first = false;
 			}
 
 			if (profesor.getAnoNacimiento() != null) {
-				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, " p.ano_nacimiento = ?");
 				first = false;
 			}
 
 			if (profesor.getFechaSubscripcion() != null) {
-				DAOUtils.addClause(queryString, first, "fecha_subscripcion = ?");
+				DAOUtils.addClause(queryString, first, " p.fecha_subscripcion = ?");
 				first = false;
 			}
 
 			if (profesor.getPrecioSesion() != null) {
-				DAOUtils.addClause(queryString, first, "precio_sesion > ?");
+				DAOUtils.addClause(queryString, first, " p.precio_sesion > ?");
 				first = false;
 			}
 
 			if (profesor.getPrecioSesionHasta() != null) {
-				DAOUtils.addClause(queryString, first, "precio_sesion < ?");
+				DAOUtils.addClause(queryString, first, " p.precio_sesion < ?");
 				first = false;
 			}
 
 			if (profesor.getIdIdioma() != null) {
-				DAOUtils.addClause(queryString, first, "id_idioma = ?");
+				DAOUtils.addClause(queryString, first, " p.id_idioma = ?");
 				first = false;
 			}
 
 			if (profesor.getIdGenero() != null) {
-				DAOUtils.addClause(queryString, first, "id_genero = ?");
+				DAOUtils.addClause(queryString, first, " p.id_genero = ?");
 				first = false;
 			}
 
 			if (profesor.getIdNivel() != null) {
-				DAOUtils.addClause(queryString, first, "id_nivel = ?");
+				DAOUtils.addClause(queryString, first, " p.id_nivel = ?");
 				first = false;
 			}
+			
 
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
