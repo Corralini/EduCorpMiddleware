@@ -24,9 +24,9 @@ public class HoraDAOImpl implements HoraDAO{
 		try {
 
 			String queryString = 
-									"SELECT ID_DIA, DIA " 
-									+"FROM DIA "
-									+"where id_dia = ?";
+									"SELECT ID_HORA, HORA " 
+									+"FROM HORA "
+									+"where ID_HORA = ?";
 
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
