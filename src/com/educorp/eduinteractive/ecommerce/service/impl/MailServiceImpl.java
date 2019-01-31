@@ -28,7 +28,6 @@ public class MailServiceImpl implements MailService{
 
 			email.addTo(to);
 			email.send();
-			System.out.println("Mensaje enviado");
 			}catch (EmailException e) {
 				e.printStackTrace();
 			}

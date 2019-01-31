@@ -38,6 +38,8 @@ public class SesionServicesImpl implements SesionServices{
 		boolean commit = false;
 		try {
 			c = ConnectionManager.getConnection();
+			c.setAutoCommit(false);
+			
 			s.setIdProfesor(h.getIdProfesor());
 			s.setIdEstudiante(idEstudiante);
 			s.setFechaSesion(fecha);
@@ -46,7 +48,7 @@ public class SesionServicesImpl implements SesionServices{
 			s.setIdEstado("S");
 			s.setFechaCambioEstado(new Date());
 			
-			c.setAutoCommit(false);
+			
 			
 			sesionDAO.create(c, s);
 			
@@ -76,7 +78,8 @@ public class SesionServicesImpl implements SesionServices{
 		boolean commit = false;
 		try {
 			c = ConnectionManager.getConnection();
-			s.setIdEstado(idEstado);
+			s.setIdEstado(idEstado.toUpperCase());
+			s.setFechaCambioEstado(new Date());
 			c.setAutoCommit(false);
 			
 			sesionDAO.update(c, s);
@@ -95,7 +98,7 @@ public class SesionServicesImpl implements SesionServices{
 		Connection c = null;
 		boolean commit = false;
 		try {
-			if (s.getIdEstado() == "A") {
+			if (s.getIdEstado().toUpperCase() == "A") {
 				c = ConnectionManager.getConnection();
 				s.setFechaInicio(new Date());
 				
@@ -104,8 +107,7 @@ public class SesionServicesImpl implements SesionServices{
 				sesionDAO.update(c, s);
 				
 				commit = true;
-				TimeUnit.HOURS.sleep(1);
-				terminarSesion(s);
+				TimeUnit.SECONDS.sleep(10);
 			}else {
 				cambiarEstado(s, "R");
 			}

@@ -32,11 +32,9 @@ public interface EstudianteService {
 	public void setCodigo (Estudiante e) 
 		throws MailException, DataException;
 	
-	public void comprobarCodigo (int codigo, Estudiante e) 
+	public void cambiarContra (Integer codigo, String email, String psswd) 
 			throws DataException;
 	
-	public void cambiarContra (Estudiante e, String psswd)
-			throws DataException;
 	
 	public void puntuarProfesor (Profesor p, Estudiante e, double puntuacion) 
 			throws DataException;

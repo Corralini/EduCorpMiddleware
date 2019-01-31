@@ -30,7 +30,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
+			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
 					+"FROM PROFESOR "
 					+"WHERE ID_PROFESOR = ? ";
 
@@ -59,7 +59,6 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
-			JDBCUtils.closeConnection(connection);
 		}  	
 
 		return p;
@@ -74,7 +73,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			String sql;
-			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
+			sql =  "SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
 					+"FROM PROFESOR "
 					+"WHERE upper(email) like upper(?) ";
 
@@ -103,7 +102,6 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
-			JDBCUtils.closeConnection(connection);
 		}  	
 
 		return e;
@@ -120,7 +118,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {
 
 			queryString = new StringBuilder(
-					"SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION "
+					"SELECT SELECT ID_PROFESOR, EMAIL, PSSWD, ID_PAIS, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION, CODIGO_DE_RECUPERACION "
 							+" FROM PROFESOR ");
 
 			boolean first = true;
@@ -263,8 +261,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		try {          
 
 			// Creamos el preparedstatement
-			String queryString = "INSERT INTO ESTUDIANTE (EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,ID_NIVEL, ID_GENERO) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String queryString = "INSERT INTO PROFESOR (EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			preparedStatement = c.prepareStatement(queryString,
 									Statement.RETURN_GENERATED_KEYS);
@@ -272,15 +270,14 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			// Rellenamos el "preparedStatement"
 			int i = 1;    
 
-				preparedStatement.setInt(i++, p.getIdProfesor());
 				preparedStatement.setString(i++,p.getEmail() );
-				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
 				preparedStatement.setString(i++, p.getIdPais());
+				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
 				preparedStatement.setString(i++,p.getNombre());
 				preparedStatement.setString(i++,p.getApellido1());
 				preparedStatement.setString(i++,p.getApellido1());
 				preparedStatement.setInt(i++, p.getAnoNacimiento());
-				preparedStatement.setDate(i++, (java.sql.Date) p.getFechaSubscripcion());
+				preparedStatement.setDate(i++, new java.sql.Date (p.getFechaSubscripcion().getTime()));
 				preparedStatement.setDouble(i++, p.getPrecioSesion());
 				preparedStatement.setString(i++, p.getIdIdioma());
 				preparedStatement.setString(i++, p.getIdGenero());
@@ -326,76 +323,91 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 					" UPDATE PROFESOR" 
 					);
 			
+
 			boolean first = true;
 			
 			if (p.getIdProfesor() != null) {
-				DAOUtils.addClause(queryString, first, " ID_PROFESOR =  ? ");
+				DAOUtils.addUpdate(queryString, first, " ID_PROFESOR =  ? ");
 				first = false;
 			}	
 
 			if (p.getEmail() != null) {
-				DAOUtils.addClause(queryString, first, " upper(email) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " email = ? ");
 				first = false;
 			}
 
 			if (p.getPsswd() != null) {
-				DAOUtils.addClause(queryString, first, " psswd = ? ");
+				DAOUtils.addUpdate(queryString, first, " psswd = ? ");
 				first = false;
 			}
 
 			if (p.getIdPais() != null) {
-				DAOUtils.addClause(queryString, first, "id_pais = ?");
+				DAOUtils.addUpdate(queryString, first, "id_pais = ?");
 				first = false;
 			}
 
 			if (p.getNombre() != null) {
-				DAOUtils.addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " nombre = ? ");
 				first = false;
 			}
 
 			if (p.getApellido1() != null) {
-				DAOUtils.addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " apellido1 = ? ");
 				first = false;
 			}
 
 			if (p.getApellido2() != null) {
-				DAOUtils.addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
+				DAOUtils.addUpdate(queryString, first, " apellido2 = ? ");
 				first = false;
 			}
 
 			if (p.getAnoNacimiento() != null) {
-				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
+				DAOUtils.addUpdate(queryString, first, " ano_nacimiento = ? ");
 				first = false;
 			}
 
 			if (p.getFechaSubscripcion() != null) {
-				DAOUtils.addClause(queryString, first, "fecha_subscripcion = ?");
+				DAOUtils.addUpdate(queryString, first, " fecha_subscripcion = ? ");
 				first = false;
 			}
 
 			if (p.getPrecioSesion() != null) {
-				DAOUtils.addClause(queryString, first, "precio_sesion > ?");
+				DAOUtils.addUpdate(queryString, first, " precio_sesion = ? ");
 				first = false;
 			}
 
 			if (p.getIdIdioma() != null) {
-				DAOUtils.addClause(queryString, first, "id_idioma = ?");
+				DAOUtils.addUpdate(queryString, first, " id_idioma = ? ");
 				first = false;
 			}
 
 			if (p.getIdGenero() != null) {
-				DAOUtils.addClause(queryString, first, "id_genero = ?");
+				DAOUtils.addUpdate(queryString, first, " id_genero = ? ");
 				first = false;
 			}
 
 			if (p.getIdNivel() != null) {
-				DAOUtils.addClause(queryString, first, "id_nivel = ?");
+				DAOUtils.addUpdate(queryString, first, " id_nivel = ? ");
 				first = false;
 			}
 			
+			if (p.getAceptado() != null) {
+				DAOUtils.addUpdate(queryString, first, " activada = ? ");
+				first = false;
+			}
+			
+			if (p.getDescripcion() != null) {
+				DAOUtils.addUpdate(queryString, first, " descripcion = ? ");
+				first = false;
+			}
+			
+			if(p.getCodigoDeRecuperacion() != null) {
+				DAOUtils.addUpdate(queryString, first, " codigo_de_recuperacion = ? ");
+				first = false;
+			}
 			
 						
-			queryString.append("WHERE id_profesor = ?");
+			queryString.append(" WHERE id_profesor = ? ");
 			
 			preparedStatement = c.prepareStatement(queryString.toString());
 			
@@ -431,6 +443,10 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				preparedStatement.setInt(i++, p.getAceptado());
 			if (p.getDescripcion() != null)
 				preparedStatement.setString(i++, p.getDescripcion());
+			if(p.getCodigoDeRecuperacion() != null)
+				preparedStatement.setInt(i++, p.getCodigoDeRecuperacion());
+			
+			preparedStatement.setInt(i++, findByEmail(c, p.getEmail()).getIdProfesor());
 
 			int updatedRows = preparedStatement.executeUpdate();
 
@@ -469,6 +485,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		Integer idNivel = resultSet.getInt(i++);
 		Integer activada = resultSet.getInt(i++);
 		String descripcion = resultSet.getString(i++);
+		Integer codigoDeRecuperacion = resultSet.getInt(i++);
 
 
 		p = new Profesor();
@@ -487,6 +504,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		p.setIdNivel(idNivel);
 		p.setAceptado(activada);
 		p.setDescripcion(descripcion);
+		p.setCodigoDeRecuperacion(codigoDeRecuperacion);
 
 
 		return p;

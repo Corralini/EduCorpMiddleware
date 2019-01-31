@@ -13,32 +13,29 @@ public interface ProfesorService {
 
 	public List<Profesor> findByCriteria(ProfesorCriteria criteria)
 			throws DataException;
-		
-		public Profesor findById(Integer id)
+
+	public Profesor findById(Integer id)
 			throws DataException;
-		
-		public Profesor login(String email, String psswd)
+
+	public Profesor login(String email, String psswd)
 			throws DataException;
-		
-		public Profesor signUp(Profesor e)
+
+	public Profesor signUp(Profesor e)
 			throws DuplicateInstanceException, MailException, DataException;
-		
-		public Profesor update(Profesor e)
+
+	public Profesor update(Profesor e)
 			throws DataException;
-		
-		public Profesor findByEmailToRecovery (String email) 
+
+	public Profesor findByEmailToRecovery (String email) 
 			throws MailException, DataException;
-		
-		public void setCodigo (Profesor e) 
+
+	public void setCodigo (Profesor e) 
 			throws MailException, DataException;
-		
-		public void comprobarCodigo (int codigo, Profesor e) 
+
+	public void cambiarContra (Integer codigo, String email, String psswd) 
 			throws DataException;
-		
-		public void cambiarContra (Profesor p, String psswd)
-				throws DataException;
-		
-		public void puntuarEstudiante (Profesor p, Estudiante e, double puntuacion) 
+
+	public void puntuarEstudiante (Profesor p, Estudiante e, double puntuacion) 
 			throws DataException;
 
 }

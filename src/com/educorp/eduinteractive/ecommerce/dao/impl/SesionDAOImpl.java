@@ -110,7 +110,7 @@ public class SesionDAOImpl implements SesionDAO{
 		try {
 			
 			String queryString = 
-					"SELECT ID_SESION, ID_PROFESOR, ID_ESTUDIANTE, ID_MES,S.ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ANO, ID_ESTADO, FECHA_CAMBIO_ESTADO " + 
+					"SELECT ID_SESION, ID_PROFESOR, ID_ESTUDIANTE, FECHA_SESION, S.ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO " + 
 					"FROM SESION   " +
 					"WHERE UPPER(ID_ESTADO) = LIKE UPPER(?) ";
 
@@ -148,8 +148,8 @@ public class SesionDAOImpl implements SesionDAO{
 		try {          
 
 			// Creamos el preparedstatement
-			String queryString = "INSERT INTO SESION (ID_PROFESOR, ID_ESTUDIANTE,FECHA_SESION, ID_HORARIO, FECHA_INICIO, FECHA_FIN, ANO, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String queryString = "INSERT INTO SESION (ID_PROFESOR, ID_ESTUDIANTE,FECHA_SESION, ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			preparedStatement = connection.prepareStatement(queryString,
 									Statement.RETURN_GENERATED_KEYS);
@@ -160,8 +160,8 @@ public class SesionDAOImpl implements SesionDAO{
 			preparedStatement.setInt(i++, s.getIdEstudiante());
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaSesion().getTime()));
 			preparedStatement.setInt(i++, s.getIdHorario());
-			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaInicio().getTime()));
-			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaFin().getTime()));
+			preparedStatement.setDate(i++, null);
+			preparedStatement.setDate(i++, null);
 			preparedStatement.setDouble(i++, s.getPrecio());
 			preparedStatement.setString(i++, s.getIdEstado());
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaCambioEstado().getTime()));
@@ -201,7 +201,7 @@ public class SesionDAOImpl implements SesionDAO{
 		try {	
 			
 			queryString = new StringBuilder(
-					" UPDATE Estudiante" 
+					" UPDATE Sesion" 
 					);
 			
 			boolean first = true;
@@ -247,11 +247,11 @@ public class SesionDAOImpl implements SesionDAO{
 			}
 			
 			if (s.getFechaCambioEstado() != null) {
-				DAOUtils.addUpdate(queryString, first, "fecha_nacimiento = ?");
+				DAOUtils.addUpdate(queryString, first, "fecha_CAMBIO_ESTADO = ?");
 				first = false;			
 			}
 						
-			queryString.append("WHERE id_s = ?");
+			queryString.append("WHERE id_sESION = ?");
 			
 			preparedStatement = connection.prepareStatement(queryString.toString());
 			
@@ -266,17 +266,21 @@ public class SesionDAOImpl implements SesionDAO{
 			if (s.getIdHorario() != null)
 				preparedStatement.setInt(i++, s.getIdHorario());
 			if (s.getFechaInicio()!=null) 
-				preparedStatement.setDate(i++, (java.sql.Date) s.getFechaInicio());
+				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaInicio().getTime()));
 			if (s.getFechaFin()!=null) 
-				preparedStatement.setDate(i++, (java.sql.Date) s.getFechaFin());
+				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaFin().getTime()));
 			if (s.getPrecio()!=null) 
 				preparedStatement.setDouble(i++,s.getPrecio());
 			if (s.getIdEstado() != null)
 				preparedStatement.setString(i++, s.getIdEstado());
 			if (s.getFechaCambioEstado() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) s.getFechaCambioEstado());
-
+				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaCambioEstado().getTime()));
+				
+			preparedStatement.setInt(i++, s.getIdSesion());
+			
 			int updatedRows = preparedStatement.executeUpdate();
+			
+				
 
 			if (updatedRows == 0) {
 				throw new DataException("Non se actualizou o estudiante");

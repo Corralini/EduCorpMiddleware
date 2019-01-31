@@ -101,6 +101,9 @@ public class ProfesorServicesImpl implements ProfesorService{
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 
+			e.setFechaSubscripcion(new Date());
+			e.setAceptado(0);
+			
 			Profesor result = profesorDAO.create(c, e);
 
 
@@ -210,33 +213,34 @@ public class ProfesorServicesImpl implements ProfesorService{
 	}
 
 	@Override
-	public void comprobarCodigo(int codigo, Profesor e) throws DataException {
-
-			if(codigo != e.getCodigoDeRecuperacion()) {
-				
-				throw new DataException("El código introducido no coincide, compruebe el código");
-			}
-		
-	}
-	
-	@Override
-	public void cambiarContra(Profesor p, String psswd) throws DataException {
+	public void cambiarContra(Integer codigo, String email, String psswd) throws DataException {
 		Connection c = null;
 		boolean commit = false;
 		try {
-			c = ConnectionManager.getConnection();
-			p.setPsswd(psswd);
-			c.setAutoCommit(false);
-			profesorDAO.update(c, p);
-			commit = true;
-			
-		}catch(SQLException ex) {
+		c = ConnectionManager.getConnection();
+		Profesor p = new Profesor();
+		Profesor cambio = new Profesor();
+		
+		ProfesorDAO estudianteDAO = new ProfesorDAOImpl();
+		p = estudianteDAO.findByEmail(c, email);
+		c.setAutoCommit(false);
+			if(codigo.equals(p.getCodigoDeRecuperacion())) {
+				cambio.setEmail(p.getEmail());
+				cambio.setPsswd(psswd);
+				cambio.setCodigoDeRecuperacion(0);
+				
+				estudianteDAO.update(c, cambio);
+				commit = true;
+			}else {
+				throw new DataException("El código introducido no coincide, compruebe el código");
+			}
+		}catch (SQLException ex) {
 			throw new DataException(ex);
-		}finally{
+		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
-		
 	}
+	
 
 	@Override
 	public void puntuarEstudiante(Profesor p, Estudiante e, double puntuacion) throws DataException {

@@ -27,7 +27,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_HORARIO, ID_PROFESOR, ID_ESTUDIANTE, ID_DIA, ID_HORA "
+			sql =  "SELECT ID_HORARIO, ID_PROFESOR, ID_DIA, ID_HORA "
 					+"FROM HORARIO "
 					+"WHERE ID_HORARIO = ? ";
 
@@ -71,7 +71,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 		try {
     
 			queryString = new StringBuilder(
-					"SELECT ID_HORARIO, ID_PROFESOR, ID_ESTUDIANTE, ID_DIA, ID_HORA "
+					"SELECT ID_HORARIO, ID_PROFESOR, ID_DIA, ID_HORA "
 					+" FROM HORARIO ");
 			
 			boolean first = true;

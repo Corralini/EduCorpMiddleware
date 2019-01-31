@@ -30,7 +30,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
+			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
 					+"FROM ESTUDIANTE "
 					+"WHERE ID_ESTUDIANTE = ? ";
 
@@ -63,8 +63,8 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 		return e;
 	}
-	
-	
+
+
 	@Override
 	public List<Estudiante> findByNombre(Connection connection, String nombre)
 			throws DataException {	
@@ -74,7 +74,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try{
 
 			String sql;
-			sql =  	 "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
+			sql =  	 "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
 					+"  FROM ESTUDIANTE "
 					+"	WHERE UPPER(NOMBRE) LIKE UPPER(?) ";
 
@@ -107,19 +107,19 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 	@Override
 	public List<Estudiante> findByCriteria (Connection connection, EstudianteCriteria estudiante)
-		throws DataException{
+			throws DataException{
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		StringBuilder queryString = null;
 
 		try {
-    
+
 			queryString = new StringBuilder(
-					"SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
-					+" FROM ESTUDIANTE ");
-			
+					"SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
+							+" FROM ESTUDIANTE ");
+
 			boolean first = true;
-			
+
 			if (estudiante.getIdEstudiante() != null) {
 				DAOUtils.addClause(queryString, first, " id_estudiante =  ? ");
 				first = false;
@@ -129,59 +129,59 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				DAOUtils.addClause(queryString, first, " upper(email) LIKE upper(?) ");
 				first = false;
 			}
-			
+
 			if (estudiante.getIdPais() != null) {
 				DAOUtils.addClause(queryString, first, "id_pais = ?");
 				first = false;
 			}
-			
+
 			if (estudiante.getPsswd() != null) {
 				DAOUtils.addClause(queryString, first, " psswd = ? ");
 				first = false;
 			}
-			
+
 			if (estudiante.getNombre() != null) {
 				DAOUtils.addClause(queryString, first, " upper(nombre) LIKE upper(?) ");
 				first = false;
 			}
-			
+
 			if (estudiante.getApellido1() != null) {
 				DAOUtils.addClause(queryString, first, " upper(apellido1) LIKE upper(?) ");
 				first = false;
 			}
-			
+
 			if (estudiante.getApellido2() != null) {
 				DAOUtils.addClause(queryString, first, " upper(apellido2) LIKE upper(?) ");
 				first = false;
 			}
-			
+
 			if (estudiante.getAnoNacimiento() != null) {
 				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
 				first = false;
 			}
-			
+
 			if (estudiante.getFechaSubscripcion() != null) {
 				DAOUtils.addClause(queryString, first, "fecha_nacimiento = ?");
 				first = false;
 			}
-			
+
 			if (estudiante.getIdNivel() != null) {
 				DAOUtils.addClause(queryString, first, "id_nivel = ?");
 				first = false;
 			}
-			
+
 			if (estudiante.getIdGenero() != null) {
 				DAOUtils.addClause(queryString, first, "id_genero = ?");
 				first = false;
 			}
 
-			
-			
+
+
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			int i = 1;  
-			
+
 			if (estudiante.getIdEstudiante() != null)
 				preparedStatement.setInt(i++, estudiante.getIdEstudiante());
 			if (estudiante.getEmail()!=null) 
@@ -197,32 +197,34 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (estudiante.getApellido2()!=null) 
 				preparedStatement.setString(i++, "%" + estudiante.getApellido2() + "%");
 			if(estudiante.getIdNivel() != null)
-				preparedStatement.setString(i++, estudiante.getIdNivel());
+				preparedStatement.setInt(i++, estudiante.getIdNivel());
 			if (estudiante.getAnoNacimiento() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getAnoNacimiento());
+				preparedStatement.setInt(i++, estudiante.getAnoNacimiento());
 			if (estudiante.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getFechaSubscripcion());
 
 			resultSet = preparedStatement.executeQuery();
-			
+
 			List<Estudiante> estudiantes = new ArrayList<Estudiante>();                        
 			Estudiante e = null;
+			if (resultSet.next()) {
+				while (resultSet.next()) {
+					e = loadNext(resultSet);						
+					estudiantes.add(e);
+				}
 
-			while (resultSet.next()) {
-				e = loadNext(resultSet);						
-				estudiantes.add(e);
+				return estudiantes;
+			} else {
+				throw new DataException("No hay ningún resultado para la búsqueda");
 			}
-
-			return estudiantes;
-	
-			} catch (SQLException e) {
-				throw new DataException("Hemos encontrado un problema");
-			} finally {
-				JDBCUtils.closeResultSet(resultSet);
-				JDBCUtils.closeStatement(preparedStatement);
+		} catch (SQLException e) {
+			throw new DataException("Hemos encontrado un problema");
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
 		}
 	}
-	
+
 	@Override
 	public Estudiante findByEmail (Connection connection, String email)
 			throws DataException{
@@ -232,7 +234,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO "
+			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
 					+"FROM ESTUDIANTE "
 					+"WHERE upper(email) like upper(?) ";
 
@@ -261,7 +263,6 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
-			JDBCUtils.closeConnection(connection);
 		}  	
 
 		return e;
@@ -306,7 +307,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public Estudiante create(Connection connection, Estudiante e) 
 			throws DuplicateInstanceException, DataException {
-		
+
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -316,21 +317,21 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			preparedStatement = connection.prepareStatement(queryString,
-									Statement.RETURN_GENERATED_KEYS);
+					Statement.RETURN_GENERATED_KEYS);
 
 			// Rellenamos el "preparedStatement"
 			int i = 1;    
 			preparedStatement.setString(i++, e.getEmail());
-			preparedStatement.setString(i++, e.getIdPais());
+			preparedStatement.setString(i++, e.getIdPais().toUpperCase());
 			preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(e.getPsswd()));
 			preparedStatement.setString(i++, e.getNombre());
 			preparedStatement.setString(i++, e.getApellido1());
 			preparedStatement.setString(i++, e.getApellido2());
-			preparedStatement.setDate(i++, new java.sql.Date( e.getAnoNacimiento().getTime()));
+			preparedStatement.setInt(i++,  e.getAnoNacimiento());
 			preparedStatement.setDate(i++, new java.sql.Date(e.getFechaSubscripcion().getTime()));
-			preparedStatement.setString(i++, e.getIdNivel());
+			preparedStatement.setInt(i++, e.getIdNivel());
 			preparedStatement.setString(i++, e.getIdGenero());
-			
+
 			// Execute query
 			int insertedRows = preparedStatement.executeUpdate();
 
@@ -351,7 +352,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			return e;
 
 		} catch (SQLException ex) {
-			throw new DataException(ex);
+			throw new DataException("Hemos tenido algunos problemas, por favor introduzca de nuevo los datos");
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
@@ -361,17 +362,17 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public void update(Connection c, Estudiante e) 
 			throws  InstanceNotFoundException, DataException {
-		
+
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
-			
+
 			queryString = new StringBuilder(
 					" UPDATE Estudiante" 
 					);
-			
+
 			boolean first = true;
-			
+
 			if (e.getIdEstudiante() != null) {
 				DAOUtils.addUpdate(queryString, first, " id_estudiante =  ? ");
 				first = false;
@@ -381,58 +382,62 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				DAOUtils.addUpdate(queryString, first, " email = ? ");
 				first = false;
 			}
-			
+
 			if (e.getIdPais() != null) {
 				DAOUtils.addUpdate(queryString, first, "id_pais = ? ");
 				first = false;
 			}
-			
+
 			if (e.getPsswd() != null) {
 				DAOUtils.addUpdate(queryString, first, " psswd = ? ");
 				first = false;
 			}
-			
+
 			if (e.getNombre() != null) {
 				DAOUtils.addUpdate(queryString, first, " nombre = ? ");
 				first = false;
 			}
-			
+
 			if (e.getApellido1() != null) {
 				DAOUtils.addUpdate(queryString, first, " apelllido1 = ? ");
 				first = false;
 			}
-			
+
 			if (e.getApellido2() != null) {
 				DAOUtils.addUpdate(queryString, first, " apelllido2 = ? ");
 				first = false;
 			}
-			
+
 			if (e.getAnoNacimiento() != null) {
 				DAOUtils.addUpdate(queryString, first, "ano_nacimiento = ? ");
 				first = false;
 			}
-			
+
 			if (e.getFechaSubscripcion() != null) {
 				DAOUtils.addUpdate(queryString, first, "fecha_nacimiento = ? ");
 				first = false;
 			}
-			
+
 			if (e.getIdNivel() != null) {
 				DAOUtils.addUpdate(queryString, first, "id_nivel = ? ");
 				first = false;
 			}
-			
+
 			if (e.getIdGenero() != null) {
 				DAOUtils.addUpdate(queryString, first, "id_genero = ? ");
 				first = false;
 			}
-			
-			
-						
-			queryString.append("WHERE id_estudiante = ?");
-			
+
+			if(e.getCodigoDeRecuperacion() != null) {
+				DAOUtils.addUpdate(queryString, first, " codigo_de_recuperacion = ? ");
+				first = false;
+			}
+
+
+			queryString.append(" WHERE id_estudiante = ? ");
+
 			preparedStatement = c.prepareStatement(queryString.toString());
-			
+
 
 			int i = 1;
 			if (e.getIdEstudiante() != null)
@@ -440,7 +445,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (e.getEmail()!=null) 
 				preparedStatement.setString(i++,e.getEmail() );
 			if (e.getIdPais() != null)
-				preparedStatement.setString(i++, e.getIdPais());
+				preparedStatement.setString(i++, e.getIdPais().toUpperCase());
 			if (e.getPsswd()!=null) 
 				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(e.getPsswd()));
 			if (e.getNombre()!=null)
@@ -450,9 +455,17 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (e.getApellido2()!=null) 
 				preparedStatement.setString(i++,e.getApellido1());
 			if (e.getAnoNacimiento() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) e.getAnoNacimiento());
+				preparedStatement.setInt(i++, e.getAnoNacimiento());
 			if (e.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) e.getFechaSubscripcion());
+			if (e.getIdNivel() != null)
+				preparedStatement.setInt(i++, e.getIdNivel());
+			if(e.getIdGenero() != null)
+				preparedStatement.setString(i++, e.getIdGenero().toUpperCase());
+			if(e.getCodigoDeRecuperacion() != null)
+				preparedStatement.setInt(i++, e.getCodigoDeRecuperacion());
+
+			preparedStatement.setInt(i++, findByEmail(c, e.getEmail()).getIdEstudiante());
 
 			int updatedRows = preparedStatement.executeUpdate();
 
@@ -464,15 +477,15 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				throw new SQLException("Duplicate row for id = '" + 
 						e.getIdEstudiante() + "' in table 'E'");
 			}     
-			
+
 		} catch (SQLException ex) {
 			throw new DataException(ex);    
 		} finally {
 			JDBCUtils.closeStatement(preparedStatement);
 		}
-		
+
 	}
-	
+
 	private Estudiante loadNext(ResultSet resultSet) throws SQLException, DataException {
 
 		Estudiante e = new Estudiante();
@@ -484,11 +497,12 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		String nombre = resultSet.getString(i++);
 		String apellido1 = resultSet.getString(i++);	
 		String apellido2 = resultSet.getString(i++);
-		Date anoNacimiento = resultSet.getDate(i++);
+		Integer anoNacimiento = resultSet.getInt(i++);
 		Date fechaSubscripcion = resultSet.getDate(i++);
-		String idNivel = resultSet.getString(i++);
+		Integer idNivel = resultSet.getInt(i++);
 		String idGenero = resultSet.getString(i++);
-		
+		Integer codigoRecuperacion = resultSet.getInt(i++);
+
 
 
 		e = new Estudiante();
@@ -503,6 +517,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		e.setFechaSubscripcion(fechaSubscripcion);
 		e.setIdNivel(idNivel);
 		e.setIdGenero(idGenero);
+		e.setCodigoDeRecuperacion(codigoRecuperacion);
 
 		return e;
 

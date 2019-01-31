@@ -13,9 +13,9 @@ public class Estudiante extends AbstractValueObject{
 	private String nombre;
 	private String apellido1;
 	private String apellido2;
-	private Date anoNacimiento;
+	private Integer anoNacimiento;
 	private Date fechaSubscripcion;
-	private String idNivel;
+	private Integer idNivel;
 	private String idGenero;
 	private Integer codigoDeRecuperacion;
 	
@@ -94,12 +94,12 @@ public class Estudiante extends AbstractValueObject{
 	}
 
 
-	public Date getAnoNacimiento() {
+	public Integer getAnoNacimiento() {
 		return anoNacimiento;
 	}
 
 
-	public void setAnoNacimiento(Date anoNacimiento) {
+	public void setAnoNacimiento(Integer anoNacimiento) {
 		this.anoNacimiento = anoNacimiento;
 	}
 
@@ -114,12 +114,12 @@ public class Estudiante extends AbstractValueObject{
 	}
 
 
-	public String getIdNivel() {
+	public Integer getIdNivel() {
 		return idNivel;
 	}
 
 
-	public void setIdNivel(String idNivel) {
+	public void setIdNivel(Integer idNivel) {
 		this.idNivel = idNivel;
 	}
 

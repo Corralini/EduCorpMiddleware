@@ -101,6 +101,8 @@ public class EstudianteServiceImpl implements EstudianteService{
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 
+			e.setFechaSubscripcion(new Date());
+			
 			Estudiante result = estudianteDAO.create(c, e);
 
 
@@ -175,7 +177,9 @@ public class EstudianteServiceImpl implements EstudianteService{
 			c.setAutoCommit(true);
 			Estudiante e = new Estudiante();
 			e = estudianteDAO.findByEmail(c, email);
-			setCodigo(e);
+			Estudiante estudianteCodigo = new Estudiante();
+			estudianteCodigo.setEmail(e.getEmail());
+			setCodigo(estudianteCodigo);
 			return e;
 
 		}catch (SQLException ex) {
@@ -209,29 +213,35 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public void comprobarCodigo(int codigo, Estudiante e) throws DataException {
-			if(codigo != e.getCodigoDeRecuperacion()) {
-				throw new DataException("El código introducido no coincide, compruebe el código");
-			}
-	}
-	
-	@Override
-	public void cambiarContra(Estudiante e, String psswd) throws DataException {
+	public void cambiarContra(Integer codigo, String email, String psswd) throws DataException {
 		Connection c = null;
 		boolean commit = false;
 		try {
-			c = ConnectionManager.getConnection();
-			e.setPsswd(psswd);
-			c.setAutoCommit(false);
-			estudianteDAO.update(c, e);
-			commit = false;
-		}catch(SQLException ex) {
+		c = ConnectionManager.getConnection();
+		Estudiante e = new Estudiante();
+		Estudiante cambio = new Estudiante();
+		
+		EstudianteDAO estudianteDAO = new EstudianteDAOImpl();
+		
+		e = estudianteDAO.findByEmail(c, email);
+		c.setAutoCommit(false);
+			if(codigo.equals(e.getCodigoDeRecuperacion())) {
+				cambio.setEmail(e.getEmail());
+				cambio.setPsswd(psswd);
+				cambio.setCodigoDeRecuperacion(0);
+				
+				estudianteDAO.update(c, cambio);
+				commit = true;
+			}else {
+				throw new DataException("El código introducido no coincide, compruebe el código");
+			}
+		}catch (SQLException ex) {
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
-		
 	}
+	
 
 	@Override
 	public void puntuarProfesor(Profesor p, Estudiante e, double puntuacion) throws DataException {
