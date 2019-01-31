@@ -515,6 +515,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		p.setDescripcion(descripcion);
 		p.setCodigoDeRecuperacion(codigoDeRecuperacion);
 
+		
+		
 
 		return p;
 

@@ -1,5 +1,6 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -74,7 +75,6 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-		try {
 			//						findByIdTest(4);
 			//			loginTest("acorralfdez@gmail.com", "nueva");
 
@@ -86,9 +86,10 @@ public class EstudianteServiceTest {
 //						test.setNombre("Alejandro Ricardo");
 //						test.setApellido1("Corral");
 //						test.setApellido2("Fernández");
-//						test.setAnoNacimiento(0);
+//						test.setAnoNacimiento(1969);
 //						test.setIdNivel(2);
 //						test.setIdGenero("O");
+//						test.setFechaSubscripcion(new Date(1998,5,9));
 
 
 			//			
@@ -117,24 +118,6 @@ public class EstudianteServiceTest {
 			//				System.out.println("" + e);
 			//			}
 
-			EstudianteCriteria c = new EstudianteCriteria();
-
-			c.setIdGenero("M");
-			c.setApellido1("settg");
-
-
-			EstudianteService estudiante = new EstudianteServiceImpl();
-			List<Estudiante> est;
-			try {
-				est = estudiante.findByCriteria(c);
-				for (Estudiante e: est) {
-				System.out.println(e);
-				}
-			} catch (DataException e1) {
-				e1.printStackTrace();
-			}
-		}finally {
-			
-		}
 	}
+
 }
