@@ -88,6 +88,10 @@ public class EstudianteServiceImpl implements EstudianteService{
 			throws DuplicateInstanceException, MailException, DataException {
 		boolean commit = false;
 		Connection c = null;
+		
+		if (e.getAnoNacimiento() < 1900) {
+			throw new DataException("O ano de nacemento non e válido, introduce un ano maior que 1900");
+		}
 
 		try {
 			c = ConnectionManager.getConnection();

@@ -40,7 +40,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
 			// Establece os parámetros
 			int i = 1;
-			preparedStatement.setLong(i++, id);
+			preparedStatement.setInt(i++, id);
 
 
 			resultSet = preparedStatement.executeQuery();			
@@ -97,7 +97,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			} 
 			return empleados;
 		} catch (SQLException ex) {
-			throw new DataException("Non se encontrou o estudiante " + nombre);
+			throw new DataException("Non se encontrou o estudiante " + nombre + ex);
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
@@ -156,22 +156,23 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			}
 
 			if (estudiante.getAnoNacimiento() != null) {
-				DAOUtils.addClause(queryString, first, "ano_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, " ano_nacimiento = ? ");
 				first = false;
 			}
 
 			if (estudiante.getFechaSubscripcion() != null) {
-				DAOUtils.addClause(queryString, first, "fecha_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, " fecha_nacimiento = ? ");
 				first = false;
 			}
 
 			if (estudiante.getIdNivel() != null) {
-				DAOUtils.addClause(queryString, first, "id_nivel = ?");
+				DAOUtils.addClause(queryString, first, " id_nivel = ? ");
 				first = false;
 			}
 
 			if (estudiante.getIdGenero() != null) {
-				DAOUtils.addClause(queryString, first, "id_genero = ?");
+				DAOUtils.addClause(queryString, first, " id_genero = ? "
+						+ "");
 				first = false;
 			}
 
@@ -196,12 +197,15 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				preparedStatement.setString(i++, "%" + estudiante.getApellido1() + "%");
 			if (estudiante.getApellido2()!=null) 
 				preparedStatement.setString(i++, "%" + estudiante.getApellido2() + "%");
-			if(estudiante.getIdNivel() != null)
-				preparedStatement.setInt(i++, estudiante.getIdNivel());
 			if (estudiante.getAnoNacimiento() != null)
 				preparedStatement.setInt(i++, estudiante.getAnoNacimiento());
 			if (estudiante.getFechaSubscripcion() != null)
 				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getFechaSubscripcion());
+			if(estudiante.getIdNivel() != null)
+				preparedStatement.setInt(i++, estudiante.getIdNivel());
+			if (estudiante.getIdGenero() != null)
+				preparedStatement.setString(i++, estudiante.getIdGenero());
+			
 
 			resultSet = preparedStatement.executeQuery();
 
@@ -218,7 +222,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				throw new DataException("No hay ningún resultado para la búsqueda");
 			}
 		} catch (SQLException e) {
-			throw new DataException("Hemos encontrado un problema");
+			throw new DataException("Hemos encontrado un problema" + e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
@@ -352,7 +356,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			return e;
 
 		} catch (SQLException ex) {
-			throw new DataException("Hemos tenido algunos problemas, por favor introduzca de nuevo los datos");
+			throw new DataException("Hemos tenido algunos problemas, por favor introduzca de nuevo los datos" + ex);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);

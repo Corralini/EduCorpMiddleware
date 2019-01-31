@@ -159,38 +159,46 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			}
 
 			if (profesor.getAnoNacimiento() != null) {
-				DAOUtils.addClause(queryString, first, " p.ano_nacimiento = ?");
+				DAOUtils.addClause(queryString, first, " p.ano_nacimiento = ? ");
 				first = false;
 			}
 
 			if (profesor.getFechaSubscripcion() != null) {
-				DAOUtils.addClause(queryString, first, " p.fecha_subscripcion = ?");
+				DAOUtils.addClause(queryString, first, " p.fecha_subscripcion = ?" );
 				first = false;
 			}
 
 			if (profesor.getPrecioSesion() != null) {
-				DAOUtils.addClause(queryString, first, " p.precio_sesion > ?");
+				DAOUtils.addClause(queryString, first, " p.precio_sesion > ? ");
 				first = false;
 			}
 
 			if (profesor.getPrecioSesionHasta() != null) {
-				DAOUtils.addClause(queryString, first, " p.precio_sesion < ?");
+				DAOUtils.addClause(queryString, first, " p.precio_sesion < ? ");
 				first = false;
 			}
 
 			if (profesor.getIdIdioma() != null) {
-				DAOUtils.addClause(queryString, first, " p.id_idioma = ?");
+				DAOUtils.addClause(queryString, first, " p.id_idioma = ? ");
 				first = false;
 			}
 
 			if (profesor.getIdGenero() != null) {
-				DAOUtils.addClause(queryString, first, " p.id_genero = ?");
+				DAOUtils.addClause(queryString, first, " p.id_genero = ? ");
 				first = false;
 			}
 
 			if (profesor.getIdNivel() != null) {
-				DAOUtils.addClause(queryString, first, " p.id_nivel = ?");
+				DAOUtils.addClause(queryString, first, " p.id_nivel = ? ");
 				first = false;
+			}
+			
+			if (profesor.getAceptado() != null) {
+				DAOUtils.addClause(queryString, first, " p.activada = ? ");
+			}
+			
+			if (profesor.getDescripcion() != null) {
+				DAOUtils.addClause(queryString, first, " p.descripcion = ? ");
 			}
 			
 

@@ -21,7 +21,7 @@ public class IdiomaDAOImpl implements IdiomaDAO{
 		try {
 
 			String queryString = 
-					"SELECT ID_HORA, HORA " 
+							"SELECT ID_HORA, HORA " 
 							+"FROM HORA "
 							+"ORDER BY ID_HORA ASC";
 
