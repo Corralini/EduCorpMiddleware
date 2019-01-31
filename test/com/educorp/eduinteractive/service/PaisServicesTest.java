@@ -17,7 +17,7 @@ public class PaisServicesTest {
 	
 	public static void main(String[] args) throws DataException {
 
-		List<Pais> paises =	findByIdioma("es");
+		List<Pais> paises =	findByIdioma("");
 		
 		for(Pais p: paises) {
 			System.out.println("" + p);
