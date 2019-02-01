@@ -294,12 +294,12 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				preparedStatement.setString(i++,p.getApellido1());
 				preparedStatement.setString(i++,p.getApellido1());
 				preparedStatement.setInt(i++, p.getAnoNacimiento());
-				preparedStatement.setDate(i++, new java.sql.Date (p.getFechaSubscripcion().getTime()));
+				preparedStatement.setDate(i++, new java.sql.Date (new Date().getTime()));
 				preparedStatement.setDouble(i++, p.getPrecioSesion());
 				preparedStatement.setString(i++, p.getIdIdioma());
 				preparedStatement.setString(i++, p.getIdGenero());
 				preparedStatement.setInt(i++, p.getIdNivel());
-				preparedStatement.setInt(i++, p.getAceptado());
+				preparedStatement.setInt(i++, 0);
 				preparedStatement.setString(i++, p.getDescripcion());
 			
 			// Execute query

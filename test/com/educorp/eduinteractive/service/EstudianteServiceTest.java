@@ -1,6 +1,5 @@
 package com.educorp.eduinteractive.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -78,24 +77,24 @@ public class EstudianteServiceTest {
 			//						findByIdTest(4);
 			//			loginTest("acorralfdez@gmail.com", "nueva");
 
-//						Estudiante test = new Estudiante();
-//						test.setIdEstudiante(12);
-//						test.setEmail("acorralfdez@gmail.com");
-//						test.setIdPais("es");
-//						test.setPsswd("corralito");
-//						test.setNombre("Alejandro Ricardo");
-//						test.setApellido1("Corral");
-//						test.setApellido2("Fernández");
-//						test.setAnoNacimiento(1969);
-//						test.setIdNivel(2);
-//						test.setIdGenero("O");
+						Estudiante test = new Estudiante();
+						test.setIdEstudiante(12);
+						test.setEmail("acorralfdez@gmail.com");
+						test.setIdPais("es");
+						test.setPsswd("corralito");
+						test.setNombre("Alejandro Ricardo");
+						test.setApellido1("Corral");
+						test.setApellido2("Fernández");
+						test.setAnoNacimiento(1969);
+						test.setIdNivel(2);
+						test.setIdGenero("O");
 //
 //
 //			//			
 //						Estudiante testNuevo = new Estudiante();
 //						testNuevo.setEmail("acorralfdez@gmail.com");
 //						testNuevo.setIdGenero("h");
-////						signUpTest(test);
+						signUpTest(test);
 //
 //						updateTest(testNuevo);
 //			//			cambiarContraTest(997414, "acorralfdez@gmail.com", "nueva");
@@ -105,17 +104,17 @@ public class EstudianteServiceTest {
 			//			
 			//			puntuarProfesorTest(profesor, test, 4.0d);
 
-						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
-						EstudianteCriteria criteria = new EstudianteCriteria();
-						
-						criteria.setPuntuacion(2.0d);
-			
-						
-						estudiantes = findByCriteriaTest(criteria);
-						
-						for (Estudiante e : estudiantes) {
-							System.out.println("" + e);
-						}
+//						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
+//						EstudianteCriteria criteria = new EstudianteCriteria();
+//						
+//						criteria.setPuntuacion(2.0d);
+//			
+//						
+//						estudiantes = findByCriteriaTest(criteria);
+//						
+//						for (Estudiante e : estudiantes) {
+//							System.out.println("" + e);
+//						}
 
 	}
 

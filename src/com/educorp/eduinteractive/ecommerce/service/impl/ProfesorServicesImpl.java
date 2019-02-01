@@ -101,7 +101,6 @@ public class ProfesorServicesImpl implements ProfesorService{
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 
-			e.setFechaSubscripcion(new Date());
 			e.setAceptado(0);
 			
 			Profesor result = profesorDAO.create(c, e);

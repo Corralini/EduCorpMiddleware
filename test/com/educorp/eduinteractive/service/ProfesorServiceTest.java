@@ -86,22 +86,22 @@ public class ProfesorServiceTest {
 		
 //		findByIdTest(6);
 		
-//		Profesor test = new Profesor();
-//		test.setIdProfesor(11);
-//		test.setEmail("acorralfdez@gmail.com");
-//		test.setPsswd("corralito");
-//		test.setIdPais("es");
-//		test.setNombre("Alejandro Ricardo");
-//		test.setApellido1("Corral");
-//		test.setApellido2("Fernández");
-//		test.setAnoNacimiento(2000);
-//		test.setPrecioSesion(5.5d);
-//		test.setIdIdioma("en");
-//		test.setIdNivel(2);
-//		test.setIdGenero("H");
-//		test.setDescripcion("You love me and you know it");
-//		
-//		signUp(test);
+		Profesor test = new Profesor();
+		test.setIdProfesor(11);
+		test.setEmail("acorralfdez@gmail.com");
+		test.setPsswd("corralito");
+		test.setIdPais("es");
+		test.setNombre("Alejandro Ricardo");
+		test.setApellido1("Corral");
+		test.setApellido2("Fernández");
+		test.setAnoNacimiento(2000);
+		test.setPrecioSesion(5.5d);
+		test.setIdIdioma("en");
+		test.setIdNivel(2);
+		test.setIdGenero("H");
+		test.setDescripcion("You love me and you know it");
+		
+		signUp(test);
 		
 //		login("acorralfdez@gmail.com", "corralito");
 		

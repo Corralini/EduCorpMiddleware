@@ -342,7 +342,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			preparedStatement.setString(i++, e.getApellido1());
 			preparedStatement.setString(i++, e.getApellido2());
 			preparedStatement.setInt(i++,  e.getAnoNacimiento());
-			preparedStatement.setDate(i++, new java.sql.Date(e.getFechaSubscripcion().getTime()));
+			preparedStatement.setDate(i++, new java.sql.Date(new Date().getTime()));
 			preparedStatement.setInt(i++, e.getIdNivel());
 			preparedStatement.setString(i++, e.getIdGenero());
 

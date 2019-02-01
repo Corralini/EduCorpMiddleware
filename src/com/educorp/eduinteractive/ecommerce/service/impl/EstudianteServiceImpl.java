@@ -104,8 +104,6 @@ public class EstudianteServiceImpl implements EstudianteService{
 			String mssg = "Hola " + e.getNombre()
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
-
-			e.setFechaSubscripcion(new Date());
 			
 			Estudiante result = estudianteDAO.create(c, e);
 
