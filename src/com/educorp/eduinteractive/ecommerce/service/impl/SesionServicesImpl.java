@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.HoraDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.HorarioDAOImpl;
@@ -146,6 +145,7 @@ public class SesionServicesImpl implements SesionServices{
 		try {
 			c = ConnectionManager.getConnection();
 			s.setFechaFin(new Date());
+			s.setIdEstado("T");
 			c.setAutoCommit(false);
 			sesionDAO.update(c, s);
 			commit = true;

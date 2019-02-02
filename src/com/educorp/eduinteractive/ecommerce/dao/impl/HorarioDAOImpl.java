@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
@@ -63,7 +64,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 	
 	
 	@Override
-	public List<Horario> findBy(Connection connection, Integer idProfesor, Integer idDia) throws DataException {
+	public List<Horario> findBy(Connection connection, Integer idProfesor, Integer idDia, Date fecha) throws DataException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		StringBuilder queryString = null;
@@ -72,31 +73,20 @@ public class HorarioDAOImpl implements HorarioDAO{
     
 			queryString = new StringBuilder(
 					"SELECT ID_HORARIO, ID_PROFESOR, ID_DIA, ID_HORA "
-					+" FROM HORARIO ");
-			
-			boolean first = true;
-			
-			if (idProfesor != null) {
-				DAOUtils.addClause(queryString, first, " ID_PROFESOR =  ? ");
-				first = false;
-			}	
-			
-			if (idDia != null) {
-				DAOUtils.addClause(queryString, first, "ID_DIA = ?");
-				first = false;
-			}
-			
-
-			
+					+" FROM HORARIO "
+					+ " where id_horario not in (SELECT ID_HORARIO "
+					+ " FROM sesion " 
+					+ " where fecha_sesion <> ? and id_profesor = ? and (id_estado = 'S' || id_estado = 'A')) "
+		            + " and id_profesor = ? and id_dia = ? " );
 			
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			int i = 1;  
 			
-			if (idProfesor != null)
+				preparedStatement.setDate(i++, new java.sql.Date(fecha.getTime()));
 				preparedStatement.setInt(i++, idProfesor);
-			if (idDia != null)
+				preparedStatement.setInt(i++, idProfesor);
 				preparedStatement.setInt(i++, idDia);
 
 

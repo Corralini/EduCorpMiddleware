@@ -272,7 +272,7 @@ public class SesionDAOImpl implements SesionDAO{
 			if (s.getPrecio()!=null) 
 				preparedStatement.setDouble(i++,s.getPrecio());
 			if (s.getIdEstado() != null)
-				preparedStatement.setString(i++, s.getIdEstado());
+				preparedStatement.setString(i++, s.getIdEstado().toUpperCase());
 			if (s.getFechaCambioEstado() != null)
 				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaCambioEstado().getTime()));
 				

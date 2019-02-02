@@ -13,7 +13,6 @@ public interface SesionDAO {
 	public Sesion findById (Connection connection, Integer id)
 		throws InstanceNotFoundException, DataException;
 	
-	// a hora de ordenalos ordenar por dia e hora
 	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario)
 		throws DataException;
 	

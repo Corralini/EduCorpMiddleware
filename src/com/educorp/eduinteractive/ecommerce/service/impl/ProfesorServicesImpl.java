@@ -96,11 +96,19 @@ public class ProfesorServicesImpl implements ProfesorService{
 					Connection.TRANSACTION_READ_COMMITTED);
 
 			c.setAutoCommit(false);
-
-			String mssg = "Hola " + e.getNombre()
+			
+			String mssg = "";
+			
+			if(e.getApellido2() == null) {
+			
+			mssg = "Hola " + e.getNombre()
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
-
+			}else {
+			mssg = "Hola " + e.getNombre()
+			+ " " + e.getApellido1() + " " + e.getApellido2()
+			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
+			}
 			e.setAceptado(0);
 			
 			Profesor result = profesorDAO.create(c, e);

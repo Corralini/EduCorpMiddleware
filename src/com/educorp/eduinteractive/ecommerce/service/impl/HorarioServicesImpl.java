@@ -67,7 +67,7 @@ public class HorarioServicesImpl implements HorarioService{
 			connection = ConnectionManager.getConnection();
 			connection.setAutoCommit(true);
 			
-			return horarioDAO.findBy(connection, idProfesor, dia);
+			return horarioDAO.findBy(connection, idProfesor, dia, fecha);
 
 		} catch (SQLException e){
 			throw new DataException(e);

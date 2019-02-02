@@ -35,11 +35,11 @@ public class EstudianteServiceTest {
 		return estudianteService.login(email, psswd);
 	}
 
-	public static Estudiante signUpTest (Estudiante e)
+	public static Estudiante signUpTest (Estudiante e, Integer acertadas)
 			throws DuplicateInstanceException, MailException, DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
 
-		return estudianteService.signUp(e);
+		return estudianteService.signUp(e, acertadas);
 	}
 
 	public static void updateTest(Estudiante e)
@@ -86,15 +86,14 @@ public class EstudianteServiceTest {
 						test.setApellido1("Corral");
 						test.setApellido2("Fernández");
 						test.setAnoNacimiento(1969);
-						test.setIdNivel(2);
 						test.setIdGenero("O");
-//
+						signUpTest(test, 1);
 //
 //			//			
 //						Estudiante testNuevo = new Estudiante();
 //						testNuevo.setEmail("acorralfdez@gmail.com");
 //						testNuevo.setIdGenero("h");
-						signUpTest(test);
+
 //
 //						updateTest(testNuevo);
 //			//			cambiarContraTest(997414, "acorralfdez@gmail.com", "nueva");
@@ -115,7 +114,11 @@ public class EstudianteServiceTest {
 //						for (Estudiante e : estudiantes) {
 //							System.out.println("" + e);
 //						}
-
+		
+//		Integer aux = 9;
+//		aux = (int) Math.round(aux - 0.01)/2;
+//		System.out.println(aux);
+		
 	}
 
 }

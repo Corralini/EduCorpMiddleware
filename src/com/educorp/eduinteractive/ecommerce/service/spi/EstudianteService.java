@@ -20,7 +20,7 @@ public interface EstudianteService {
 	public Estudiante login(String email, String psswd)
 		throws DataException;
 	
-	public Estudiante signUp(Estudiante e)
+	public Estudiante signUp(Estudiante e, Integer acertadas)
 		throws DuplicateInstanceException, MailException, DataException;
 	
 	public void update(Estudiante e)

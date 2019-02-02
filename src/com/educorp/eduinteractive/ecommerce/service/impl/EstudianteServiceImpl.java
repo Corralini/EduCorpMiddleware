@@ -2,6 +2,7 @@ package com.educorp.eduinteractive.ecommerce.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -84,13 +85,27 @@ public class EstudianteServiceImpl implements EstudianteService{
 	}
 
 	@Override
-	public Estudiante signUp(Estudiante e)
+	public Estudiante signUp(Estudiante e, Integer acertadas)
 			throws DuplicateInstanceException, MailException, DataException {
 		boolean commit = false;
 		Connection c = null;
+		Calendar calendario = Calendar.getInstance();
+		Integer ano = calendario.get(Calendar.YEAR);
 		
-		if (e.getAnoNacimiento() < 1900) {
+		
+		if (e.getAnoNacimiento() < 1900 || e.getAnoNacimiento() > ano) {
 			throw new DataException("O ano de nacemento non e válido, introduce un ano maior que 1900");
+		}
+		
+		if (acertadas > 0 || acertadas < 11) {
+			
+			acertadas = (int) Math.round(acertadas - 0.01)/2;
+			if (acertadas == 0) {
+				acertadas = 1;
+			}
+			e.setIdNivel(acertadas);
+		}else {
+			throw new DataException("Hemos tenido algún problema con el test");
 		}
 
 		try {
@@ -101,9 +116,18 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 			c.setAutoCommit(false);
 
-			String mssg = "Hola " + e.getNombre()
+			String mssg = "";
+			
+			if(e.getApellido2() == null) {
+			
+			mssg = "Hola " + e.getNombre()
 			+ " " + e.getApellido1()
 			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
+			}else {
+			mssg = "Hola " + e.getNombre()
+			+ " " + e.getApellido1() + " " + e.getApellido2()
+			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
+			}
 			
 			Estudiante result = estudianteDAO.create(c, e);
 
