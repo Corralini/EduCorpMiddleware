@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.EstudianteDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
@@ -91,14 +93,14 @@ public class EstudianteServiceImpl implements EstudianteService{
 		Connection c = null;
 		Calendar calendario = Calendar.getInstance();
 		Integer ano = calendario.get(Calendar.YEAR);
-		
-		
+
+
 		if (e.getAnoNacimiento() < 1900 || e.getAnoNacimiento() > ano) {
 			throw new DataException("O ano de nacemento non e válido, introduce un ano maior que 1900");
 		}
-		
+
 		if (acertadas > 0 || acertadas < 11) {
-			
+
 			acertadas = (int) Math.round(acertadas - 0.01)/2;
 			if (acertadas == 0) {
 				acertadas = 1;
@@ -106,6 +108,10 @@ public class EstudianteServiceImpl implements EstudianteService{
 			e.setIdNivel(acertadas);
 		}else {
 			throw new DataException("Hemos tenido algún problema con el test");
+		}
+		
+		if (checkEmail(e.getEmail())) {
+			throw new DataException("Email incorrecto");
 		}
 
 		try {
@@ -117,18 +123,18 @@ public class EstudianteServiceImpl implements EstudianteService{
 			c.setAutoCommit(false);
 
 			String mssg = "";
-			
+
 			if(e.getApellido2() == null) {
-			
-			mssg = "Hola " + e.getNombre()
-			+ " " + e.getApellido1()
-			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
+
+				mssg = "Hola " + e.getNombre()
+				+ " " + e.getApellido1()
+				+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 			}else {
-			mssg = "Hola " + e.getNombre()
-			+ " " + e.getApellido1() + " " + e.getApellido2()
-			+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
+				mssg = "Hola " + e.getNombre()
+				+ " " + e.getApellido1() + " " + e.getApellido2()
+				+ " el equipo de Educorp Interactive le da la bienvenida a Educorp ";
 			}
-			
+
 			Estudiante result = estudianteDAO.create(c, e);
 
 
@@ -224,7 +230,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			e.setCodigoDeRecuperacion(UsuariosUtils.codRecuperacion());
 
 			String mssg = "Hola "
-			+ " Introduce este código para poder cambiar tu contraseña: " + e.getCodigoDeRecuperacion();
+					+ " Introduce este código para poder cambiar tu contraseña: " + e.getCodigoDeRecuperacion();
 
 			c.setAutoCommit(false);
 			estudianteDAO.update(c, e);
@@ -242,19 +248,19 @@ public class EstudianteServiceImpl implements EstudianteService{
 		Connection c = null;
 		boolean commit = false;
 		try {
-		c = ConnectionManager.getConnection();
-		Estudiante e = new Estudiante();
-		Estudiante cambio = new Estudiante();
-		
-		EstudianteDAO estudianteDAO = new EstudianteDAOImpl();
-		
-		e = estudianteDAO.findByEmail(c, email);
-		c.setAutoCommit(false);
+			c = ConnectionManager.getConnection();
+			Estudiante e = new Estudiante();
+			Estudiante cambio = new Estudiante();
+
+			EstudianteDAO estudianteDAO = new EstudianteDAOImpl();
+
+			e = estudianteDAO.findByEmail(c, email);
+			c.setAutoCommit(false);
 			if(codigo.equals(e.getCodigoDeRecuperacion())) {
 				cambio.setEmail(e.getEmail());
 				cambio.setPsswd(psswd);
 				cambio.setCodigoDeRecuperacion(0);
-				
+
 				estudianteDAO.update(c, cambio);
 				commit = true;
 			}else {
@@ -266,7 +272,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			JDBCUtils.closeConnection(c, commit);
 		}
 	}
-	
+
 
 	@Override
 	public void puntuarProfesor(Profesor p, Estudiante e, double puntuacion) throws DataException {
@@ -287,6 +293,24 @@ public class EstudianteServiceImpl implements EstudianteService{
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
+	}
+
+	public static boolean checkEmail (String email) {
+
+		boolean result = true;
+		
+		String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
+				"[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
+		Pattern pattern = Pattern.compile(emailPattern);
+		if (email != null) {
+			Matcher matcher = pattern.matcher(email);
+			if (matcher.matches()) {
+				result = false;
+			}
+		}
+		
+		return result;
+
 	}
 
 }

@@ -207,7 +207,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (estudiante.getAnoNacimiento() != null)
 				preparedStatement.setInt(i++, estudiante.getAnoNacimiento());
 			if (estudiante.getFechaSubscripcion() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) estudiante.getFechaSubscripcion());
+				preparedStatement.setDate(i++, new java.sql.Date(new Date().getTime()));
 			if(estudiante.getIdNivel() != null)
 				preparedStatement.setInt(i++, estudiante.getIdNivel());
 			if (estudiante.getIdGenero() != null)

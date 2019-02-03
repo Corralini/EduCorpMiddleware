@@ -2,8 +2,11 @@ package com.educorp.eduinteractive.ecommerce.service.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
@@ -88,6 +91,17 @@ public class ProfesorServicesImpl implements ProfesorService{
 			throws DuplicateInstanceException, MailException, DataException {
 		boolean commit = false;
 		Connection c = null;
+		
+		Calendar calendario = Calendar.getInstance();
+		Integer ano = calendario.get(Calendar.YEAR);
+		
+		if (e.getAnoNacimiento() < 1900 || e.getAnoNacimiento() > ano) {
+			throw new DataException("O ano de nacemento non e válido, introduce un ano maior que 1900");
+		}
+		
+		if (checkEmail(e.getEmail())) {
+			throw new DataException("Email incorrecto");
+		}
 
 		try {
 			c = ConnectionManager.getConnection();
@@ -267,6 +281,24 @@ public class ProfesorServicesImpl implements ProfesorService{
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
+	}
+	
+	public static boolean checkEmail (String email) {
+
+		boolean result = true;
+		
+		String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
+				"[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
+		Pattern pattern = Pattern.compile(emailPattern);
+		if (email != null) {
+			Matcher matcher = pattern.matcher(email);
+			if (matcher.matches()) {
+				result = false;
+			}
+		}
+		
+		return result;
+
 	}
 	
 }

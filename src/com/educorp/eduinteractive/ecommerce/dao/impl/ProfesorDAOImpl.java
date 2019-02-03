@@ -447,7 +447,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (p.getAnoNacimiento() != null)
 				preparedStatement.setInt(i++, p.getAnoNacimiento());
 			if (p.getFechaSubscripcion() != null)
-				preparedStatement.setDate(i++, (java.sql.Date) p.getFechaSubscripcion());
+				preparedStatement.setDate(i++, new java.sql.Date(new Date().getTime()));
 			if (p.getPrecioSesion() != null) 
 				preparedStatement.setDouble(i++, p.getPrecioSesion());
 			if (p.getIdIdioma() != null)
