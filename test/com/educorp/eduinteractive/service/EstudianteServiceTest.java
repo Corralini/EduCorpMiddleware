@@ -75,7 +75,7 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-			//						findByIdTest(4);
+									findByIdTest(1);
 			//			loginTest("acorralfdez@gmail.com", "nueva");
 
 //						Estudiante test = new Estudiante();
@@ -103,19 +103,19 @@ public class EstudianteServiceTest {
 			//			profesor.setIdProfesor(1);
 			//			
 			//			puntuarProfesorTest(profesor, test, 4.0d);
-
-						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
-						EstudianteCriteria criteria = new EstudianteCriteria();
+//
+//						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
+//						EstudianteCriteria criteria = new EstudianteCriteria();
+////						
+////						criteria.setPuntuacion(2.0d);
+////			
+////						
+//						estudiantes = findByCriteriaTest(criteria);
 //						
-//						criteria.setPuntuacion(2.0d);
-//			
-//						
-						estudiantes = findByCriteriaTest(criteria);
-						
-						for (Estudiante e : estudiantes) {
-							System.out.println("" + e);
-						}
-		
+//						for (Estudiante e : estudiantes) {
+//							System.out.println("" + e);
+//						}
+//		
 //		Integer aux = 9;
 //		aux = (int) Math.round(aux - 0.01)/2;
 //		System.out.println(aux);

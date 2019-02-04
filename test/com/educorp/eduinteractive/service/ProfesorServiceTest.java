@@ -72,16 +72,16 @@ public class ProfesorServiceTest {
 	
 	public static void main(String[] args) throws DataException, MailException {
 		
-		List<Profesor> profesores = new ArrayList<Profesor>();
-		ProfesorCriteria criteria = new ProfesorCriteria();
-		
-		criteria.setDiaSesion(1);
-		
-		profesores = findByCriteriaTest(criteria);
-		
-		for (Profesor p: profesores) {
-			System.out.println("" + p);
-		}
+//		List<Profesor> profesores = new ArrayList<Profesor>();
+//		ProfesorCriteria criteria = new ProfesorCriteria();
+//		
+//		criteria.setDiaSesion(1);
+//		
+//		profesores = findByCriteriaTest(criteria);
+//		
+//		for (Profesor p: profesores) {
+//			System.out.println("" + p);
+//		}
 		
 //		findByIdTest(6);
 		
