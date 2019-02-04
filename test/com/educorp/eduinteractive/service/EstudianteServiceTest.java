@@ -1,5 +1,6 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -77,17 +78,17 @@ public class EstudianteServiceTest {
 			//						findByIdTest(4);
 			//			loginTest("acorralfdez@gmail.com", "nueva");
 
-						Estudiante test = new Estudiante();
-						test.setIdEstudiante(12);
-						test.setEmail("acorralfdez@gmail.com");
-						test.setIdPais("es");
-						test.setPsswd("corralito");
-						test.setNombre("Alejandro Ricardo");
-						test.setApellido1("Corral");
-						test.setApellido2("Fernández");
-						test.setAnoNacimiento(1969);
-						test.setIdGenero("O");
-						signUpTest(test, 1);
+//						Estudiante test = new Estudiante();
+//						test.setIdEstudiante(12);
+//						test.setEmail("acorralfdez@gmail.com");
+//						test.setIdPais("es");
+//						test.setPsswd("corralito");
+//						test.setNombre("Alejandro Ricardo");
+//						test.setApellido1("Corral");
+//						test.setApellido2("Fernández");
+//						test.setAnoNacimiento(1969);
+//						test.setIdGenero("O");
+//						signUpTest(test, 1);
 //
 //			//			
 //						Estudiante testNuevo = new Estudiante();
@@ -103,17 +104,17 @@ public class EstudianteServiceTest {
 			//			
 			//			puntuarProfesorTest(profesor, test, 4.0d);
 
-//						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
-//						EstudianteCriteria criteria = new EstudianteCriteria();
+						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
+						EstudianteCriteria criteria = new EstudianteCriteria();
 //						
 //						criteria.setPuntuacion(2.0d);
 //			
 //						
-//						estudiantes = findByCriteriaTest(criteria);
-//						
-//						for (Estudiante e : estudiantes) {
-//							System.out.println("" + e);
-//						}
+						estudiantes = findByCriteriaTest(criteria);
+						
+						for (Estudiante e : estudiantes) {
+							System.out.println("" + e);
+						}
 		
 //		Integer aux = 9;
 //		aux = (int) Math.round(aux - 0.01)/2;

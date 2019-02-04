@@ -5,6 +5,7 @@ import com.educorp.eduinteractive.ecommerce.model.Profesor;
 public class ProfesorCriteria extends Profesor{
 
 	private Double precioSesionHasta = null;
+	private Integer diaSesion = null;
 	
 	public ProfesorCriteria() {
 		
@@ -16,6 +17,14 @@ public class ProfesorCriteria extends Profesor{
 
 	public void setPrecioSesionHasta(Double precioSesionHasta) {
 		this.precioSesionHasta = precioSesionHasta;
+	}
+
+	public Integer getDiaSesion() {
+		return diaSesion;
+	}
+
+	public void setDiaSesion(Integer diaSesion) {
+		this.diaSesion = diaSesion;
 	}
 	
 }

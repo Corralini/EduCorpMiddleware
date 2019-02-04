@@ -119,7 +119,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 			queryString = new StringBuilder(
 					"select P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION, punt.puntuacion "
-							+" from profesor p left join estudiante_puntua_profesor punt on (p.id_profesor = punt.id_profesor) ");
+							+" from profesor p left join estudiante_puntua_profesor punt on (p.id_profesor = punt.id_profesor) "
+							+" inner join horario h on (p.id_profesor = h.id_profesor) ");
 
 			boolean first = true;
 
@@ -205,6 +206,10 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM estudiante_puntua_profesor puntu where puntu.id_profesor = p.id_profesor) > ? ");
 			}
 			
+			if (profesor.getDiaSesion() != null) {
+				DAOUtils.addClause(queryString, first, " h.id_dia = ? ");
+			}
+			
 			queryString.append(" group By p.id_profesor"
 								+ " order by punt.puntuacion desc ");
 			
@@ -247,6 +252,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				preparedStatement.setString(i++, profesor.getDescripcion());
 			if (profesor.getPuntuacion() != null)
 				preparedStatement.setDouble(i++, profesor.getPuntuacion());
+			if(profesor.getDiaSesion() != null)
+				preparedStatement.setInt(i++, profesor.getDiaSesion());
 
 
 			resultSet = preparedStatement.executeQuery();
