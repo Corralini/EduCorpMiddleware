@@ -76,7 +76,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 					+" FROM HORARIO "
 					+ " where id_horario not in (SELECT ID_HORARIO "
 					+ " FROM sesion " 
-					+ " where fecha_sesion <> ? and id_profesor = ? and (id_estado = 'S' || id_estado = 'A')) "
+					+ " where fecha_sesion = ? and id_profesor = ? and (id_estado = 'S' || id_estado = 'A')) "
 		            + " and id_profesor = ? and id_dia = ? " );
 			
 			preparedStatement = connection.prepareStatement(queryString.toString(),
