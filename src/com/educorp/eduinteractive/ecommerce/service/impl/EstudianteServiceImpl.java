@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.EstudianteDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
@@ -108,10 +106,6 @@ public class EstudianteServiceImpl implements EstudianteService{
 			e.setIdNivel(acertadas);
 		}else {
 			throw new DataException("Hemos tenido algún problema con el test");
-		}
-		
-		if (checkEmail(e.getEmail())) {
-			throw new DataException("Email incorrecto");
 		}
 
 		try {
@@ -293,24 +287,6 @@ public class EstudianteServiceImpl implements EstudianteService{
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
-	}
-
-	public static boolean checkEmail (String email) {
-
-		boolean result = true;
-		
-		String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
-				"[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
-		Pattern pattern = Pattern.compile(emailPattern);
-		if (email != null) {
-			Matcher matcher = pattern.matcher(email);
-			if (matcher.matches()) {
-				result = false;
-			}
-		}
-		
-		return result;
-
 	}
 
 }

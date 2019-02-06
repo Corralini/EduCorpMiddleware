@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.GeneroDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
+import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.GeneroDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Genero;
@@ -30,6 +31,8 @@ public class GeneroServiceImpl implements GeneroService{
 			
 		}catch(SQLException ex) {
 			throw new DataException(ex);
+		}finally {
+			JDBCUtils.closeConnection(c);
 		}
 	}
 }
