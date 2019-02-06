@@ -2,8 +2,9 @@ package com.educorp.eduinteractive.service;
 
 import java.util.Date;
 
-import com.educorp.eduinteractive.model.Estudiante;
-import com.educorp.eduinteractive.service.impl.MailServiceImpl;
+import com.educorp.eduinteractive.ecommerce.model.Estudiante;
+import com.educorp.eduinteractive.ecommerce.service.impl.MailServiceImpl;
+import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class SendMailTest {
 
