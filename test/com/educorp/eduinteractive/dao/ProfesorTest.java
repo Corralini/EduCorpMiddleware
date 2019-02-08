@@ -27,7 +27,6 @@ public class ProfesorTest {
 			c = ConnectionManager.getConnection();
 			Profesor e = profesorDAO.findById(c, id);
 
-			System.out.println(e);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,9 +41,6 @@ public class ProfesorTest {
 			c = ConnectionManager.getConnection();
 			List <Profesor> profesores = profesorDAO.findByCriteria(c, criteria);
 			
-			for(Profesor p: profesores) {
-				System.out.println("" + p);
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

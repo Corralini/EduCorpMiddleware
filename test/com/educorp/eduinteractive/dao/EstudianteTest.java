@@ -25,7 +25,6 @@ public class EstudianteTest {
 				c = ConnectionManager.getConnection();
 				Estudiante e = estudianteDAO.findById(c, id);
 				
-				System.out.println(e);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -41,7 +40,6 @@ public class EstudianteTest {
 			List <Estudiante> estudiantes = estudianteDAO.findByNombre(c, nombre);
 			
 			for(Estudiante e: estudiantes) {
-				System.out.println("" + e);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -57,9 +55,6 @@ public class EstudianteTest {
 			c = ConnectionManager.getConnection();
 			List <Estudiante> estudiantes = estudianteDAO.findByCriteria(c, criteria);
 			
-			for(Estudiante e: estudiantes) {
-				System.out.println("" + e);
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

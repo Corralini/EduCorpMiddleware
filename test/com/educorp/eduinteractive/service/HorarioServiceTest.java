@@ -21,7 +21,6 @@ public class HorarioServiceTest {
 
 	public static Horario findById (Integer id) throws DataException{
 		HorarioService horarioService = new HorarioServicesImpl();
-		System.out.println("" + horarioService.findById(id));
 		return horarioService.findById(id);
 	}
 
@@ -48,7 +47,6 @@ public class HorarioServiceTest {
 		horarios = findByFecha(1, new Date());
 		
 		for(Horario horar : horarios) {
-			System.out.println("" + horar);
 		}
 	}
 

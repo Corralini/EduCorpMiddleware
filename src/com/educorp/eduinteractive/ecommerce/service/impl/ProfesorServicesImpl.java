@@ -72,7 +72,6 @@ public class ProfesorServicesImpl implements ProfesorService{
 			}
 
 			if(PasswordEncryptionUtil.checkPassword(psswd, p.getPsswd())) {
-				System.out.println("Usuario " + p.getEmail() + " autenticado a las " + new Date());
 				return p;
 			}else {
 				throw new DataException("Hemos detetado un problema, comprueba los datos introducidos");

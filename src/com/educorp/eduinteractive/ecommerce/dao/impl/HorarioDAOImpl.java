@@ -33,7 +33,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 					+"WHERE ID_HORARIO = ? ";
 
 			// Preparar a query
-			System.out.println("Creating statement...");
+
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros

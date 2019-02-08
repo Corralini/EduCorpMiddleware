@@ -29,7 +29,6 @@ public class PuntuacionDAOImpl implements PuntuacionDAO {
 					+"WHERE id_estudiante = ? ";
 
 			// Preparar a query
-			System.out.println("Creating statement...");
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros
@@ -73,7 +72,6 @@ public class PuntuacionDAOImpl implements PuntuacionDAO {
 					+"WHERE id_estudiante = ? ";
 
 			// Preparar a query
-			System.out.println("Creating statement...");
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros

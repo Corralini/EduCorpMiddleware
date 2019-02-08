@@ -70,7 +70,6 @@ public class EstudianteServiceImpl implements EstudianteService{
 			}
 
 			if(PasswordEncryptionUtil.checkPassword(psswd, e.getPsswd())) {
-				System.out.println("Usuario " + e.getEmail() + " autenticado a las " + new Date());
 				return e;
 			}else {
 				throw new DataException("Hemos detetado un problema, comprueba los datos introducidos");

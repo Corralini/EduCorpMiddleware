@@ -11,7 +11,6 @@ public class equalsToStringTest {
 		s.setIdProfesor(25);
 		s.setIdEstudiante(25);
 		
-		System.out.println(s.getIdProfesor().toString().equals(s.getIdEstudiante().toString()));
 		
 	}
 	

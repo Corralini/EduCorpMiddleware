@@ -35,7 +35,6 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 					+"where P.id_profesor = ? ";
 
 			// Preparar a query
-			System.out.println("Creating statement...");
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros
@@ -78,7 +77,6 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 					+" WHERE upper(p.email) like upper(?) ";
 
 			// Preparar a query
-			System.out.println("Creating statement...");
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros

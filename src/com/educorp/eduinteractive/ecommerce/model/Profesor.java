@@ -181,7 +181,6 @@ public class Profesor extends AbstractValueObject  implements Comparable<Profeso
 
 	@Override
 	public int compareTo(Profesor p) {
-		System.out.println("Comparando " + this.nombre + " con " + p.getNombre() + "...");
 		return this.getPuntuacion().compareTo(p.getPuntuacion());
 	}
 }

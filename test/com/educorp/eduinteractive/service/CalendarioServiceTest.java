@@ -19,7 +19,7 @@ public class CalendarioServiceTest {
 		List<Sesion> sesiones = findByUsuarioTest(4);
 		
 		for(Sesion s : sesiones) {
-			System.out.println("" + s);
+
 		}
 	}
 }

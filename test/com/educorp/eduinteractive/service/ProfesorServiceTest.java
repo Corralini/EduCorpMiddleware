@@ -24,7 +24,6 @@ public class ProfesorServiceTest {
 	public static Profesor findByIdTest(Integer id)
 			throws DataException{
 		ProfesorService profesorService = new ProfesorServicesImpl();
-		System.out.println("" + profesorService.findById(id));
 		return profesorService.findById(id);
 	}
 
@@ -80,7 +79,6 @@ public class ProfesorServiceTest {
 //		profesores = findByCriteriaTest(criteria);
 //		
 //		for (Profesor p: profesores) {
-//			System.out.println("" + p);
 //		}
 		
 //		findByIdTest(6);

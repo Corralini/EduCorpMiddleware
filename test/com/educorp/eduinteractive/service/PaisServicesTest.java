@@ -20,7 +20,6 @@ public class PaisServicesTest {
 		List<Pais> paises =	findByIdioma("");
 		
 		for(Pais p: paises) {
-			System.out.println("" + p);
 		}
 			
 	}

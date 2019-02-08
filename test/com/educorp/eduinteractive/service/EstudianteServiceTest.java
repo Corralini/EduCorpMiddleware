@@ -16,14 +16,12 @@ public class EstudianteServiceTest {
 	public static List<Estudiante> findByCriteriaTest(EstudianteCriteria criteria)
 			throws DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
-
 		return estudianteService.findByCriteria(criteria);
 	}
 
 	public static Estudiante findByIdTest (Integer id)
 			throws DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
-		System.out.println("" + estudianteService.findById(id));
 		return estudianteService.findById(id);
 
 	}
@@ -31,14 +29,12 @@ public class EstudianteServiceTest {
 	public static Estudiante loginTest (String email, String psswd)
 			throws DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
-
 		return estudianteService.login(email, psswd);
 	}
 
 	public static Estudiante signUpTest (Estudiante e, Integer acertadas)
 			throws DuplicateInstanceException, MailException, DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
-
 		return estudianteService.signUp(e, acertadas);
 	}
 
@@ -74,18 +70,18 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-//									findByIdTest(1);
+									findByIdTest(1);
 //						loginTest("AmberReeves@jourrapide.com", "Me2eeT0aiBu");
-
-						Estudiante test = new Estudiante();
-						test.setEmail("JenniferMatthews@dayrep.com");
-						test.setIdPais("us");
-						test.setPsswd("lajdlkajsdla");
-						test.setNombre("Jennifer");
-						test.setApellido1("Matthews");
-						test.setAnoNacimiento(1995);
-						test.setIdGenero("M");
-						signUpTest(test, 7);
+//
+//						Estudiante test = new Estudiante();
+//						test.setEmail("JenniferMatthews@dayrep.com");
+//						test.setIdPais("us");
+//						test.setPsswd("lajdlkajsdla");
+//						test.setNombre("Jennifer");
+//						test.setApellido1("Matthews");
+//						test.setAnoNacimiento(1995);
+//						test.setIdGenero("M");
+//						signUpTest(test, 7);
 //
 //			//			
 //						Estudiante testNuevo = new Estudiante();
@@ -110,12 +106,10 @@ public class EstudianteServiceTest {
 //						estudiantes = findByCriteriaTest(criteria);
 //						
 //						for (Estudiante e : estudiantes) {
-//							System.out.println("" + e);
 //						}
 //		
 //		Integer aux = 9;
 //		aux = (int) Math.round(aux - 0.01)/2;
-//		System.out.println(aux);
 		
 	}
 

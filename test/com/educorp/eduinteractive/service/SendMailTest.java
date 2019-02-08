@@ -27,7 +27,6 @@ public class SendMailTest {
 					+ "donde el aprendizaje no conoce fronteras ni límites.";
 		MailService mailService = new MailServiceImpl();
 		mailService.sendEmail(e.getEmail(), "Bienvendio a EduCorp", sub);
-		System.out.println("Email enviado");
 	}
 
 }

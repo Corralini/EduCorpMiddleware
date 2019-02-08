@@ -20,7 +20,6 @@ public class ProfesorComparatorByFechaSubscripcion implements Comparator<Profeso
 	
 	@Override
 	public int compare(Profesor p1, Profesor p2) {
-		System.out.println("Comparo " + p1.getNombre() + " con " + p2.getNombre());
 		return p1.getFechaSubscripcion().compareTo(p2.getFechaSubscripcion());
 	}
 }
