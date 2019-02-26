@@ -9,10 +9,10 @@ import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class MailServiceImpl implements MailService{
-	
+
 	public MailServiceImpl() {		
 	}
-	
+
 
 	@Override
 	public void sendEmail(String to, String subject, String plainText) throws MailException {
@@ -25,12 +25,11 @@ public class MailServiceImpl implements MailService{
 			email.setFrom("educorpinteractive@gmail.com");
 			email.setSubject(subject);
 			email.setMsg(plainText);
-
 			email.addTo(to);
 			email.send();
-			}catch (EmailException e) {
-				e.printStackTrace();
-			}
-		
+		}catch (EmailException e) {
+			e.printStackTrace();
+		}
+
 	}
-	}
+}

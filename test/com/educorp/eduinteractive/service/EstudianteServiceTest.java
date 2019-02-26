@@ -70,18 +70,18 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-									findByIdTest(1);
+//									findByIdTest(1);
 //						loginTest("AmberReeves@jourrapide.com", "Me2eeT0aiBu");
 //
-//						Estudiante test = new Estudiante();
-//						test.setEmail("JenniferMatthews@dayrep.com");
-//						test.setIdPais("us");
-//						test.setPsswd("lajdlkajsdla");
-//						test.setNombre("Jennifer");
-//						test.setApellido1("Matthews");
-//						test.setAnoNacimiento(1995);
-//						test.setIdGenero("M");
-//						signUpTest(test, 7);
+						Estudiante test = new Estudiante();
+						test.setEmail("hector.modino.otero@gmail.com");
+						test.setIdPais("es");
+						test.setPsswd("modino");
+						test.setNombre("Hector");
+						test.setApellido1("Modino");
+						test.setAnoNacimiento(2000);
+						test.setIdGenero("H");
+						test = signUpTest(test, 9);
 //
 //			//			
 //						Estudiante testNuevo = new Estudiante();

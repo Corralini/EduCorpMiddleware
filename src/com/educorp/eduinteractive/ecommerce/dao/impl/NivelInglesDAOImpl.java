@@ -21,9 +21,9 @@ public class NivelInglesDAOImpl implements NivelInglesDAO{
 		try {
 
 			String queryString = 
-					"SELECT ID_INGLES, NIVEL " 
+					"SELECT ID_NIVEL, NIVEL " 
 							+"FROM NIVEL_INGLES "
-							+"ORDER BY ID_INGLES ASC";
+							+"ORDER BY ID_NIVEL ASC";
 
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

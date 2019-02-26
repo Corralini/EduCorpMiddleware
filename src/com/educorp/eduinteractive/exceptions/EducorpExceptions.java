@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 
 public class EducorpExceptions extends Exception {
 	
+	private String errorCode = null;
 		
 	public EducorpExceptions() {
 		super();
@@ -23,6 +24,14 @@ public class EducorpExceptions extends Exception {
 		super(message,cause);		
 	}			
 	
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+
 	public void printStackTrace() {
 		if (getCause()!=null) {
 			getCause().printStackTrace();
