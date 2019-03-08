@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.GeneroDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -14,8 +17,11 @@ import com.educorp.eduinteractive.ecommerce.model.Genero;
 
 public class GeneroDAOImpl implements GeneroDAO{
 
+	private Logger logger = LogManager.getLogger(GeneroDAOImpl.class);
+	
 	@Override
 	public List<Genero> findAll(Connection connection) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("all");
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -25,7 +31,7 @@ public class GeneroDAOImpl implements GeneroDAO{
 							"SELECT ID_GENERO, GENERO " 
 							+"FROM GENERO "
 							+"ORDER BY ID_GENERO ASC";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -41,6 +47,7 @@ public class GeneroDAOImpl implements GeneroDAO{
 
 			return genero;
 		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);

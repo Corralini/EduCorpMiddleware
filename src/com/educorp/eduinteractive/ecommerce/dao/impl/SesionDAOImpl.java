@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.SesionDAO;
@@ -19,8 +22,11 @@ import com.educorp.eduinteractive.ecommerce.model.Sesion;
 
 public class SesionDAOImpl implements SesionDAO{
 
+	private Logger logger = LogManager.getLogger(SesionDAOImpl.class);
+	
 	@Override
 	public Sesion findById(Connection connection, Integer id) throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		Sesion s = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -30,7 +36,7 @@ public class SesionDAOImpl implements SesionDAO{
 			sql =  "SELECT ID_SESION, ID_PROFESOR, ID_ESTUDIANTE, ID_MES,ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ANO, ID_ESTADO, FECHA_CAMBIO_ESTADO "
 					+"FROM SESION "
 					+"WHERE ID_SESION = ? ";
-
+			if(logger.isDebugEnabled()) logger.debug(sql);
 			// Preparar a query
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -44,13 +50,14 @@ public class SesionDAOImpl implements SesionDAO{
 			if (resultSet.next()) {				
 				s = loadNext(resultSet);				
 			} else {
-				throw new DataException("Non se encontrou a sesion "+id);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou a sesion {}", id);
 			}
 			if (resultSet.next()) {
-				throw new DataException("Sesion"+id+" duplicado");
+				if(logger.isDebugEnabled()) logger.debug("Sesion {} duplicado", id);
 			}
 
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -62,7 +69,7 @@ public class SesionDAOImpl implements SesionDAO{
 
 	@Override
 	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante) throws DataException {
-		
+		if(logger.isDebugEnabled()) logger.debug("id: {}", idEstudiante);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -73,7 +80,7 @@ public class SesionDAOImpl implements SesionDAO{
 					"FROM SESION S INNER JOIN HORARIO H ON (S.ID_HORARIO = H.ID_HORARIO)  " +
 					"WHERE S.ID_ESTUDIANTE = ? AND (S.ID_ESTADO = 'A' OR S.ID_ESTADO = 'S')  " +
 					"ORDER BY FECHA_SESION ASC";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -93,6 +100,7 @@ public class SesionDAOImpl implements SesionDAO{
 			return sesiones;
 
 		} catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -103,6 +111,7 @@ public class SesionDAOImpl implements SesionDAO{
 
 	@Override
 	public List<Sesion> findByEstado(Connection connection, String idEstado) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("id_estado: {}", idEstado);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 			
@@ -112,7 +121,7 @@ public class SesionDAOImpl implements SesionDAO{
 					"SELECT ID_SESION, ID_PROFESOR, ID_ESTUDIANTE, FECHA_SESION, S.ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO " + 
 					"FROM SESION   " +
 					"WHERE UPPER(ID_ESTADO) = LIKE UPPER(?) ";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -132,6 +141,7 @@ public class SesionDAOImpl implements SesionDAO{
 			return sesiones;
 
 		} catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -142,6 +152,7 @@ public class SesionDAOImpl implements SesionDAO{
 	@Override
 	public Sesion create(Connection connection, Sesion s) 
 			throws DuplicateInstanceException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Sesion: {}", s);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -149,7 +160,7 @@ public class SesionDAOImpl implements SesionDAO{
 			// Creamos el preparedstatement
 			String queryString = "INSERT INTO SESION (ID_PROFESOR, ID_ESTUDIANTE,FECHA_SESION, ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ID_ESTADO, FECHA_CAMBIO_ESTADO) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 									Statement.RETURN_GENERATED_KEYS);
 
@@ -169,7 +180,7 @@ public class SesionDAOImpl implements SesionDAO{
 			int insertedRows = preparedStatement.executeUpdate();
 
 			if (insertedRows == 0) {
-				throw new SQLException("Can not add row to table 'Estudiante'");
+				if(logger.isDebugEnabled()) logger.debug("Can not add row to table 'Sesion'");
 			}
 
 			// Recuperamos la PK generada
@@ -178,13 +189,14 @@ public class SesionDAOImpl implements SesionDAO{
 				Integer pk = resultSet.getInt(1); 
 				s.setIdEstudiante(pk);
 			} else {
-				throw new DataException("Unable to fetch autogenerated primary key");
+				if(logger.isDebugEnabled()) logger.debug("Unable to fetch autogenerated primary key");
 			}
 
 			// Return the DTO
 			return s;
 
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(),ex);
 			throw new DataException(ex);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -195,6 +207,7 @@ public class SesionDAOImpl implements SesionDAO{
 	@Override
 	public void update(Connection connection, Sesion s) 
 			throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Sesion: {}", s);
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
@@ -251,7 +264,7 @@ public class SesionDAOImpl implements SesionDAO{
 			}
 						
 			queryString.append("WHERE id_sESION = ?");
-			
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString.toString());
 			
 
@@ -282,15 +295,15 @@ public class SesionDAOImpl implements SesionDAO{
 				
 
 			if (updatedRows == 0) {
-				throw new DataException("Non se actualizou o estudiante");
+				if(logger.isDebugEnabled()) logger.debug("Non se actualizou a sesion {}", s.getIdSesion());
 			}
 
 			if (updatedRows > 1) {
-				throw new SQLException("Duplicate row for id = '" + 
-						s.getIdEstudiante() + "' in table 'E'");
+				if(logger.isDebugEnabled()) logger.debug("Duplicate row for id = {} in table 'Sesion'", s.getIdSesion());
 			}     
 			
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);    
 		} finally {
 			JDBCUtils.closeStatement(preparedStatement);

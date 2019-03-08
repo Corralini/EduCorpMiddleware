@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.PaisDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -14,8 +17,11 @@ import com.educorp.eduinteractive.ecommerce.model.Pais;
 
 public class PaisDAOImpl implements PaisDAO{
 
+	private Logger logger = LogManager.getLogger(PaisDAOImpl.class);
+	
 	@Override
 	public List<Pais> findAll(Connection connection, String idIdioma) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("all");
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -27,7 +33,7 @@ public class PaisDAOImpl implements PaisDAO{
 					"from idioma_pagina_pais  " +
 					"WHERE ID_IDIOMA_PAGINA = ? "+
 					"ORDER BY PAIS ASC ";
-			
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -48,6 +54,7 @@ public class PaisDAOImpl implements PaisDAO{
 			return results;
 
 		} catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);

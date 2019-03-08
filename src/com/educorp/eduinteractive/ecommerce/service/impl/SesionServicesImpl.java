@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.impl.HoraDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.HorarioDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
@@ -25,6 +28,8 @@ import com.educorp.eduinteractive.ecommerce.service.spi.SesionServices;
 
 public class SesionServicesImpl implements SesionServices{
 
+	private Logger logger = LogManager.getLogger(SesionServicesImpl.class);
+	
 	private SesionDAO sesionDAO = null;
 	private ProfesorDAO profesorDAO = null;
 	private MailService mailService = null;
@@ -37,6 +42,7 @@ public class SesionServicesImpl implements SesionServices{
 
 	@Override
 	public void create(Horario h, Date fecha, Integer idEstudiante) throws MailException, DuplicateInstanceException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Horario: {}; fecha: {}; idEstudiante: {}", h, fecha, idEstudiante);
 		Connection c = null;
 		Sesion s = new Sesion();
 		boolean commit = false;
@@ -80,6 +86,7 @@ public class SesionServicesImpl implements SesionServices{
 			commit = true;
 			
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
@@ -89,6 +96,7 @@ public class SesionServicesImpl implements SesionServices{
 
 	@Override
 	public void cambiarEstado(Sesion s, String idEstado) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Sesion: {}; idEstado: {}", s, idEstado);
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -101,6 +109,7 @@ public class SesionServicesImpl implements SesionServices{
 			
 			commit = true;
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
@@ -110,6 +119,7 @@ public class SesionServicesImpl implements SesionServices{
 
 	@Override
 	public void empezarSesion(Sesion s) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Sesion: {}", s);
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -128,6 +138,7 @@ public class SesionServicesImpl implements SesionServices{
 				cambiarEstado(s, "R");
 			}
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}// catch (InterruptedException ie) {
 			//     Thread.currentThread().interrupt();
@@ -140,6 +151,7 @@ public class SesionServicesImpl implements SesionServices{
 
 	@Override
 	public void terminarSesion(Sesion s) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Sesion: {}", s);
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -150,6 +162,7 @@ public class SesionServicesImpl implements SesionServices{
 			sesionDAO.update(c, s);
 			commit = true;
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);

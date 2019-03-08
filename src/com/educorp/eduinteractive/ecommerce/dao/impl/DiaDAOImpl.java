@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.DiaDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -15,8 +18,11 @@ import com.educorp.eduinteractive.ecommerce.model.Dia;
 
 public class DiaDAOImpl implements DiaDAO{
 
+	private Logger logger = LogManager.getLogger(DiaDAOImpl.class);
+	
 	@Override
 	public Dia findById(Connection connection, Integer id) throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -26,7 +32,7 @@ public class DiaDAOImpl implements DiaDAO{
 									"SELECT ID_DIA, DIA " 
 									+"FROM DIA "
 									+"where id_dia = ?";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -40,14 +46,15 @@ public class DiaDAOImpl implements DiaDAO{
 			if (resultSet.next()) {				
 				t = loadNext(resultSet);				
 			} else {
-				throw new DataException("Non se encontrou o dia "+id);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o dia {}", id);
 			}
 			if (resultSet.next()) {
-				throw new DataException("Dia"+id+" duplicado");
+				if(logger.isDebugEnabled()) logger.debug("Dia {} duplicado", id);
 			}                	              	
 
 			return t;
 		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -56,6 +63,7 @@ public class DiaDAOImpl implements DiaDAO{
 	}
 	
 	public List<Dia> findAll(Connection connection) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("all");
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -65,7 +73,7 @@ public class DiaDAOImpl implements DiaDAO{
 									"SELECT ID_DIA, DIA " 
 									+"FROM DIA "
 									+"ORDER BY ID_DIA ASC";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -81,6 +89,7 @@ public class DiaDAOImpl implements DiaDAO{
 
 			return dias;
 		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);

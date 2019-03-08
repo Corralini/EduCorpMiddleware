@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.impl.HorarioDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
@@ -17,6 +20,8 @@ import com.educorp.eduinteractive.ecommerce.service.spi.HorarioService;
 
 public class HorarioServicesImpl implements HorarioService{
 
+	private Logger logger = LogManager.getLogger(HorarioServicesImpl.class);
+	
 	private HorarioDAO horarioDAO = null;
 	
 	public HorarioServicesImpl() {
@@ -25,6 +30,7 @@ public class HorarioServicesImpl implements HorarioService{
 	
 	@Override
 	public void create(Horario h) throws DuplicateInstanceException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("horario: {}", h);
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -33,6 +39,7 @@ public class HorarioServicesImpl implements HorarioService{
 			horarioDAO.create(c, h);
 			commit = true;
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
@@ -42,6 +49,7 @@ public class HorarioServicesImpl implements HorarioService{
 
 	@Override
 	public Horario findById(Integer id) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
@@ -49,6 +57,7 @@ public class HorarioServicesImpl implements HorarioService{
 			return horarioDAO.findById(c, id);
 
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		} finally {   
 			JDBCUtils.closeConnection(c);
@@ -57,6 +66,7 @@ public class HorarioServicesImpl implements HorarioService{
 
 	@Override
 	public List<Horario> findByFecha(Integer idProfesor, Date fecha) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("idProfesor: {}; fecha: {}", idProfesor, fecha); 
 		Connection connection = null;
 
 		try {
@@ -70,6 +80,7 @@ public class HorarioServicesImpl implements HorarioService{
 			return horarioDAO.findBy(connection, idProfesor, dia, fecha);
 
 		} catch (SQLException e){
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeConnection(connection);

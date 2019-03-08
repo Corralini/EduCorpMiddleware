@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.HoraDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -15,9 +18,11 @@ import com.educorp.eduinteractive.ecommerce.model.Hora;
 
 public class HoraDAOImpl implements HoraDAO{
 	
+	private Logger logger = LogManager.getLogger(HoraDAOImpl.class);
+	
 	@Override
 	public Hora findById(Connection connection, Integer id) throws InstanceNotFoundException, DataException {
-		
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -41,14 +46,15 @@ public class HoraDAOImpl implements HoraDAO{
 			if (resultSet.next()) {				
 				t = loadNext(resultSet);				
 			} else {
-				throw new DataException("Non se encontrou a hora "+id);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou a hora {}", id);
 			}
 			if (resultSet.next()) {
-				throw new DataException("Hora "+id+" duplicado");
+				if(logger.isDebugEnabled()) logger.debug("Hora {} duplicado", id);
 			}                	              	
 
 			return t;
 		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -57,6 +63,7 @@ public class HoraDAOImpl implements HoraDAO{
 	}
 
 	public List<Hora> findAll(Connection connection) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("all");
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -66,7 +73,7 @@ public class HoraDAOImpl implements HoraDAO{
 					"SELECT ID_HORA, HORA " 
 							+"FROM HORA "
 							+"ORDER BY ID_HORA ASC";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -82,6 +89,7 @@ public class HoraDAOImpl implements HoraDAO{
 
 			return dias;
 		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);

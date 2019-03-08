@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.impl.GeneroDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
@@ -14,6 +17,8 @@ import com.educorp.eduinteractive.ecommerce.service.spi.GeneroService;
 
 public class GeneroServiceImpl implements GeneroService{
 
+	private Logger logger = LogManager.getLogger(GeneroServiceImpl.class);
+	
 	private GeneroDAO generoDAO = null;
 	
 	public GeneroServiceImpl(){
@@ -22,6 +27,7 @@ public class GeneroServiceImpl implements GeneroService{
 	
 	@Override
 	public List<Genero> findAll () throws DataException{
+		if(logger.isDebugEnabled()) logger.debug("all");
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
@@ -30,6 +36,7 @@ public class GeneroServiceImpl implements GeneroService{
 			return generoDAO.findAll(c);
 			
 		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c);

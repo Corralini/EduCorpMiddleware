@@ -30,7 +30,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	public Estudiante findById(Connection connection, Integer id)
 			throws  InstanceNotFoundException,DataException {
 		
-		logger.debug("id = {} ", id);
+		if(logger.isDebugEnabled()) logger.debug("id = {} ", id);
 		
 		Estudiante e = null;
 		PreparedStatement preparedStatement = null;
@@ -56,10 +56,10 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (resultSet.next()) {				
 				e = loadNext(connection, resultSet);				
 			} else {
-				logger.debug("Non se encontrou o estudiante {}", id);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o estudiante {}", id);
 			}
 			if (resultSet.next()) {
-				logger.debug("Estudainte {} duplicado" , id);
+				if(logger.isDebugEnabled()) logger.debug("Estudainte {} duplicado" , id);
 			}
 
 		} catch (SQLException ex) {
@@ -77,7 +77,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public List<Estudiante> findByNombre(Connection connection, String nombre)
 			throws DataException {	
-		logger.debug("nombre = {} ", nombre);
+		if(logger.isDebugEnabled()) logger.debug("nombre = {} ", nombre);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try{
@@ -88,7 +88,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 					+"	WHERE UPPER(NOMBRE) LIKE UPPER(?) ";
 
 			// Preparar a query
-			logger.debug(sql);
+			if(logger.isDebugEnabled()) logger.debug(sql);
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			// Establece os parámetros
@@ -119,7 +119,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	public List<Estudiante> findByCriteria (Connection connection, EstudianteCriteria estudiante)
 			throws DataException{
 		
-		logger.debug("criteria = {}", estudiante);
+		if(logger.isDebugEnabled()) logger.debug("criteria = {}", estudiante);
 		
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -197,7 +197,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			queryString.append(" group By e.id_estudiante " 
 								+ " order by punt.puntuacion desc ");
 
-			logger.debug(queryString);
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -241,7 +241,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 				}
 				
 				if (estudiantes.isEmpty()) {
-					throw new DataException("No se han encontrado resultados");
+					if(logger.isDebugEnabled()) logger.debug("No se han encontrado resultados");
 				}
 
 				return estudiantes;
@@ -257,7 +257,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public Estudiante findByEmail (Connection connection, String email)
 			throws DataException{
-		logger.debug("Email = {}", (email==null));
+		if(logger.isDebugEnabled()) logger.debug("Email = {}", (email==null));
 		Estudiante e = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -267,7 +267,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			sql =  "SELECT ID_ESTUDIANTE, EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION, ID_NIVEL, ID_GENERO, CODIGO_DE_RECUPERACION "
 					+"FROM ESTUDIANTE "
 					+"WHERE upper(email) like upper(?) ";
-			logger.debug(sql);
+			if(logger.isDebugEnabled()) logger.debug(sql);
 			// Preparar a query
 			
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -282,10 +282,10 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			if (resultSet.next()) {				
 				e = loadNext(connection, resultSet);				
 			} else {
-				logger.debug("Non se encontrou o estudiante {}", email);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o estudiante {}", email);
 			}
 			if (resultSet.next()) {
-				logger.debug("Estudainte {} duplicado", email);
+				if(logger.isDebugEnabled()) logger.debug("Estudainte {} duplicado", email);
 			}
 
 		} catch (SQLException ex) {
@@ -303,7 +303,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	public Boolean exists(Connection connection, String email) 
 			throws DataException {
 		boolean exist = false;
-		logger.debug("Email = {}", (email==null));
+		if(logger.isDebugEnabled()) logger.debug("Email = {}", (email==null));
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 
@@ -339,7 +339,8 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public Estudiante create(Connection connection, Estudiante e) 
 			throws DuplicateInstanceException, DataException {
-		logger.debug("Estudiante = {}" + e);
+		if(logger.isDebugEnabled()) logger.debug("Estudiante = email: {}; id_pais: {}; pssw: {}; nombre: {}; apellido1: {}; apellido2: {}; ano_nacimiento: {}; fecha_subscripcion: {}; id_nivel: {}, id_genero: {}",
+					e.getEmail(), e.getIdPais(), e.getPsswd()==null, e.getNombre(), e.getApellido1(), e.getApellido2(), e.getAnoNacimiento(), e.getFechaSubscripcion(), e.getIdNivel(), e.getIdGenero());
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -347,7 +348,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			// Creamos el preparedstatement
 			String queryString = "INSERT INTO ESTUDIANTE (EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,ID_NIVEL, ID_GENERO) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			logger.debug(queryString);
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					Statement.RETURN_GENERATED_KEYS);
 
@@ -395,7 +396,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 	@Override
 	public void update(Connection c, Estudiante e) 
 			throws  InstanceNotFoundException, DataException {
-		logger.debug("Estudiante = {}" + e);
+		if(logger.isDebugEnabled()) logger.debug("Estudiante = {}" + e);
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
@@ -503,11 +504,11 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			int updatedRows = preparedStatement.executeUpdate();
 
 			if (updatedRows == 0) {
-				logger.debug("Non se actualizou o estudiante");
+				if(logger.isDebugEnabled()) logger.debug("Non se actualizou o estudiante");
 			}
 
 			if (updatedRows > 1) {
-				logger.debug("Duplicate row for id = '{}' in table 'E'" , e.getIdEstudiante());
+				if(logger.isDebugEnabled()) logger.debug("Duplicate row for id = '{}' in table 'E'" , e.getIdEstudiante());
 			}     
 
 		} catch (SQLException ex) {
@@ -559,6 +560,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 		String queryString = "SELECT AVG(PUNTUACION) "
 							+ " FROM profesor_puntua_estudiante"
 							+ " WHERE ID_ESTUDIANTE = " +e.getIdEstudiante();
+		if(logger.isDebugEnabled()) logger.debug(queryString);
 		preparedStatement = connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		rs = preparedStatement.executeQuery();
 		if (rs.next()) {

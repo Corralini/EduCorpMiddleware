@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
@@ -20,10 +23,13 @@ import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class ProfesorDAOImpl implements ProfesorDAO {
-
+	
+	private Logger logger = LogManager.getLogger(ProfesorDAOImpl.class);
+	
 	@Override
 	public Profesor findById(Connection connection, Integer id) 
 			throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		Profesor p = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -33,7 +39,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			sql =  "SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
 					+" from profesor p  "
 					+"where P.id_profesor = ? ";
-
+			if(logger.isDebugEnabled()) logger.debug(sql);
 			// Preparar a query
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -47,13 +53,14 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (resultSet.next()) {				
 				p = loadNext(connection, resultSet);				
 			} else {
-				throw new DataException("Non se encontrou o profesor "+id);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o profesor {}", id);
 			}
 			if (resultSet.next()) {
-				throw new DataException("Profesor"+id+" duplicado");
+				if(logger.isDebugEnabled()) logger.debug("Profesor {} duplicado", id);
 			}
 
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
@@ -66,6 +73,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	@Override
 	public Profesor findByEmail (Connection connection, String email)
 			throws DataException{
+		if(logger.isDebugEnabled()) logger.debug("Email: {}", email);
 		Profesor e = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -75,7 +83,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			sql =  "SELECT P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION "
 					+" from profesor p  "
 					+" WHERE upper(p.email) like upper(?) ";
-
+			if(logger.isDebugEnabled()) logger.debug(sql);
 			// Preparar a query
 			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -89,14 +97,14 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (resultSet.next()) {				
 				e = loadNext(connection, resultSet);				
 			} else {
-				throw new DataException("Non se encontrou o estudiante "+email);
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o estudiante {}", email);
 			}
 			if (resultSet.next()) {
-				throw new DataException("Estudainte"+email+" duplicado");
+				if(logger.isDebugEnabled()) logger.debug("Estudainte {} duplicado", email);
 			}
 
 		} catch (SQLException ex) {
-			throw new DataException(ex);
+			logger.warn(ex.getMessage(), ex);
 		} finally {            
 			JDBCUtils.closeResultSet(resultSet);
 			JDBCUtils.closeStatement(preparedStatement);
@@ -108,7 +116,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 	@Override
 	public List<Profesor> findByCriteria(Connection connection, ProfesorCriteria profesor) throws DataException {
-
+		if(logger.isDebugEnabled()) logger.debug("Profesor: {}", profesor);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		StringBuilder queryString = null;
@@ -119,7 +127,6 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 					"select P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION, punt.puntuacion "
 							+" from profesor p left join estudiante_puntua_profesor punt on (p.id_profesor = punt.id_profesor) "
 							+" inner join horario h on (p.id_profesor = h.id_profesor) ");
-
 			boolean first = true;
 
 			if (profesor.getIdProfesor() != null) {
@@ -210,7 +217,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			
 			queryString.append(" group By p.id_profesor"
 								+ " order by punt.puntuacion desc ");
-			
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -267,6 +274,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			return profesores;
 
 		} catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeResultSet(resultSet);
@@ -278,6 +286,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	@Override
 	public Profesor create(Connection c, Profesor p) 
 			throws DuplicateInstanceException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Profesor = email: {}; idPais: {}; psswd: {}; nombre: {}; apellido1: {}; apellido2: {}; fecha_subscripcion: {}; precio_sesion: {}; id_idioma: {}; id_genero: {}; id_nivel: {}; descripcion: {}",
+													p.getEmail(), p.getIdPais(), p.getPsswd()==null, p.getNombre(), p.getApellido1(), p.getApellido2(), p.getFechaSubscripcion(), p.getPrecioSesion(), p.getIdIdioma(), p.getIdGenero(), p.getIdNivel(), p.getDescripcion()); 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -285,7 +295,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			// Creamos el preparedstatement
 			String queryString = "INSERT INTO PROFESOR (EMAIL, ID_PAIS, PSSWD, NOMBRE, APELLIDO1, APELLIDO2, ANO_NACIMIENTO, FECHA_SUBSCRIPCION,PRECIO_SESION, ID_IDIOMA, ID_GENERO, ID_NIVEL, ACTIVADA, DESCRIPCION) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = c.prepareStatement(queryString,
 									Statement.RETURN_GENERATED_KEYS);
 
@@ -311,7 +321,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			int insertedRows = preparedStatement.executeUpdate();
 
 			if (insertedRows == 0) {
-				throw new SQLException("Can not add row to table 'Estudiante'");
+				if(logger.isDebugEnabled()) logger.debug("Can not add row to table 'Profesor'");
 			}
 
 			// Recuperamos la PK generada
@@ -320,7 +330,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				Integer pk = resultSet.getInt(1); 
 				p.setIdProfesor(pk);;
 			} else {
-				throw new DataException("Unable to fetch autogenerated primary key");
+				if(logger.isDebugEnabled()) logger.debug("Unable to fetch autogenerated primary key");
 			}
 
 			// Return the DTO
@@ -337,6 +347,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	@Override
 	public void update(Connection c, Profesor p) 
 			throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Profesor: {}", p);
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
@@ -430,7 +441,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			
 						
 			queryString.append(" WHERE id_profesor = ? ");
-			
+			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = c.prepareStatement(queryString.toString());
 			
 
@@ -473,15 +484,16 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			int updatedRows = preparedStatement.executeUpdate();
 
 			if (updatedRows == 0) {
-				throw new DataException("Non se actualizou o estudiante");
+				if(logger.isDebugEnabled()) logger.debug("Non se actualizou o profesor");
 			}
 
 			if (updatedRows > 1) {
-				throw new SQLException("Duplicate row for id = '" + 
-						p.getIdProfesor() + "' in table 'Profesor'");
+				if(logger.isDebugEnabled()) logger.debug("Duplicate row for id = {} in table 'Profesor'",
+						p.getIdProfesor());
 			}     
 			
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);    
 		} finally {
 			JDBCUtils.closeStatement(preparedStatement);
@@ -536,6 +548,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		String queryString = "SELECT AVG(PUNTUACION) "
 							+ " FROM ESTUDIANTE_PUNTUA_PROFESOR"
 							+ " WHERE ID_PROFESOR = " +p.getIdProfesor();
+		if(logger.isDebugEnabled()) logger.debug(queryString);
 		preparedStatement = connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		rs = preparedStatement.executeQuery();
 		if (rs.next()) {

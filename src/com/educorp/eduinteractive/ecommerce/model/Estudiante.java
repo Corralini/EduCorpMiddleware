@@ -158,5 +158,22 @@ public class Estudiante extends AbstractValueObject{
 		   return ToStringBuilder.reflectionToString(this);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof Estudiante)) {
+			return false;
+		}
+		Estudiante e = (Estudiante) o;
+		if(this.getIdEstudiante() == null && e.getIdEstudiante() == null) {
+			return true;
+		}else {
+			return this.getIdEstudiante().equals(e.getIdEstudiante());
+		} 
+	}
+	
+	@Override
+	public int hashCode() {
+		return id==null?Integer.MAX_VALUE:id.hashCode();
+	}
 	
 }

@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.dao.impl.EstudianteDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
@@ -27,6 +30,8 @@ import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class EstudianteServiceImpl implements EstudianteService{
 
+	private Logger logger = LogManager.getLogger(EstudianteServiceImpl.class);
+	
 	private EstudianteDAO estudianteDAO = null;
 	private PuntuacionDAO puntuacionDAO = null;
 	private MailService mailService = new MailServiceImpl();
@@ -39,6 +44,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public Estudiante findById(Integer id) 
 			throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("id: {}", id);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
@@ -46,6 +52,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			return estudianteDAO.findById(c, id);
 
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		} finally {   
 			JDBCUtils.closeConnection(c);
@@ -58,6 +65,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public Estudiante login(String email, String psswd)
 			throws DataException{
+		if(logger.isDebugEnabled()) logger.debug("email: {}; psswd: {}", email, psswd=null);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
@@ -74,10 +82,12 @@ public class EstudianteServiceImpl implements EstudianteService{
 			if(PasswordEncryptionUtil.checkPassword(psswd, e.getPsswd())) {
 				return e;
 			}else {
+				if(logger.isDebugEnabled()) logger.debug("Psswd inorrecta");
 				throw new DataException("Hemos detetado un problema, comprueba los datos introducidos");
 			}
 
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}
 		finally {
@@ -88,6 +98,8 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public Estudiante signUp(Estudiante e, Integer acertadas)
 			throws DuplicateInstanceException, MailException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Estudiante = email: {}; id_pais: {}; pssw: {}; nombre: {}; apellido1: {}; apellido2: {}; ano_nacimiento: {}; id_genero: {}; acertadas= {}",
+				e.getEmail(), e.getIdPais(), e.getPsswd()==null, e.getNombre(), e.getApellido1(), e.getApellido2(), e.getAnoNacimiento(), e.getIdGenero(), acertadas);
 		boolean commit = false;
 		Connection c = null;
 		Calendar calendario = Calendar.getInstance();
@@ -95,6 +107,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 
 		if (e.getAnoNacimiento() < 1900 || e.getAnoNacimiento() > ano) {
+			if(logger.isDebugEnabled()) logger.debug("Ano introducido incorrecto");
 			throw new DataException("O ano de nacemento non e válido, introduce un ano maior que 1900");
 		}
 
@@ -106,6 +119,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			}
 			e.setIdNivel(acertadas);
 		}else {
+			if(logger.isDebugEnabled()) logger.debug("Error en el test");
 			throw new DataException("Hemos tenido algún problema con el test");
 		}
 
@@ -140,6 +154,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			return result;
 
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 
 		} finally {
@@ -153,6 +168,8 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public void update(Estudiante e)
 			throws InstanceNotFoundException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Estudiante = email: {}; id_pais: {}; pssw: {}; nombre: {}; apellido1: {}; apellido2: {}; ano_nacimiento: {}; id_genero: {}",
+				e.getEmail(), e.getIdPais(), e.getPsswd()==null, e.getNombre(), e.getApellido1(), e.getApellido2(), e.getAnoNacimiento(), e.getIdGenero());
 		Connection connection = null;
 		boolean commit = false;
 
@@ -169,6 +186,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			commit = true;
 
 		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 
 		} finally {
@@ -179,6 +197,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public List<Estudiante> findByCriteria(EstudianteCriteria criteria)
 			throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Criteria: {}" , criteria);
 		Connection connection = null;
 
 		try {
@@ -189,6 +208,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			return estudianteDAO.findByCriteria(connection, criteria);
 
 		} catch (SQLException e){
+			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
 		} finally {
 			JDBCUtils.closeConnection(connection);
@@ -198,6 +218,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public Estudiante findByEmailToRecovery(String email) 
 			throws MailException, DataException {
+		if(logger.isDebugEnabled()) logger.debug("Email: {}", email);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
@@ -210,6 +231,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			return e;
 
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException("Hemos encontrado algún problema, por favor comprueba los datos");
 		} finally {   
 			JDBCUtils.closeConnection(c);
@@ -218,6 +240,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 	public void setCodigo (Estudiante e) 
 			throws MailException, DataException{
+		if(logger.isDebugEnabled()) logger.debug("Codigo: {}", e.getCodigoDeRecuperacion());
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -232,6 +255,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			mailService.sendEmail(e.getEmail(), "Restablecer contraseña", mssg);
 			commit = true;
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
@@ -240,6 +264,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 	@Override
 	public void cambiarContra(Integer codigo, String email, String psswd) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Codigo: {}; Email: {}; psswd: {}", codigo, email, psswd == null);
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -259,9 +284,11 @@ public class EstudianteServiceImpl implements EstudianteService{
 				estudianteDAO.update(c, cambio);
 				commit = true;
 			}else {
+				if(logger.isDebugEnabled()) logger.debug("El codigo no coincide");
 				throw new DataException("El código introducido no coincide, compruebe el código");
 			}
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
@@ -271,6 +298,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 
 	@Override
 	public void puntuarProfesor(Profesor p, Estudiante e, double puntuacion) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("idProfesor: {}; idEstudiante: {}; puntuacion: {}", p.getIdProfesor(), e.getIdEstudiante(), puntuacion); 
 		Connection c = null;
 		boolean commit = false;
 		try {
@@ -284,6 +312,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 			puntuacionDAO.createPuntuacionProfesor(c, punt);
 			commit = true;
 		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
 			throw new DataException (ex);
 		}finally {
 			JDBCUtils.closeConnection(c, commit);
