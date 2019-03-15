@@ -1,7 +1,6 @@
 package com.educorp.eduinteractive.ecommerce.service.spi;
 
-import java.util.List;
-
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
@@ -11,7 +10,7 @@ import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 
 public interface ProfesorService {
 
-	public List<Profesor> findByCriteria(ProfesorCriteria criteria)
+	public Results<Profesor> findByCriteria(ProfesorCriteria criteria, int startIndex, int count)
 			throws DataException;
 
 	public Profesor findById(Integer id)

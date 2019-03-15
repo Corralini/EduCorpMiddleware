@@ -1,8 +1,9 @@
 package com.educorp.eduinteractive.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
@@ -13,12 +14,37 @@ import com.educorp.eduinteractive.ecommerce.service.impl.ProfesorServicesImpl;
 import com.educorp.eduinteractive.ecommerce.service.spi.ProfesorService;
 
 public class ProfesorServiceTest {
+	
+	private static Logger logger = LogManager.getLogger(ProfesorServiceTest.class);
 
-	public static List<Profesor> findByCriteriaTest(ProfesorCriteria criteria)
+	public static void findByCriteriaTest()
 			throws DataException{
 		ProfesorService profesorService = new ProfesorServicesImpl();
+		int pageSize = 2;
+		ProfesorCriteria criteria = new ProfesorCriteria();
+		
+		try {
 
-		return profesorService.findByCriteria(criteria);
+			Results<Profesor> results = null;
+			int startIndex = 1; 
+			int i = 1;
+			do {
+				results = profesorService.findByCriteria(criteria, startIndex, pageSize);
+				logger.info("Found "+results.getResultadosTotales()+" results.");				
+				if (results.getResultados().size()>0) {
+					logger.info("Page ["+startIndex+" - "+(startIndex+results.getResultados().size()-1)+"] : ");				
+					for (Profesor p: results.getResultados()) {
+						logger.info("Result "+i+": "+ p);
+						i++;
+					}
+					startIndex = startIndex + pageSize;
+				}
+				
+			} while (!(results.getResultados().size()<pageSize)); 		
+						
+		} catch (Throwable t) {
+			logger.error(t.getMessage(), t);
+		}
 	}
 
 	public static Profesor findByIdTest(Integer id)
@@ -71,51 +97,8 @@ public class ProfesorServiceTest {
 	
 	public static void main(String[] args) throws DataException, MailException {
 		
-//		List<Profesor> profesores = new ArrayList<Profesor>();
-//		ProfesorCriteria criteria = new ProfesorCriteria();
-//		
-//		criteria.setDiaSesion(1);
-//		
-//		profesores = findByCriteriaTest(criteria);
-//		
-//		for (Profesor p: profesores) {
-//		}
+		findByCriteriaTest();
 		
-//		findByIdTest(6);
-		
-//		Profesor test = new Profesor();
-//		test.setIdProfesor(11);
-//		test.setEmail("acorralfdez@gmail.com");
-//		test.setPsswd("corralito");
-//		test.setIdPais("es");
-//		test.setNombre("Alejandro Ricardo");
-//		test.setApellido1("Corral");
-//		test.setApellido2("Fernández");
-//		test.setAnoNacimiento(2000);
-//		test.setPrecioSesion(5.5d);
-//		test.setIdIdioma("en");
-//		test.setIdNivel(2);
-//		test.setIdGenero("H");
-//		test.setDescripcion("You love me and you know it");
-//		
-//		signUp(test);
-		
-//		login("acorralfdez@gmail.com", "corralito");
-		
-//		Profesor test1 = new Profesor();
-//		
-//		test1.setEmail("acorralfdez@gmail.com");
-//		test1.setPrecioSesion(7.5d);
-//		
-//		update(test1);
-		
-//		findByEmailToRecovery("acorralfdez@gmail.com");
-//		cambiarContraTest(379067, "acorralfdez@gmail.com", "pericodelospalotes123.");
-		
-//		Estudiante e = new Estudiante ();
-//		e.setIdEstudiante(3);
-//		
-//		puntuarEstudianteTest(test, e, 8.0d);
 	}
 	
 }

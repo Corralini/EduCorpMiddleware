@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.dao.spi.HorarioDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
@@ -71,12 +72,14 @@ public class HorarioDAOImpl implements HorarioDAO{
 
 
 	@Override
-	public List<Horario> findBy(Connection connection, Integer idProfesor, Integer idDia, Date fecha) throws DataException {
+	public Results<Horario> findBy(Connection connection, Integer idProfesor, Integer idDia, Date fecha, 
+			int startIndex, int count) 
+					throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("Busqueda= idProfesor: {}; idDia: {}; fecha: {}", idProfesor, idDia, fecha); 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		StringBuilder queryString = null;
-
+		
 		try {
 
 			queryString = new StringBuilder(
@@ -103,13 +106,23 @@ public class HorarioDAOImpl implements HorarioDAO{
 
 			List<Horario> horarios = new ArrayList<Horario>();                        
 			Horario h = null;
+			int currentCount = 0;
 
-			while (resultSet.next()) {
-				h = loadNext(resultSet);						
-				horarios.add(h);
+			if((startIndex >= 1) && resultSet.absolute(startIndex)) {
+				do {
+					h = loadNext(resultSet);						
+					horarios.add(h);
+					currentCount++;
+				}while((currentCount < count) && resultSet.next());
 			}
 
-			return horarios;
+			int totalRows = JDBCUtils.getTotalRows(resultSet);
+			
+			if(logger.isDebugEnabled()) logger.debug("Total rows: " + totalRows);
+			
+			Results<Horario> results = new Results<Horario>(horarios, startIndex, totalRows);
+
+			return results;
 
 		} catch (SQLException e) {
 			logger.warn(e.getMessage(), e);
@@ -124,7 +137,7 @@ public class HorarioDAOImpl implements HorarioDAO{
 	public void update(Connection connection, Horario h) 
 			throws InstanceNotFoundException, DataException {
 		if(logger.isDebugEnabled()) logger.debug("Horario= idHorario: {}; idProfesor: {}; idDia: {}; idHora: {}",
-													h.getIdHorario(), h.getIdProfesor(), h.getIdDia(), h.getIdHora());
+				h.getIdHorario(), h.getIdProfesor(), h.getIdDia(), h.getIdHora());
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	

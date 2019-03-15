@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.DAOUtils;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
@@ -23,9 +24,9 @@ import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class ProfesorDAOImpl implements ProfesorDAO {
-	
+
 	private Logger logger = LogManager.getLogger(ProfesorDAOImpl.class);
-	
+
 	@Override
 	public Profesor findById(Connection connection, Integer id) 
 			throws InstanceNotFoundException, DataException {
@@ -115,7 +116,9 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 
 	@Override
-	public List<Profesor> findByCriteria(Connection connection, ProfesorCriteria profesor) throws DataException {
+	public Results<Profesor> findByCriteria(Connection connection, ProfesorCriteria profesor,
+			int startIndex, int count) 
+					throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("Profesor: {}", profesor);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -126,8 +129,8 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			queryString = new StringBuilder(
 					"select P.ID_PROFESOR, P.EMAIL, P.PSSWD, P.ID_PAIS, P.NOMBRE, P.APELLIDO1, P.APELLIDO2, P.ANO_NACIMIENTO, P.FECHA_SUBSCRIPCION, P.PRECIO_SESION, P.ID_IDIOMA, P.ID_GENERO, P.ID_NIVEL, P.ACTIVADA, P.DESCRIPCION, P.CODIGO_DE_RECUPERACION, punt.puntuacion "
 							+" from profesor p left join estudiante_puntua_profesor punt on (p.id_profesor = punt.id_profesor) "
-							+" inner join horario h on (p.id_profesor = h.id_profesor) ");
-			boolean first = true;
+							+" inner join horario h on (p.id_profesor = h.id_profesor) where  p.activada <> 0");
+			boolean first = false;
 
 			if (profesor.getIdProfesor() != null) {
 				DAOUtils.addClause(queryString, first, " p.ID_PROFESOR =  ? ");
@@ -198,25 +201,25 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				DAOUtils.addClause(queryString, first, " p.id_nivel = ? ");
 				first = false;
 			}
-			
+
 			if (profesor.getAceptado() != null) {
 				DAOUtils.addClause(queryString, first, " p.activada = ? ");
 			}
-			
+
 			if (profesor.getDescripcion() != null) {
 				DAOUtils.addClause(queryString, first, " p.descripcion = ? ");
 			}
-			
+
 			if (profesor.getPuntuacion() != null) {
 				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM estudiante_puntua_profesor puntu where puntu.id_profesor = p.id_profesor) > ? ");
 			}
-			
+
 			if (profesor.getDiaSesion() != null) {
 				DAOUtils.addClause(queryString, first, " h.id_dia = ? ");
 			}
-			
+
 			queryString.append(" group By p.id_profesor"
-								+ " order by punt.puntuacion desc ");
+					+ " order by punt.puntuacion desc ");
 			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString.toString(),
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -265,13 +268,23 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 
 			List<Profesor> profesores = new ArrayList<Profesor>();                        
 			Profesor p = null;
+			int currentCount = 0;
 
-			while (resultSet.next()) {
-				p = loadNext(connection, resultSet);						
-				profesores.add(p);
+			if((startIndex >= 1) && resultSet.absolute(startIndex)) {
+				do {
+					p = loadNext(connection, resultSet);						
+					profesores.add(p);
+					currentCount++;
+				}while((currentCount < count) && resultSet.next());
 			}
 
-			return profesores;
+			int totalRows = JDBCUtils.getTotalRows(resultSet);
+			
+			if(logger.isDebugEnabled()) logger.debug("Total rows: " + totalRows);
+			
+			Results<Profesor> results = new Results<Profesor>(profesores, startIndex, totalRows);
+			
+			return results;
 
 		} catch (SQLException e) {
 			logger.warn(e.getMessage(), e);
@@ -287,7 +300,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 	public Profesor create(Connection c, Profesor p) 
 			throws DuplicateInstanceException, DataException {
 		if(logger.isDebugEnabled()) logger.debug("Profesor = email: {}; idPais: {}; psswd: {}; nombre: {}; apellido1: {}; apellido2: {}; fecha_subscripcion: {}; precio_sesion: {}; id_idioma: {}; id_genero: {}; id_nivel: {}; descripcion: {}",
-													p.getEmail(), p.getIdPais(), p.getPsswd()==null, p.getNombre(), p.getApellido1(), p.getApellido2(), p.getFechaSubscripcion(), p.getPrecioSesion(), p.getIdIdioma(), p.getIdGenero(), p.getIdNivel(), p.getDescripcion()); 
+				p.getEmail(), p.getIdPais(), p.getPsswd()==null, p.getNombre(), p.getApellido1(), p.getApellido2(), p.getFechaSubscripcion(), p.getPrecioSesion(), p.getIdIdioma(), p.getIdGenero(), p.getIdNivel(), p.getDescripcion()); 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {          
@@ -297,26 +310,26 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = c.prepareStatement(queryString,
-									Statement.RETURN_GENERATED_KEYS);
+					Statement.RETURN_GENERATED_KEYS);
 
 			// Rellenamos el "preparedStatement"
 			int i = 1;    
 
-				preparedStatement.setString(i++,p.getEmail() );
-				preparedStatement.setString(i++, p.getIdPais());
-				preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
-				preparedStatement.setString(i++,p.getNombre());
-				preparedStatement.setString(i++,p.getApellido1());
-				preparedStatement.setString(i++,p.getApellido1());
-				preparedStatement.setInt(i++, p.getAnoNacimiento());
-				preparedStatement.setDate(i++, new java.sql.Date (new Date().getTime()));
-				preparedStatement.setDouble(i++, p.getPrecioSesion());
-				preparedStatement.setString(i++, p.getIdIdioma());
-				preparedStatement.setString(i++, p.getIdGenero());
-				preparedStatement.setInt(i++, p.getIdNivel());
-				preparedStatement.setInt(i++, 0);
-				preparedStatement.setString(i++, p.getDescripcion());
-			
+			preparedStatement.setString(i++,p.getEmail() );
+			preparedStatement.setString(i++, p.getIdPais());
+			preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
+			preparedStatement.setString(i++,p.getNombre());
+			preparedStatement.setString(i++,p.getApellido1());
+			preparedStatement.setString(i++,p.getApellido1());
+			preparedStatement.setInt(i++, p.getAnoNacimiento());
+			preparedStatement.setDate(i++, new java.sql.Date (new Date().getTime()));
+			preparedStatement.setDouble(i++, p.getPrecioSesion());
+			preparedStatement.setString(i++, p.getIdIdioma());
+			preparedStatement.setString(i++, p.getIdGenero());
+			preparedStatement.setInt(i++, p.getIdNivel());
+			preparedStatement.setInt(i++, 0);
+			preparedStatement.setString(i++, p.getDescripcion());
+
 			// Execute query
 			int insertedRows = preparedStatement.executeUpdate();
 
@@ -351,14 +364,14 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		PreparedStatement preparedStatement = null;
 		StringBuilder queryString = null;
 		try {	
-			
+
 			queryString = new StringBuilder(
 					" UPDATE PROFESOR" 
 					);
-			
+
 
 			boolean first = true;
-			
+
 			if (p.getIdProfesor() != null) {
 				DAOUtils.addUpdate(queryString, first, " ID_PROFESOR =  ? ");
 				first = false;
@@ -423,27 +436,27 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				DAOUtils.addUpdate(queryString, first, " id_nivel = ? ");
 				first = false;
 			}
-			
+
 			if (p.getAceptado() != null) {
 				DAOUtils.addUpdate(queryString, first, " activada = ? ");
 				first = false;
 			}
-			
+
 			if (p.getDescripcion() != null) {
 				DAOUtils.addUpdate(queryString, first, " descripcion = ? ");
 				first = false;
 			}
-			
+
 			if(p.getCodigoDeRecuperacion() != null) {
 				DAOUtils.addUpdate(queryString, first, " codigo_de_recuperacion = ? ");
 				first = false;
 			}
-			
-						
+
+
 			queryString.append(" WHERE id_profesor = ? ");
 			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = c.prepareStatement(queryString.toString());
-			
+
 
 			int i = 1;
 			if (p.getIdProfesor() != null)
@@ -478,7 +491,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				preparedStatement.setString(i++, p.getDescripcion());
 			if(p.getCodigoDeRecuperacion() != null)
 				preparedStatement.setInt(i++, p.getCodigoDeRecuperacion());
-			
+
 			preparedStatement.setInt(i++, findByEmail(c, p.getEmail()).getIdProfesor());
 
 			int updatedRows = preparedStatement.executeUpdate();
@@ -491,7 +504,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 				if(logger.isDebugEnabled()) logger.debug("Duplicate row for id = {} in table 'Profesor'",
 						p.getIdProfesor());
 			}     
-			
+
 		} catch (SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);    
@@ -505,7 +518,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		Profesor p = new Profesor();
 		int i = 1;
 		Double puntuacion = 0.0d;
-		
+
 		Integer id = resultSet.getInt(i++);
 		String email = resultSet.getString(i++);
 		String contra = resultSet.getString(i++);
@@ -546,17 +559,17 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 		ResultSet rs = null;
 
 		String queryString = "SELECT AVG(PUNTUACION) "
-							+ " FROM ESTUDIANTE_PUNTUA_PROFESOR"
-							+ " WHERE ID_PROFESOR = " +p.getIdProfesor();
+				+ " FROM ESTUDIANTE_PUNTUA_PROFESOR"
+				+ " WHERE ID_PROFESOR = " +p.getIdProfesor();
 		if(logger.isDebugEnabled()) logger.debug(queryString);
 		preparedStatement = connection.prepareStatement(queryString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		rs = preparedStatement.executeQuery();
 		if (rs.next()) {
 			puntuacion = rs.getDouble(1);
 		}
-		
+
 		p.setPuntuacion(puntuacion);
-		
+
 
 		return p;
 

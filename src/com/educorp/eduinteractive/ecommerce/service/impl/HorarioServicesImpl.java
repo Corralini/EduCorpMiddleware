@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.educorp.eduinteractive.ecommerce.dao.impl.HorarioDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.dao.spi.HorarioDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
@@ -65,7 +65,9 @@ public class HorarioServicesImpl implements HorarioService{
 	}
 
 	@Override
-	public List<Horario> findByFecha(Integer idProfesor, Date fecha) throws DataException {
+	public Results<Horario> findByFecha(Integer idProfesor, Date fecha, 
+			int startIndex, int count) 
+					throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("idProfesor: {}; fecha: {}", idProfesor, fecha); 
 		Connection connection = null;
 
@@ -77,7 +79,7 @@ public class HorarioServicesImpl implements HorarioService{
 			connection = ConnectionManager.getConnection();
 			connection.setAutoCommit(true);
 			
-			return horarioDAO.findBy(connection, idProfesor, dia, fecha);
+			return horarioDAO.findBy(connection, idProfesor, dia, fecha, startIndex, count);
 
 		} catch (SQLException e){
 			logger.warn(e.getMessage(), e);

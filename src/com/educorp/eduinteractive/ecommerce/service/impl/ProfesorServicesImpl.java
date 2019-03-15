@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +14,7 @@ import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.impl.PuntuacionDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.dao.spi.PuntuacionDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -190,17 +190,15 @@ public class ProfesorServicesImpl implements ProfesorService{
 	}
 
 	@Override
-	public List<Profesor> findByCriteria(ProfesorCriteria criteria)
+	public Results<Profesor> findByCriteria(ProfesorCriteria criteria, int startIndex, int count)
 			throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("Criteria: {}", criteria);
 		Connection connection = null;
-
 		try {
-
 			connection = ConnectionManager.getConnection();
 			connection.setAutoCommit(true);
-
-			return profesorDAO.findByCriteria(connection, criteria);
+			Results<Profesor> profesores = profesorDAO.findByCriteria(connection, criteria, startIndex, count);
+			return profesores;
 
 		} catch (SQLException e){
 			logger.warn(e.getMessage(), e);
