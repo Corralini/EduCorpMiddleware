@@ -2,6 +2,9 @@ package com.educorp.eduinteractive.service;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.MailException;
@@ -13,6 +16,8 @@ import com.educorp.eduinteractive.ecommerce.service.spi.EstudianteService;
 
 public class EstudianteServiceTest {
 
+	private Logger logger = LogManager.getLogger(EstudianteServiceTest.class);
+	
 	public static List<Estudiante> findByCriteriaTest(EstudianteCriteria criteria)
 			throws DataException{
 		EstudianteService estudianteService = new EstudianteServiceImpl();
@@ -70,46 +75,9 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-//									findByIdTest(1);
-//						loginTest("AmberReeves@jourrapide.com", "Me2eeT0aiBu");
-//
-						Estudiante test = new Estudiante();
-						test.setEmail("hector.modino.otero@gmail.com");
-						test.setIdPais("es");
-						test.setPsswd("modino");
-						test.setNombre("Hector");
-						test.setApellido1("Modino");
-						test.setAnoNacimiento(2000);
-						test.setIdGenero("H");
-						test = signUpTest(test, 9);
-//
-//			//			
-//						Estudiante testNuevo = new Estudiante();
-//						testNuevo.setEmail("acorralfdez@gmail.com");
-//						testNuevo.setIdGenero("h");
 
-//
-//						updateTest(testNuevo);
-//			//			cambiarContraTest(997414, "acorralfdez@gmail.com", "nueva");
-
-			//			Profesor profesor = new Profesor();
-			//			profesor.setIdProfesor(1);
-			//			
-			//			puntuarProfesorTest(profesor, test, 4.0d);
-//
-//						List<Estudiante> estudiantes =  new ArrayList<Estudiante>();
-//						EstudianteCriteria criteria = new EstudianteCriteria();
-////						
-////						criteria.setPuntuacion(2.0d);
-////			
-////						
-//						estudiantes = findByCriteriaTest(criteria);
-//						
-//						for (Estudiante e : estudiantes) {
-//						}
-//		
-//		Integer aux = 9;
-//		aux = (int) Math.round(aux - 0.01)/2;
+		Estudiante e = loginTest("acorralfdez@gmail.com", "Alejandro22.");
+	
 		
 	}
 

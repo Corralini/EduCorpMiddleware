@@ -65,7 +65,7 @@ public class EstudianteServiceImpl implements EstudianteService{
 	@Override
 	public Estudiante login(String email, String psswd)
 			throws DataException{
-		if(logger.isDebugEnabled()) logger.debug("email: {}; psswd: {}", email, psswd=null);
+		if(logger.isDebugEnabled()) logger.debug("email: {}; psswd: {}", email, psswd==null);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
