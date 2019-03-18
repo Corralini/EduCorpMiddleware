@@ -11,4 +11,7 @@ public interface NivelInglesDAO {
 	public List<NivelIngles> findAll (Connection connection)
 		throws DataException;
 	
+	public NivelIngles findById (Connection connection, Integer id)
+		throws DataException;
+	
 }

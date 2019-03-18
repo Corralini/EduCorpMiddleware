@@ -45,4 +45,24 @@ public class NivelInglesServicesImpl implements NivelInglesServices{
 		}
 	}
 
+	@Override
+	public NivelIngles findById(Integer id) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Find by id --> {}", id);
+		Connection c = null;
+		
+		try {
+			
+			c = ConnectionManager.getConnection();
+			c.setAutoCommit(true);
+			
+			return nivelInglesDAO.findById(c, id);
+			
+		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException(ex);
+		}finally {
+			JDBCUtils.closeConnection(c);
+		}
+	}
+
 }

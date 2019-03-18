@@ -22,12 +22,21 @@ public class NivelInglesServiceTest {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void findByIdTest() {
+		NivelInglesServices nivelServices = new NivelInglesServicesImpl();
+		NivelIngles nivel;
 		try {
-			findAll();
+			nivel = nivelServices.findById(3);
+			logger.debug(nivel);
 		} catch (DataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+			
+	}
+	
+	public static void main(String[] args) {
+			findByIdTest();
+
 	}
 }
