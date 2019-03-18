@@ -75,9 +75,7 @@ public class EstudianteServiceTest {
 	}
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-
-		Estudiante e = loginTest("acorralfdez@gmail.com", "Alejandro22.");
-	
+		
 		
 	}
 
