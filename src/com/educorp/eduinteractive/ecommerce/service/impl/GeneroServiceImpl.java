@@ -42,4 +42,24 @@ public class GeneroServiceImpl implements GeneroService{
 			JDBCUtils.closeConnection(c);
 		}
 	}
+
+	@Override
+	public Genero findById(String id) throws DataException {
+	
+		if(logger.isDebugEnabled()) logger.debug("Find by id --> {}", id);
+		Connection c = null;
+		try {
+			c = ConnectionManager.getConnection();
+			c.setAutoCommit(true);
+			
+			return generoDAO.findById(c, id);
+			
+		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException(ex);
+		}finally {
+			JDBCUtils.closeConnection(c);
+		}
+		
+	}
 }

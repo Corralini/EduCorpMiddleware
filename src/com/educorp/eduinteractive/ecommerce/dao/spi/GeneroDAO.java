@@ -12,4 +12,7 @@ public interface GeneroDAO {
 	public List <Genero> findAll(Connection connection)
 		throws DataException;
 	
+	public Genero findById(Connection connection, String id)
+			throws DataException;
+	
 }

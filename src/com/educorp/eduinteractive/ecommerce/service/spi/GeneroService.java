@@ -8,5 +8,6 @@ import com.educorp.eduinteractive.ecommerce.model.Genero;
 public interface GeneroService {
 
 	public List<Genero> findAll () throws DataException;
+	public Genero findById (String id) throws DataException;
 	
 }

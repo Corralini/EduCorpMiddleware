@@ -14,6 +14,7 @@ import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
 import com.educorp.eduinteractive.ecommerce.dao.spi.GeneroDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Genero;
+import com.educorp.eduinteractive.ecommerce.model.Hora;
 
 public class GeneroDAOImpl implements GeneroDAO{
 
@@ -46,6 +47,49 @@ public class GeneroDAOImpl implements GeneroDAO{
 			}                	              	
 
 			return genero;
+		}catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
+			throw new DataException(e);
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}
+	}
+	
+	@Override
+	public Genero findById(Connection connection, String id) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("all");
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			String queryString = 
+							" SELECT ID_GENERO, GENERO " 
+							+" FROM GENERO "
+							+" WHERE ID_GENERO LIKE ? "
+							+" ORDER BY ID_GENERO ASC";
+			if(logger.isDebugEnabled()) logger.debug(queryString);
+			preparedStatement = connection.prepareStatement(queryString,
+					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			int i = 1;
+			preparedStatement.setString(i++, id);
+			
+			resultSet = preparedStatement.executeQuery();
+                        
+			Genero t = null;
+
+			if (resultSet.next()) {				
+				t = loadNext(resultSet);				
+			} else {
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou a hora {}", id);
+			}
+			if (resultSet.next()) {
+				if(logger.isDebugEnabled()) logger.debug("Hora {} duplicado", id);
+			}                	              	
+
+			return t;
 		}catch (SQLException e) {
 			logger.warn(e.getMessage(), e);
 			throw new DataException(e);
