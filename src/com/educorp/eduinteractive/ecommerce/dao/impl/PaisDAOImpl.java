@@ -61,6 +61,51 @@ public class PaisDAOImpl implements PaisDAO{
 			JDBCUtils.closeStatement(preparedStatement);
 		}
 	}
+	
+	@Override
+	public Pais findById(Connection connection, String id, String idIdioma) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("Find by Id: {}", id);
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		
+		try {
+
+			// Create "preparedStatement"       
+			String queryString = 
+					"select ID_PAIS, PAIS " + 
+					"from idioma_pagina_pais  " +
+					"WHERE ID_IDIOMA_PAGINA = ? AND ID_PAIS = ?";
+			if(logger.isDebugEnabled()) logger.debug(queryString);
+			preparedStatement = connection.prepareStatement(queryString,
+					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			int i = 1;                
+			preparedStatement.setString(i++, idIdioma);
+			preparedStatement.setString(i++, id);
+
+			resultSet = preparedStatement.executeQuery();
+			
+			Pais p = new Pais();
+			
+			// Recupera la pagina de resultados
+			if (resultSet.next()) {				
+				p = loadNext(resultSet);				
+			} else {
+				if(logger.isDebugEnabled()) logger.debug("Non se encontrou o estudiante {}", id);
+			}
+			if (resultSet.next()) {
+				if(logger.isDebugEnabled()) logger.debug("Estudainte {} duplicado" , id);
+			}
+			return p;
+
+		} catch (SQLException e) {
+			logger.warn(e.getMessage(), e);
+			throw new DataException(e);
+		} finally {
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}
+	}
 
 	private Pais loadNext(ResultSet resultSet)
 			throws SQLException, DataException {

@@ -42,4 +42,21 @@ public class PaisServicesImpl implements PaisServices{
 		} 
 	}
 
+	@Override
+	public Pais findById(String id, String idIdioma) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("idIdioma: {}; idPais: {}", idIdioma, id);
+		Connection c = null;
+		try {
+			c = ConnectionManager.getConnection();
+			c.setAutoCommit(true);
+			return paisDAO.findById(c, id, idIdioma);
+
+		}catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException(ex);
+		} finally {   
+			JDBCUtils.closeConnection(c);
+		} 
+	}
+
 }

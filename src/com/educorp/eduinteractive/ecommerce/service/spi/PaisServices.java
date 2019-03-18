@@ -8,5 +8,6 @@ import com.educorp.eduinteractive.ecommerce.model.Pais;
 public interface PaisServices {
 
 	public List<Pais> findByIdioma (String idIdioma) throws DataException;
+	public Pais findById (String id, String idIdioma) throws DataException;
 	
 }

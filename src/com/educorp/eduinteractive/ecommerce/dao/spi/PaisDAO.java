@@ -10,4 +10,7 @@ public interface PaisDAO {
 	
 	public List<Pais> findAll (Connection connection, String idIdioma) 
 			throws DataException;
+	
+	public Pais findById (Connection connection, String id, String idIdioma)
+			throws DataException;
 }

@@ -15,12 +15,20 @@ public class PaisServicesTest {
 		return paisServices.findByIdioma(idIdioma);
 	}
 	
+	public static void findById () {
+		PaisServices paisServices = new PaisServicesImpl();
+		try {
+			Pais p = paisServices.findById("es", "ES");
+			System.out.println("" + p);
+		} catch (DataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) throws DataException {
 
-		List<Pais> paises =	findByIdioma("");
-		
-		for(Pais p: paises) {
-		}
+		findById();
 			
 	}
 	
