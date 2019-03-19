@@ -35,11 +35,9 @@ public class ConnectionManager	 {
 			user = dbConfiguration.getString(USER_PARAMETER);
 			password = dbConfiguration.getString(PASSWORD_PARAMETER);
 
-			/* Load driver. */
-			//Class.forName(driverClassName);
 
 			dataSource = new ComboPooledDataSource();
-			dataSource.setDriverClass(driverClassName); //loads the jdbc driver            
+			dataSource.setDriverClass(driverClassName);           
 			dataSource.setJdbcUrl(url);
 			dataSource.setUser(user);                                  
 			dataSource.setPassword(password);
@@ -53,7 +51,6 @@ public class ConnectionManager	 {
 	private ConnectionManager() {}
 
 	public final static Connection getConnection() throws SQLException {
-		//return DriverManager.getConnection(url, user, password);
 		return dataSource.getConnection();
 	}
 	

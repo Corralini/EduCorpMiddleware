@@ -211,7 +211,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			}
 
 			if (profesor.getPuntuacion() != null) {
-				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM estudiante_puntua_profesor puntu where puntu.id_profesor = p.id_profesor) > ? ");
+				DAOUtils.addClause(queryString, first, " (SELECT AVG(puntuacion) FROM estudiante_puntua_profesor puntu where puntu.id_profesor = p.id_profesor) >= ? ");
 			}
 
 			if (profesor.getDiaSesion() != null) {

@@ -22,6 +22,7 @@ public class ProfesorServiceTest {
 		ProfesorService profesorService = new ProfesorServicesImpl();
 		int pageSize = 2;
 		ProfesorCriteria criteria = new ProfesorCriteria();
+		criteria.setPuntuacion(1.0d);
 		
 		try {
 
