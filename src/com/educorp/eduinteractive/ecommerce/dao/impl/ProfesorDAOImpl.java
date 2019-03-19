@@ -235,11 +235,11 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			if (profesor.getIdPais() != null)
 				preparedStatement.setString(i++, profesor.getIdPais());
 			if (profesor.getNombre()!=null)
-				preparedStatement.setString(i++,profesor.getNombre());
+				preparedStatement.setString(i++,"%" + profesor.getNombre() + "%");
 			if (profesor.getApellido1()!=null) 
-				preparedStatement.setString(i++,profesor.getApellido1());
+				preparedStatement.setString(i++,"%" + profesor.getApellido1() + "%");
 			if (profesor.getApellido2()!=null) 
-				preparedStatement.setString(i++,profesor.getApellido1());
+				preparedStatement.setString(i++,"%" + profesor.getApellido2() + "%");
 			if (profesor.getAnoNacimiento() != null)
 				preparedStatement.setInt(i++, profesor.getAnoNacimiento());
 			if (profesor.getFechaSubscripcion() != null)
