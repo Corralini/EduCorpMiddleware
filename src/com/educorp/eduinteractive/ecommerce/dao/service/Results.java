@@ -8,6 +8,10 @@ public class Results<T> {
 	private int startIndex = 0;
 	private int resultadosTotales = 0;
 	
+	public Results() {
+		
+	}
+	
 	public Results(List<T> resultados, int startIndex, int resultadosTotales) {
 		setResultados(resultados);
 		setStartIndex(startIndex);
