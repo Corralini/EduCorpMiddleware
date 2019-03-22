@@ -98,8 +98,20 @@ public class ProfesorServiceTest {
 	
 	public static void main(String[] args) throws DataException, MailException {
 		
-		findByCriteriaTest();
-		
+		Profesor p = new Profesor();
+		p.setNombre("Alejandro");
+		p.setApellido1("Corral");
+		p.setApellido2("Corral");
+		p.setPsswd("Alejandro12.");
+		p.setDescripcion("Soy el fucking boss del barrio");
+		p.setIdGenero("H");
+		p.setAnoNacimiento(2000);
+		p.setIdIdioma("en");
+		p.setIdNivel(3);
+		p.setIdPais("ES");
+		p.setPrecioSesion(7.0d);
+		p.setEmail("acorralfdez@gmail.com");
+		signUp(p);
 	}
 	
 }

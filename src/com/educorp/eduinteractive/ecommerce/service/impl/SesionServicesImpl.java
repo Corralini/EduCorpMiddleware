@@ -77,7 +77,7 @@ public class SesionServicesImpl implements SesionServices{
 			String mssg = "Hola " + profesorDAO.findById(c, h.getIdProfesor()).getNombre()
 					+ " " + profesorDAO.findById(c, h.getIdProfesor()).getApellido1()
 					+ " hay un estudiante que desea realizar una sesion en la siguiente fecha: "  + "\n" 
-					+ calendario.get(Calendar.DAY_OF_WEEK_IN_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + hora  + "\n"                          
+					+ calendario.get(Calendar.DAY_OF_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + hora  + "\n"                          
 					+ " Por favor responda SI en caso de aceptar la sesion y en caso contrario responda NO.";
 
 
