@@ -1,6 +1,8 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
@@ -17,6 +19,20 @@ public class SesionServicesTest {
 		SesionServices sesionServices = new SesionServicesImpl(); 
 		
 		sesionServices.create(h, fecha, idEstudiante);
+	}
+	
+	public static void findByCalendarioTest() {
+		List<Sesion> sesiones = new ArrayList<Sesion>();
+		SesionServices sesionServices = new SesionServicesImpl(); 
+		try {
+			sesiones = sesionServices.findByCalendario(53);
+		} catch (DataException e) {
+			e.printStackTrace();
+		}
+		
+		for(Sesion s: sesiones) {
+			System.out.println(s);
+		}
 	}
 
 	public static void cambiarEstadoTest (Sesion s, String estado)
@@ -44,19 +60,7 @@ public class SesionServicesTest {
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
 		
 		
-		Horario h = new Horario();
-		h.setIdHorario(19);
-		h.setIdProfesor(11);
-		
-		createTest(h, new Date(), 4);
-		
-//		Sesion s = new Sesion();
-//		s.setIdSesion(7);
-//		s.setIdEstado("A");
-//		
-//		empezarSesionTest(s);
-//		terminarSesionTest(s);
-//		cambiarEstadoTest(s, "a");
+		findByCalendarioTest();
 		
 	}
 	

@@ -195,16 +195,14 @@ public class SesionServicesImpl implements SesionServices{
 	public List<Sesion> findByCalendario(Integer idEstudiante) throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("id Estudiante: {}", idEstudiante);
 		Connection c = null;
-		boolean commit = false;
 		try {
 			c = ConnectionManager.getConnection();
-			commit = true;
 			return sesionDAO.findByCalendario(c, idEstudiante);
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
-			JDBCUtils.closeConnection(c, commit);
+			JDBCUtils.closeConnection(c);
 		}
 	}
 
