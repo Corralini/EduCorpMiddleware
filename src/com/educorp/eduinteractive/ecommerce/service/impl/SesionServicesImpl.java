@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -170,6 +171,41 @@ public class SesionServicesImpl implements SesionServices{
 			JDBCUtils.closeConnection(c, commit);
 		}
 
+	}
+
+	@Override
+	public Sesion findById(Integer id) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("id Sesion: {}", id);
+		Connection c = null;
+		boolean commit = false;
+		try {
+			c = ConnectionManager.getConnection();
+			commit = true;
+			return sesionDAO.findById(c, id);
+		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException(ex);
+		}finally {
+			JDBCUtils.closeConnection(c, commit);
+		}
+		
+	}
+
+	@Override
+	public List<Sesion> findByCalendario(Integer idEstudiante) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("id Estudiante: {}", idEstudiante);
+		Connection c = null;
+		boolean commit = false;
+		try {
+			c = ConnectionManager.getConnection();
+			commit = true;
+			return sesionDAO.findByCalendario(c, idEstudiante);
+		}catch(SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException(ex);
+		}finally {
+			JDBCUtils.closeConnection(c, commit);
+		}
 	}
 
 }
