@@ -27,7 +27,7 @@ import com.educorp.eduinteractive.ecommerce.model.Puntuacion;
 import com.educorp.eduinteractive.ecommerce.service.criteria.ProfesorCriteria;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 import com.educorp.eduinteractive.ecommerce.service.spi.ProfesorService;
-import com.educorp.eduinteractive.ecommerce.service.spi.UsuariosUtils;
+import com.educorp.eduinteractive.ecommerce.service.utils.UsuariosUtils;
 import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class ProfesorServicesImpl implements ProfesorService{

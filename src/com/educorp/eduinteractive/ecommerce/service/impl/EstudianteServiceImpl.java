@@ -25,7 +25,7 @@ import com.educorp.eduinteractive.ecommerce.model.Puntuacion;
 import com.educorp.eduinteractive.ecommerce.service.criteria.EstudianteCriteria;
 import com.educorp.eduinteractive.ecommerce.service.spi.EstudianteService;
 import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
-import com.educorp.eduinteractive.ecommerce.service.spi.UsuariosUtils;
+import com.educorp.eduinteractive.ecommerce.service.utils.UsuariosUtils;
 import com.educorp.eduinteractive.exceptions.PasswordEncryptionUtil;
 
 public class EstudianteServiceImpl implements EstudianteService{

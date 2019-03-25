@@ -1,11 +1,11 @@
 package com.educorp.eduinteractive.dao;
 
 import java.sql.Connection;
-import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.impl.ProfesorDAOImpl;
 import com.educorp.eduinteractive.ecommerce.dao.service.ConnectionManager;
 import com.educorp.eduinteractive.ecommerce.dao.service.JDBCUtils;
+import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.dao.spi.ProfesorDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.model.Profesor;
@@ -39,7 +39,7 @@ public class ProfesorTest {
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
-			List <Profesor> profesores = profesorDAO.findByCriteria(c, criteria);
+			Results <Profesor> profesores = profesorDAO.findByCriteria(c, criteria, 1, 10);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

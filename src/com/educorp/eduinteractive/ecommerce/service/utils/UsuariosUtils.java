@@ -1,4 +1,4 @@
-package com.educorp.eduinteractive.ecommerce.service.spi;
+package com.educorp.eduinteractive.ecommerce.service.utils;
 
 
 public class UsuariosUtils {
