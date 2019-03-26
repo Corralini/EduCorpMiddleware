@@ -177,16 +177,14 @@ public class SesionServicesImpl implements SesionServices{
 	public Sesion findById(Integer id) throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("id Sesion: {}", id);
 		Connection c = null;
-		boolean commit = false;
 		try {
 			c = ConnectionManager.getConnection();
-			commit = true;
 			return sesionDAO.findById(c, id);
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
 		}finally {
-			JDBCUtils.closeConnection(c, commit);
+			JDBCUtils.closeConnection(c);
 		}
 		
 	}

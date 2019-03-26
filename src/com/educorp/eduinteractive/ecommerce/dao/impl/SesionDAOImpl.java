@@ -33,8 +33,8 @@ public class SesionDAOImpl implements SesionDAO{
 		try {
 
 			String sql;
-			sql =  "SELECT ID_SESION, ID_PROFESOR, ID_ESTUDIANTE, ID_HORARIO, FECHA_INICIO, FECHA_FIN, PRECIO, ANO, ID_ESTADO, FECHA_CAMBIO_ESTADO "
-					+"FROM SESION "
+			sql =  "SELECT S.ID_SESION, S.ID_PROFESOR, S.ID_ESTUDIANTE, S.FECHA_SESION,S.ID_HORARIO, S.FECHA_INICIO, S.FECHA_FIN, S.PRECIO, S.ID_ESTADO, S.FECHA_CAMBIO_ESTADO "
+					+"FROM SESION S "
 					+"WHERE ID_SESION = ? ";
 			if(logger.isDebugEnabled()) logger.debug(sql);
 			// Preparar a query
