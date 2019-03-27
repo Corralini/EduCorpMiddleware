@@ -432,12 +432,12 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 			}
 
 			if (e.getApellido1() != null) {
-				DAOUtils.addUpdate(queryString, first, " apelllido1 = ? ");
+				DAOUtils.addUpdate(queryString, first, " apellido1 = ? ");
 				first = false;
 			}
 
 			if (e.getApellido2() != null) {
-				DAOUtils.addUpdate(queryString, first, " apelllido2 = ? ");
+				DAOUtils.addUpdate(queryString, first, " apellido2 = ? ");
 				first = false;
 			}
 

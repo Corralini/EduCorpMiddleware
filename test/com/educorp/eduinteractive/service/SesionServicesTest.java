@@ -1,6 +1,7 @@
 package com.educorp.eduinteractive.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class SesionServicesTest {
 	public static void createTest (Horario h, Date fecha, Integer idEstudiante) 
 			throws MailException, DuplicateInstanceException, DataException{
 		SesionServices sesionServices = new SesionServicesImpl(); 
-		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
 		sesionServices.create(h, fecha, idEstudiante);
 	}
 	
@@ -71,8 +73,18 @@ public class SesionServicesTest {
 
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
 		
+		Horario h = new Horario();
+		h.setIdHorario(1);
+		h.setIdProfesor(1);
+		h.setIdDia(1);
+		h.setIdHora(44);
 		
-		findByIdTest();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int dia = calendar.get(Calendar.DAY_OF_MONTH)+1;
+		calendar.set(Calendar.DAY_OF_MONTH, dia);
+		
+		createTest(h, calendar.getTime(), 53);
 		
 	}
 	
