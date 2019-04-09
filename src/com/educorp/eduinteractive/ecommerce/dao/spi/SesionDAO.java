@@ -13,8 +13,11 @@ public interface SesionDAO {
 	public Sesion findById (Connection connection, Integer id)
 		throws InstanceNotFoundException, DataException;
 	
-	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario)
+	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario, boolean isProfesor)
 		throws DataException;
+	
+	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario)
+			throws DataException;
 	
 	public List<Sesion> findByEstado (Connection connection, String idEstado)
 		throws DataException;

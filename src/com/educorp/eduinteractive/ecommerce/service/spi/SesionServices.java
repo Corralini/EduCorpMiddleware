@@ -17,6 +17,8 @@ public interface SesionServices {
 	public List<Sesion> findByCalendario (Integer id)
 			throws DataException;
 	
+	public List<Sesion> findByCalendario (Integer id, boolean isTeacher)
+			throws DataException;
 	
 	public void create (Horario h, Date fecha, Integer idEstudiante) 
 		throws MailException, DuplicateInstanceException, DataException;

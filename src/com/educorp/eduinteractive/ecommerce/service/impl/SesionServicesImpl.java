@@ -190,7 +190,7 @@ public class SesionServicesImpl implements SesionServices{
 	}
 
 	@Override
-	public List<Sesion> findByCalendario(Integer idEstudiante) throws DataException {
+	public List<Sesion> findByCalendario(Integer idEstudiante, boolean isTeacher) throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("id Estudiante: {}", idEstudiante);
 		Connection c = null;
 		try {
@@ -202,6 +202,12 @@ public class SesionServicesImpl implements SesionServices{
 		}finally {
 			JDBCUtils.closeConnection(c);
 		}
+	}
+
+	@Override
+	public List<Sesion> findByCalendario(Integer idEstudiante) throws DataException {
+		
+		return findByCalendario(idEstudiante, false);
 	}
 
 }

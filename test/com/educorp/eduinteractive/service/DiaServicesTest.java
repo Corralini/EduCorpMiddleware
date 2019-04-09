@@ -1,6 +1,8 @@
 package com.educorp.eduinteractive.service;
 
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,8 +51,14 @@ public class DiaServicesTest {
 	}
 	
 	public static void main(String[] args) {
-		findById();
-		findAll();
+		
+		Properties systemProperties = System.getProperties();
+		String key = null;
+		for(Enumeration keys = systemProperties.keys(); keys.hasMoreElements(); ) {
+			key = (String) keys.nextElement();
+			System.out.println(key.concat("=").concat(System.getProperty(key)));
+		}
+		
 	}
 
 }

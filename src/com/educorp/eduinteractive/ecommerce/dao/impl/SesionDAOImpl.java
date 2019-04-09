@@ -68,7 +68,12 @@ public class SesionDAOImpl implements SesionDAO{
 	}
 
 	@Override
-	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante) throws DataException {
+	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante) throws DataException{
+		return findByCalendario(connection, idEstudiante, false);
+	}
+	
+	@Override
+	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante, boolean isProfesor) throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("id: {}", idEstudiante);
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -77,9 +82,14 @@ public class SesionDAOImpl implements SesionDAO{
 
 			String queryString = 
 					"SELECT S.ID_SESION, S.ID_PROFESOR, S.ID_ESTUDIANTE, S.FECHA_SESION,S.ID_HORARIO, S.FECHA_INICIO, S.FECHA_FIN, S.PRECIO, S.ID_ESTADO, S.FECHA_CAMBIO_ESTADO " + 
-					"FROM SESION S INNER JOIN HORARIO H ON (S.ID_HORARIO = H.ID_HORARIO)  " +
-					"WHERE S.ID_ESTUDIANTE = ? AND (S.ID_ESTADO = 'A' OR S.ID_ESTADO = 'S')  " +
-					"ORDER BY FECHA_SESION ASC";
+					"FROM SESION S INNER JOIN HORARIO H ON (S.ID_HORARIO = H.ID_HORARIO)  ";
+			
+					if(!isProfesor) {
+						queryString += "WHERE S.ID_ESTUDIANTE = ? "; 
+					}else {
+						queryString += "WHERE S.ID_PROFESOR = ? ";
+					}
+					queryString += "AND (S.ID_ESTADO = 'A' OR S.ID_ESTADO = 'S') ORDER BY FECHA_SESION ASC";
 			if(logger.isDebugEnabled()) logger.debug(queryString);
 			preparedStatement = connection.prepareStatement(queryString,
 					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
