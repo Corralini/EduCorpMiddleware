@@ -66,11 +66,6 @@ public class SesionDAOImpl implements SesionDAO{
 
 		return s;
 	}
-
-	@Override
-	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante) throws DataException{
-		return findByCalendario(connection, idEstudiante, false);
-	}
 	
 	@Override
 	public List<Sesion> findByCalendario(Connection connection, Integer idEstudiante, boolean isProfesor) throws DataException {

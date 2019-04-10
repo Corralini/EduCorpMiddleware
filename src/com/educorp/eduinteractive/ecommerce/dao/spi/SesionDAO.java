@@ -16,9 +16,6 @@ public interface SesionDAO {
 	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario, boolean isProfesor)
 		throws DataException;
 	
-	public List <Sesion> findByCalendario (Connection connection, Integer idUsuario)
-			throws DataException;
-	
 	public List<Sesion> findByEstado (Connection connection, String idEstado)
 		throws DataException;
 	

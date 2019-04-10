@@ -195,7 +195,7 @@ public class SesionServicesImpl implements SesionServices{
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
-			return sesionDAO.findByCalendario(c, idEstudiante);
+			return sesionDAO.findByCalendario(c, idEstudiante, isTeacher);
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
