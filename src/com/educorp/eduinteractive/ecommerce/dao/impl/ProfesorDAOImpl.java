@@ -320,7 +320,7 @@ public class ProfesorDAOImpl implements ProfesorDAO {
 			preparedStatement.setString(i++, PasswordEncryptionUtil.encryptPassword(p.getPsswd()));
 			preparedStatement.setString(i++,p.getNombre());
 			preparedStatement.setString(i++,p.getApellido1());
-			preparedStatement.setString(i++,p.getApellido1());
+			preparedStatement.setString(i++,p.getApellido2());
 			preparedStatement.setInt(i++, p.getAnoNacimiento());
 			preparedStatement.setDate(i++, new java.sql.Date (new Date().getTime()));
 			preparedStatement.setDouble(i++, p.getPrecioSesion());

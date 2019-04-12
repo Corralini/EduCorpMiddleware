@@ -81,7 +81,7 @@ public class SesionServicesTest {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		int dia = calendar.get(Calendar.DAY_OF_MONTH)+1;
+		int dia = calendar.get(Calendar.DAY_OF_MONTH);
 		calendar.set(Calendar.DAY_OF_MONTH, dia);
 		
 		createTest(h, calendar.getTime(), 53);
