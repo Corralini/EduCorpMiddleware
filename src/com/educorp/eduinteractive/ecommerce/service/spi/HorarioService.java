@@ -1,6 +1,7 @@
 package com.educorp.eduinteractive.ecommerce.service.spi;
 
 import java.util.Date;
+import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -14,5 +15,7 @@ public interface HorarioService {
 	public Horario findById (Integer id) throws DataException;
 	
 	public Results<Horario> findByFecha (Integer idProfesor, Date fecha, int startIndex, int count) throws DataException;
+	
+	public List<Horario> findByProfesor (Integer idProfesor) throws DataException;
 	
 }

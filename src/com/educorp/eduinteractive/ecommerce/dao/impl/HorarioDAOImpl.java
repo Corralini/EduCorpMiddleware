@@ -19,7 +19,10 @@ import com.educorp.eduinteractive.ecommerce.dao.spi.HorarioDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
+import com.educorp.eduinteractive.ecommerce.model.Estudiante;
 import com.educorp.eduinteractive.ecommerce.model.Horario;
+
+import javafx.beans.binding.StringBinding;
 
 public class HorarioDAOImpl implements HorarioDAO{
 
@@ -256,8 +259,48 @@ public class HorarioDAOImpl implements HorarioDAO{
 
 	@Override
 	public Horario delete(Connection connection, Horario h) throws DataException {
-
+		
 		return null;
+	}
+	
+	@Override
+	public List<Horario> findByProfesor(Connection connection, Integer idProfesor)
+			throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("idProfesor = {} ", idProfesor);
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try{
+
+			String sql;
+			sql =  	 "SELECT ID_HORARIO, ID_PROFESOR, ID_DIA, ID_HORA "
+					+"  FROM HORARIO "
+					+"	WHERE ID_PROFESOR = ? ";
+
+			// Preparar a query
+			if(logger.isDebugEnabled()) logger.debug(sql);
+			preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+			// Establece os parámetros
+			int i = 1;
+			preparedStatement.setInt(i++, idProfesor);			
+
+			resultSet = preparedStatement.executeQuery();			
+
+			//STEP 5: Extract data from result set			
+			List<Horario> horarios = new ArrayList<Horario>();
+			Horario e = null;
+			while (resultSet.next()) {
+				e = loadNext(resultSet);						
+				horarios.add(e);
+			} 
+			return horarios;
+		} catch (SQLException ex) {
+			logger.warn(ex.getMessage(), ex);
+			throw new DataException("Non se encontrou o horario para o profesor " + idProfesor);
+		} finally {            
+			JDBCUtils.closeResultSet(resultSet);
+			JDBCUtils.closeStatement(preparedStatement);
+		}  	
 	}
 
 	private Horario loadNext(ResultSet resultSet) throws SQLException, DataException {
@@ -281,4 +324,5 @@ public class HorarioDAOImpl implements HorarioDAO{
 		return h;
 
 	}
+
 }

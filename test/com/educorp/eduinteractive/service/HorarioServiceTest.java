@@ -30,6 +30,12 @@ public class HorarioServiceTest {
 		return horarioService.findByFecha(idProfesor, fecha);
 	}
 
+	public static List<Horario> findByProfesor (Integer idProfesor) throws DataException{
+		HorarioService horarioService = new HorarioServicesImpl();
+		
+		return horarioService.findByProfesor(idProfesor);
+	}
+	
 	public static void main(String[] args) throws DuplicateInstanceException, DataException {
 //		Horario h = new Horario();
 //
@@ -44,9 +50,10 @@ public class HorarioServiceTest {
 		
 		List<Horario> horarios = new ArrayList<Horario>();
 		
-		horarios = findByFecha(1, new Date());
+		horarios = findByProfesor(1);
 		
 		for(Horario horar : horarios) {
+			System.out.println("" + horar);
 		}
 	}
 

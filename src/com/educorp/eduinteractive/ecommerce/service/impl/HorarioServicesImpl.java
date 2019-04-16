@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,6 +88,25 @@ public class HorarioServicesImpl implements HorarioService{
 		} finally {
 			JDBCUtils.closeConnection(connection);
 		}
+	}
+
+	@Override
+	public List<Horario> findByProfesor(Integer idProfesor) throws DataException {
+		if(logger.isDebugEnabled()) logger.debug("idProfesor: {}", idProfesor); 
+		Connection connection = null;
+
+		try {			
+			connection = ConnectionManager.getConnection();
+			connection.setAutoCommit(true);
+			
+			return horarioDAO.findByProfesor(connection, idProfesor);
+
+		} catch (SQLException e){
+			logger.warn(e.getMessage(), e);
+			throw new DataException(e);
+		} finally {
+			JDBCUtils.closeConnection(connection);
+		}		
 	}
 
 	

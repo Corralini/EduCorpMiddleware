@@ -2,6 +2,7 @@ package com.educorp.eduinteractive.ecommerce.dao.spi;
 
 import java.sql.Connection;
 import java.util.Date;
+import java.util.List;
 
 import com.educorp.eduinteractive.ecommerce.dao.service.Results;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
@@ -20,6 +21,9 @@ public interface HorarioDAO {
 	
 	public void update (Connection connection,Horario h)
 		throws InstanceNotFoundException, DataException;
+	
+	public List <Horario> findByProfesor (Connection connection, Integer idProfesor)
+		throws DataException;
 	
 	public Horario create (Connection connection,Horario h)
 		throws DuplicateInstanceException, DataException;
