@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Profesor extends AbstractValueObject  implements Comparable<Profesor>  {
+public class Profesor extends Usuario  implements Comparable<Profesor>  {
 	
 	private Integer id;
 	private String email;

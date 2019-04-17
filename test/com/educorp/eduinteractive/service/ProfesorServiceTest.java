@@ -111,7 +111,9 @@ public class ProfesorServiceTest {
 		p.setIdPais("ES");
 		p.setPrecioSesion(7.0d);
 		p.setEmail("acorralfdez@gmail.com");
-		signUp(p);
+		// signUp(p);
+		
+		findByCriteriaTest();
 	}
 	
 }
