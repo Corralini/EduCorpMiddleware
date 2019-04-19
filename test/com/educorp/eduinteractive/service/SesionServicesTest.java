@@ -1,5 +1,8 @@
 package com.educorp.eduinteractive.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,9 +15,12 @@ import com.educorp.eduinteractive.ecommerce.model.Horario;
 import com.educorp.eduinteractive.ecommerce.model.Sesion;
 import com.educorp.eduinteractive.ecommerce.service.impl.SesionServicesImpl;
 import com.educorp.eduinteractive.ecommerce.service.spi.SesionServices;
+import com.mysql.cj.util.StringUtils;
 
 public class SesionServicesTest {
 
+	public static final DateFormat SHORT_FORMAT_DATE = new SimpleDateFormat("yyyy-MM-dd");
+	
 	public static void createTest (Horario h, Date fecha, Integer idEstudiante) 
 			throws MailException, DuplicateInstanceException, DataException{
 		SesionServices sesionServices = new SesionServicesImpl(); 
@@ -23,16 +29,16 @@ public class SesionServicesTest {
 		sesionServices.create(h, fecha, idEstudiante);
 	}
 	
-	public static void findByIdTest() {
+	public static Sesion findByIdTest() {
 		Sesion sesion = new Sesion();
 		SesionServices sesionServices = new SesionServicesImpl(); 
 		try {
-			sesion = sesionServices.findById(1);
+			sesion = sesionServices.findById(80);
 		} catch (DataException e) {
 			e.printStackTrace();
 		}
 		
-			System.out.println(sesion);
+		return sesion;
 	}
 	
 	public static void findByCalendarioTest() {
@@ -71,20 +77,31 @@ public class SesionServicesTest {
 	}
 	
 
+	public static Date dateValidator (String parameter) {
+		try {
+			if(!StringUtils.isEmptyOrWhitespaceOnly(parameter)) {
+				return SesionServicesTest.SHORT_FORMAT_DATE.parse(parameter);
+			}else {
+				return null;
+			}
+		}catch (ParseException ex) {
+			return null;
+		}
+	}
+	
 	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
 		
 		Horario h = new Horario();
-		h.setIdHorario(1);
-		h.setIdProfesor(1);
-		h.setIdDia(1);
-		h.setIdHora(44);
+		h.setIdHorario(21);
+		h.setIdProfesor(15);
+		h.setIdDia(4);
+		h.setIdHora(78);
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		int dia = calendar.get(Calendar.DAY_OF_MONTH);
-		calendar.set(Calendar.DAY_OF_MONTH, dia);
-		
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		createTest(h, calendar.getTime(), 53);
+		
+
 		
 	}
 	

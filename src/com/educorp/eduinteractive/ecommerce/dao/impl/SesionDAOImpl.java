@@ -173,6 +173,8 @@ public class SesionDAOImpl implements SesionDAO{
 			int i = 1;    
 			preparedStatement.setInt(i++, s.getIdProfesor());
 			preparedStatement.setInt(i++, s.getIdEstudiante());
+			logger.debug(s.getFechaSesion());
+			logger.debug("2 forma: {}", new java.sql.Date(s.getFechaSesion().getTime()));
 			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaSesion().getTime()));
 			preparedStatement.setInt(i++, s.getIdHorario());
 			preparedStatement.setDate(i++, null);
@@ -279,7 +281,7 @@ public class SesionDAOImpl implements SesionDAO{
 			if (s.getIdEstudiante() != null)
 				preparedStatement.setInt(i++, s.getIdEstudiante());
 			if (s.getFechaSesion()!=null) 
-				preparedStatement.setDate(i++,(java.sql.Date) s.getFechaSesion());
+				preparedStatement.setDate(i++,new java.sql.Date (s.getFechaSesion().getTime()));
 			if (s.getIdHorario() != null)
 				preparedStatement.setInt(i++, s.getIdHorario());
 			if (s.getFechaInicio()!=null) 
