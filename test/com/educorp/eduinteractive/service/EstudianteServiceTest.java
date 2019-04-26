@@ -74,8 +74,12 @@ public class EstudianteServiceTest {
 		estudianteService.puntuarProfesor(p, e, puntuacion);
 	}
 
-	public static void main(String[] args) throws MailException, DuplicateInstanceException, DataException {
-		
+	public static void main(String[] args) {
+		try {
+			cambiarContraTest(300398, "rafacervelo@gmail.com", "Hola123.");
+		} catch (DataException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

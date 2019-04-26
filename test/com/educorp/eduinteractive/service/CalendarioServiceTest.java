@@ -12,7 +12,7 @@ public class CalendarioServiceTest {
 	public static List<Sesion> findByUsuarioTest (Integer idEstudiante) throws DataException{
 		CalendarioServices calendarioServices = new CalendarioServicesImpl();
 
-		return calendarioServices.findByUsuario(idEstudiante);
+		return calendarioServices.findByUsuario(idEstudiante, false);
 	}
 	
 	public static void main(String[] args) throws DataException {

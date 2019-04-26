@@ -27,7 +27,7 @@ public class HorarioServiceTest {
 	public static List<Horario> findByFecha (Integer idProfesor, Date fecha) throws DataException{
 		HorarioService horarioService = new HorarioServicesImpl();
 		
-		return horarioService.findByFecha(idProfesor, fecha);
+		return horarioService.findByFecha(idProfesor, fecha, 1, 1).getResultados();
 	}
 
 	public static List<Horario> findByProfesor (Integer idProfesor) throws DataException{

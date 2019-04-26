@@ -28,13 +28,13 @@ public class CalendarioServicesImpl implements CalendarioServices{
 	}
 	
 	@Override
-	public List<Sesion> findByUsuario(Integer idEstudiante) throws DataException {
+	public List<Sesion> findByUsuario(Integer idEstudiante, boolean isTeacher) throws DataException {
 		if(logger.isDebugEnabled()) logger.debug("idEstudiante: {}", idEstudiante);
 		Connection c = null;
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(true);
-			return sesionDAO.findByCalendario(c, idEstudiante);
+			return sesionDAO.findByCalendario(c, idEstudiante, isTeacher);
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);

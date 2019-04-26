@@ -15,5 +15,9 @@
 	<classpathentry kind="lib" path="lib/ehcache-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/mchange-commons-java-0.2.11.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections4-4.3.jar"/>
+	<classpathentry kind="lib" path="lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-engine-core-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
