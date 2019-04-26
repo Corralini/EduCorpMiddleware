@@ -1,9 +1,5 @@
 package com.educorp.eduinteractive.ecommerce.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -92,6 +88,7 @@ public class MailServiceImpl implements MailService{
 			//creamos el context
 			VelocityContext context = new VelocityContext();
 			context.put("fbody", plainText);
+			context.put("$fproprietor", ((String) parameters.get("mail.proprietor")));
 
 			//Renderizamos la template en un StringWriter
 			StringWriter out = new StringWriter();

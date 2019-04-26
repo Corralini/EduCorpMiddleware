@@ -4,5 +4,10 @@
 </head>
 <body>
 $fbody
+<br>
+<br>
+<br>
+<p>Un saludo, <p/>
+<p>$fproprietor</p>
 </body>
 </html>
