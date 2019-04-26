@@ -84,7 +84,7 @@ public class MailServiceImpl implements MailService{
 			VelocityEngine ve = new VelocityEngine();
 			ve.init();
 			//recuperamos la template
-			Template t = ve.getTemplate("template/mail-template.vm");
+			Template t = ve.getTemplate("template/mail-body-template.vm");
 			//creamos el context
 			VelocityContext context = new VelocityContext();
 			context.put("fbody", plainText);
