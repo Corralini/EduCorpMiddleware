@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -31,37 +34,51 @@ import com.educorp.eduinteractive.ecommerce.service.spi.MailService;
 
 public class MailServiceImpl implements MailService{
 
-	private Logger logger = LogManager.getLogger(MailServiceImpl.class);
+	private static Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
+	private static final String MAIl_CONFIGURATION_FILE =
+	        "mail-settings.properties";
+	    
+	    private static Map parameters;
+	    private static Properties properties;
+	
+	static {
+		try {
+		 Class configurationParametersManagerClass = MailServiceImpl.class;
+         ClassLoader classLoader = configurationParametersManagerClass.getClassLoader();
+         InputStream inputStream = classLoader.getResourceAsStream(MAIl_CONFIGURATION_FILE);
+         properties = new Properties();
+         properties.load(inputStream);
+         inputStream.close();
+         
+         parameters = Collections.synchronizedMap(properties);
+		}catch(Throwable t) {
+			logger.error(t.getMessage(), t);
+		}
+	}
+	
 	public MailServiceImpl() {		
 	}
 
 	@Override
 	public void sendEmail(String to, String subject, String plainText) throws MailException {
 		if(logger.isDebugEnabled()) logger.debug("to: {}; subject: {}; plainText: {}", to, subject, plainText);
-		final Properties prop = System.getProperties();
 		//cargamos el fichero de configuracion
-		try {
-			prop.load(new FileInputStream(new File("config/mail-settings.properties")));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 		//autenticacion de la cuenta de envio de email
-		Session session = Session.getDefaultInstance(prop,
+		Session session = Session.getDefaultInstance(properties,
 				new Authenticator() {
 
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(
-						prop.getProperty("mail.user"), prop.getProperty("mail.passwd"));
+						((String) parameters.get("mail.user")), ((String) parameters.get("mail.passwd")));
 			}
 		});
 
 		try {
 			// Creamos el MimeMessage por defecto
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(prop.getProperty("mail.user")));
+			message.setFrom(new InternetAddress(((String) parameters.get("mail.user"))));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			message.setSubject(subject);
 
