@@ -174,7 +174,7 @@ public class SesionDAOImpl implements SesionDAO{
 			int i = 1;    
 			preparedStatement.setInt(i++, s.getIdProfesor());
 			preparedStatement.setInt(i++, s.getIdEstudiante());
-			preparedStatement.setTimestamp(i++, new Timestamp(s.getFechaSesion().getTime()));
+			preparedStatement.setDate(i++, new java.sql.Date (s.getFechaSesion().getTime()));
 			preparedStatement.setInt(i++, s.getIdHorario());
 			preparedStatement.setDate(i++, null);
 			preparedStatement.setDate(i++, null);
@@ -323,7 +323,7 @@ public class SesionDAOImpl implements SesionDAO{
 		Integer idSesion = resultSet.getInt(i++);
 		Integer idProfesor = resultSet.getInt(i++);
 		Integer idEstudiante = resultSet.getInt(i++);
-		Date fechaSesion = resultSet.getTimestamp(i++);
+		Date fechaSesion = resultSet.getDate(i++);
 		Integer idHorario = resultSet.getInt(i++);
 		Date fechaInicio = resultSet.getTimestamp(i++);
 		Date fechaFIn = resultSet.getTimestamp(i++);

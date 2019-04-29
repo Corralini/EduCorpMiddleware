@@ -19,14 +19,11 @@ import com.educorp.eduinteractive.ecommerce.dao.spi.HorarioDAO;
 import com.educorp.eduinteractive.ecommerce.exceptions.DataException;
 import com.educorp.eduinteractive.ecommerce.exceptions.DuplicateInstanceException;
 import com.educorp.eduinteractive.ecommerce.exceptions.InstanceNotFoundException;
-import com.educorp.eduinteractive.ecommerce.model.Estudiante;
 import com.educorp.eduinteractive.ecommerce.model.Horario;
-
-import javafx.beans.binding.StringBinding;
 
 public class HorarioDAOImpl implements HorarioDAO{
 
-	private Logger logger = LogManager.getLogger(HoraDAOImpl.class);
+	private Logger logger = LogManager.getLogger(HorarioDAOImpl.class);
 
 	@Override
 	public Horario findById(Connection connection, Integer id) 

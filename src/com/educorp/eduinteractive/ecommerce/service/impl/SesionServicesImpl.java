@@ -31,7 +31,7 @@ import com.educorp.eduinteractive.ecommerce.service.spi.SesionServices;
 public class SesionServicesImpl implements SesionServices{
 
 	private Logger logger = LogManager.getLogger(SesionServicesImpl.class);
-	
+
 	private SesionDAO sesionDAO = null;
 	private ProfesorDAO profesorDAO = null;
 	private MailService mailService = null;
@@ -51,16 +51,11 @@ public class SesionServicesImpl implements SesionServices{
 		HoraDAO horaDAO = new HoraDAOImpl();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha);
+		
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
-			
-			//buscamos la hora de la sesion
-			String horaSesion = horaDAO.findById(c, h.getIdHora()).getHora();
-			String[] horaMin = horaSesion.split(":");
-			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaMin[0]));
-			calendar.set(Calendar.MINUTE, Integer.parseInt(horaMin[1]));
-			
+
 			s.setIdProfesor(h.getIdProfesor());
 			s.setIdEstudiante(idEstudiante);
 			s.setFechaSesion(calendar.getTime());
@@ -68,27 +63,27 @@ public class SesionServicesImpl implements SesionServices{
 			s.setPrecio(profesorDAO.findById(c, h.getIdProfesor()).getPrecioSesion());
 			s.setIdEstado("S");
 			s.setFechaCambioEstado(new Date());
-			
-			
-			
+
+
+
 			sesionDAO.create(c, s);
-			
+
 			Calendar calendario = Calendar.getInstance();
 			calendario.setTime(fecha);
-			
+
 			Profesor profesor = profesorDAO.findById(c, h.getIdProfesor());
 
 			String mssg = "Hola " +profesor.getNombre()
-					+ " " + profesor.getApellido1()
-					+ " hay un estudiante que desea realizar una sesion en la siguiente fecha: "  + "\n" 
-					+ calendario.get(Calendar.DAY_OF_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + horaSesion  + "\n"                          
-					+ " Por favor acpete o cancele la sesión antes de la fecha";
+			+ " " + profesor.getApellido1()
+			+ " hay un estudiante que desea realizar una sesion en la siguiente fecha: "  + "\n" 
+			+ calendario.get(Calendar.DAY_OF_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + horaDAO.findById(c, h.getIdHora())  + "\n"                          
+			+ " Por favor acpete o cancele la sesión antes de la fecha";
 
 
 			mailService.sendEmail(profesorDAO.findById(c, h.getIdProfesor()).getEmail(), "Petición de sesion", mssg);
 
 			commit = true;
-			
+
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
@@ -108,9 +103,9 @@ public class SesionServicesImpl implements SesionServices{
 			s.setIdEstado(idEstado.toUpperCase());
 			s.setFechaCambioEstado(new Date());
 			c.setAutoCommit(false);
-			
+
 			sesionDAO.update(c, s);
-			
+
 			commit = true;
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
@@ -127,31 +122,31 @@ public class SesionServicesImpl implements SesionServices{
 		Connection c = null;
 		boolean commit = false;
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR_OF_DAY, 1);
+		calendar.setTime(new Date());
+		calendar.add(Calendar.HOUR_OF_DAY, 2);
 		try {
+
 			if ("A".equalsIgnoreCase(s.getIdEstado())) {
 				c = ConnectionManager.getConnection();
 				s.setFechaInicio(calendar.getTime());
-				
+
 				calendar.add(Calendar.HOUR_OF_DAY, 1);
 				s.setFechaFin(calendar.getTime());
-				
 				c.setAutoCommit(false);
-				
+
 				sesionDAO.update(c, s);
-				
+
 				commit = true;
 			}else {
 				cambiarEstado(s, "R");
 			}
+
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
-		}
-			finally {
+		}finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
-
 	}
 
 	@Override
@@ -188,7 +183,7 @@ public class SesionServicesImpl implements SesionServices{
 		}finally {
 			JDBCUtils.closeConnection(c);
 		}
-		
+
 	}
 
 	@Override
@@ -208,7 +203,7 @@ public class SesionServicesImpl implements SesionServices{
 
 	@Override
 	public List<Sesion> findByCalendario(Integer idEstudiante) throws DataException {
-		
+
 		return findByCalendario(idEstudiante, false);
 	}
 
