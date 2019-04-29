@@ -129,23 +129,22 @@ public class SesionServicesImpl implements SesionServices{
 			if (s.getIdEstado().toUpperCase() == "A") {
 				c = ConnectionManager.getConnection();
 				s.setFechaInicio(new Date());
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.HOUR_OF_DAY, 1);
+				s.setFechaFin(calendar.getTime());
 				
 				c.setAutoCommit(false);
 				
 				sesionDAO.update(c, s);
 				
 				commit = true;
-				// Simulacion de vidiollamada
-				// TimeUnit.SECONDS.sleep(10);
 			}else {
 				cambiarEstado(s, "R");
 			}
 		}catch(SQLException ex) {
 			logger.warn(ex.getMessage(), ex);
 			throw new DataException(ex);
-		}// catch (InterruptedException ie) {
-			//     Thread.currentThread().interrupt();
-		//}
+		}
 			finally {
 			JDBCUtils.closeConnection(c, commit);
 		}
