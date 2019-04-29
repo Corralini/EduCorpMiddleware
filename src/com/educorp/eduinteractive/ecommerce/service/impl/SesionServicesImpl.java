@@ -126,7 +126,7 @@ public class SesionServicesImpl implements SesionServices{
 		Connection c = null;
 		boolean commit = false;
 		try {
-			if (s.getIdEstado().toUpperCase() == "A") {
+			if ("A".equalsIgnoreCase(s.getIdEstado())) {
 				c = ConnectionManager.getConnection();
 				s.setFechaInicio(new Date());
 				Calendar calendar = Calendar.getInstance();
