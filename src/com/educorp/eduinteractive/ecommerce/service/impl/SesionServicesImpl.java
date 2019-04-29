@@ -48,18 +48,22 @@ public class SesionServicesImpl implements SesionServices{
 		Connection c = null;
 		Sesion s = new Sesion();
 		boolean commit = false;
-		Horario mostrarHora = new Horario();
-		HorarioDAO horarioDAO = new HorarioDAOImpl();
 		HoraDAO horaDAO = new HoraDAOImpl();
-		String hora = "";
-		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
 		try {
 			c = ConnectionManager.getConnection();
 			c.setAutoCommit(false);
 			
+			//buscamos la hora de la sesion
+			String horaSesion = horaDAO.findById(c, h.getIdHora()).getHora();
+			String[] horaMin = horaSesion.split(":");
+			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaMin[0]));
+			calendar.set(Calendar.MINUTE, Integer.parseInt(horaMin[1]));
+			
 			s.setIdProfesor(h.getIdProfesor());
 			s.setIdEstudiante(idEstudiante);
-			s.setFechaSesion(fecha);
+			s.setFechaSesion(calendar.getTime());
 			s.setIdHorario(h.getIdHorario());
 			s.setPrecio(profesorDAO.findById(c, h.getIdProfesor()).getPrecioSesion());
 			s.setIdEstado("S");
@@ -72,15 +76,12 @@ public class SesionServicesImpl implements SesionServices{
 			Calendar calendario = Calendar.getInstance();
 			calendario.setTime(fecha);
 			
-			mostrarHora = horarioDAO.findById(c, h.getIdHorario());
-			hora = horaDAO.findById(c, mostrarHora.getIdHora()).getHora();
-			
 			Profesor profesor = profesorDAO.findById(c, h.getIdProfesor());
 
 			String mssg = "Hola " +profesor.getNombre()
 					+ " " + profesor.getApellido1()
 					+ " hay un estudiante que desea realizar una sesion en la siguiente fecha: "  + "\n" 
-					+ calendario.get(Calendar.DAY_OF_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + hora  + "\n"                          
+					+ calendario.get(Calendar.DAY_OF_MONTH) + "/" + calendario.get(Calendar.MONTH) + "/" + calendario.get(Calendar.YEAR) + " " + horaSesion  + "\n"                          
 					+ " Por favor acpete o cancele la sesión antes de la fecha";
 
 

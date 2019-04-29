@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -173,15 +174,13 @@ public class SesionDAOImpl implements SesionDAO{
 			int i = 1;    
 			preparedStatement.setInt(i++, s.getIdProfesor());
 			preparedStatement.setInt(i++, s.getIdEstudiante());
-			logger.debug(s.getFechaSesion());
-			logger.debug("2 forma: {}", new java.sql.Date(s.getFechaSesion().getTime()));
-			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaSesion().getTime()));
+			preparedStatement.setTimestamp(i++, new Timestamp(s.getFechaSesion().getTime()));
 			preparedStatement.setInt(i++, s.getIdHorario());
 			preparedStatement.setDate(i++, null);
 			preparedStatement.setDate(i++, null);
 			preparedStatement.setDouble(i++, s.getPrecio());
 			preparedStatement.setString(i++, s.getIdEstado());
-			preparedStatement.setDate(i++, new java.sql.Date(s.getFechaCambioEstado().getTime()));
+			preparedStatement.setTimestamp(i++, new Timestamp(s.getFechaCambioEstado().getTime()));
 			
 			// Execute query
 			int insertedRows = preparedStatement.executeUpdate();
@@ -285,9 +284,9 @@ public class SesionDAOImpl implements SesionDAO{
 			if (s.getIdHorario() != null)
 				preparedStatement.setInt(i++, s.getIdHorario());
 			if (s.getFechaInicio()!=null) 
-				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaInicio().getTime()));
+				preparedStatement.setTimestamp(i++, new Timestamp(s.getFechaInicio().getTime()));
 			if (s.getFechaFin()!=null) 
-				preparedStatement.setDate(i++, new java.sql.Date (s.getFechaFin().getTime()));
+				preparedStatement.setTimestamp(i++, new Timestamp(s.getFechaFin().getTime()));
 			if (s.getPrecio()!=null) 
 				preparedStatement.setDouble(i++,s.getPrecio());
 			if (s.getIdEstado() != null)
@@ -324,13 +323,13 @@ public class SesionDAOImpl implements SesionDAO{
 		Integer idSesion = resultSet.getInt(i++);
 		Integer idProfesor = resultSet.getInt(i++);
 		Integer idEstudiante = resultSet.getInt(i++);
-		Date fechaSesion = resultSet.getDate(i++);
+		Date fechaSesion = resultSet.getTimestamp(i++);
 		Integer idHorario = resultSet.getInt(i++);
-		Date fechaInicio = resultSet.getDate(i++);
-		Date fechaFIn = resultSet.getDate(i++);
+		Date fechaInicio = resultSet.getTimestamp(i++);
+		Date fechaFIn = resultSet.getTimestamp(i++);
 		Double precio = resultSet.getDouble(i++);
 		String idEstado = resultSet.getString(i++);
-		Date fechaCambioEstado = resultSet.getDate(i++);
+		Date fechaCambioEstado = resultSet.getTimestamp(i++);
 		
 		s = new Sesion();
 		s.setIdSesion(idSesion);
