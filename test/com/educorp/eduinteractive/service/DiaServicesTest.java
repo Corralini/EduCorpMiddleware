@@ -19,6 +19,7 @@ public class DiaServicesTest {
 	public static DiaServices diaServices = new DiaServicesImpl();
 
 	public static final void findById() {
+		
 		Integer id = 3;
 		try {
 			logger.debug("Finding by id: {}", id);
