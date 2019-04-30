@@ -126,11 +126,13 @@ public class SesionServicesImpl implements SesionServices{
 		if(logger.isDebugEnabled()) logger.debug("Sesion: {}", s);
 		Connection c = null;
 		boolean commit = false;
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.HOUR_OF_DAY, 1);
 		try {
 			if ("A".equalsIgnoreCase(s.getIdEstado())) {
 				c = ConnectionManager.getConnection();
-				s.setFechaInicio(new Date());
-				Calendar calendar = Calendar.getInstance();
+				s.setFechaInicio(calendar.getTime());
+				
 				calendar.add(Calendar.HOUR_OF_DAY, 1);
 				s.setFechaFin(calendar.getTime());
 				
